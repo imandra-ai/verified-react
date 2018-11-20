@@ -1,0 +1,30 @@
+{
+  "name": "verified-react",
+  "sources": [
+    {
+      "dir" : "src",
+      "subdirs" : true
+    },
+    {
+      "dir": "examples",
+      "subdirs": true
+    }
+  ],
+  "package-specs": {
+    "module": "commonjs",
+    "in-source": true
+  },
+  "suffix": ".bs.js",
+  "bs-dependencies": [
+    "reason-react",
+    "bs-imandra-client",
+    "@glennsl/bs-jest"
+  ],
+  "reason": {
+    "react-jsx": 2
+  },
+  "warnings": {
+    "error" : "+101"
+  },
+  "refmt": 3
+}

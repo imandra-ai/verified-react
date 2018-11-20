@@ -1,0 +1,7 @@
+*.bs.js
+lib/
+node_modules/
+.imandra_init.log
+.merlin
+_opam
+.bsb.lock

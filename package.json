@@ -1,0 +1,32 @@
+{
+  "name": "verified-react",
+  "version": "1.0.0",
+  "description": "Welcome!",
+  "main": "index.js",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aestheticintegration/verified-react.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aestheticintegration/verified-react/issues"
+  },
+  "homepage": "https://github.com/aestheticintegration/verified-react#readme",
+  "dependencies": {
+    "@glennsl/bs-jest": "^0.4.5",
+    "bs-imandra-client": "git+https://github.com/aestheticintegration/bs-imandra-client.git",
+    "bs-jest": "^0.3.2",
+    "jest": "^23.6.0",
+    "reason-react": "^0.5.3"
+  },
+  "devDependencies": {
+    "bs-platform": "^4.0.7"
+  }
+}
