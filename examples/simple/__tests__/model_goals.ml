@@ -28,46 +28,36 @@ let () =
         );
 
       testPromise "verify increment" (fun () ->
-          match !runningImandraProcess with
-          | Some ip ->
-            Imandra_client.Verify.by_name ip ~name:"goal_increment"
-            |> Js.Promise.then_ (function
-                | Belt.Result.Ok (Imandra_client.Verify.Proved, _) ->
-                  Js.Promise.resolve pass
-                | _ ->
-                  Js.Promise.resolve (fail "unexpected result")
-              )
-          | None ->
-            Js.Promise.reject (Failure "no imandra process available?")
+          let ip = !runningImandraProcess |> Belt.Option.getExn in
+          Imandra_client.Verify.by_name ip ~name:"goal_increment"
+          |> Js.Promise.then_ (function
+              | Belt.Result.Ok (Imandra_client.Verify.Proved, _) ->
+                Js.Promise.resolve pass
+              | _ ->
+                Js.Promise.resolve (fail "unexpected result")
+            )
         );
 
       testPromise "verify decrement" (fun () ->
-          match !runningImandraProcess with
-          | Some ip ->
-            Imandra_client.Verify.by_name ip ~name:"goal_decrement"
-            |> Js.Promise.then_ (function
-                | Belt.Result.Ok (Imandra_client.Verify.Proved, _) ->
-                  Js.Promise.resolve pass
-                | _ ->
-                  Js.Promise.resolve (fail "unexpected result")
-              )
-          | None ->
-            Js.Promise.reject (Failure "no imandra process available?")
+          let ip = !runningImandraProcess |> Belt.Option.getExn in
+          Imandra_client.Verify.by_name ip ~name:"goal_decrement"
+          |> Js.Promise.then_ (function
+              | Belt.Result.Ok (Imandra_client.Verify.Proved, _) ->
+                Js.Promise.resolve pass
+              | _ ->
+                Js.Promise.resolve (fail "unexpected result")
+            )
         )
     )
 
 let () =
   afterAllAsync ~timeout:10000 (fun finish ->
-      match !runningImandraProcess with
-      | Some ip ->
-        Imandra_client.stop ip
-        |> Js.Promise.then_ (fun _ ->
-            runningImandraProcess := None;
-            finish ();
-            Js.Promise.resolve ()
-          )
-        |> ignore
-
-      | None ->
-        fail "no imandra process available during teardown?" |> ignore
+      let ip = !runningImandraProcess |> Belt.Option.getExn in
+      Imandra_client.stop ip
+      |> Js.Promise.then_ (fun _ ->
+          runningImandraProcess := None;
+          finish ();
+          Js.Promise.resolve ()
+        )
+      |> ignore
     )
