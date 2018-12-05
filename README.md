@@ -1,4 +1,4 @@
-Welcome to VerifiedReact! This is work in progress! Stay in touch via ![VerifiedByAI](twitter.com/verifiedbyai)
+Welcome to VerifiedReact! This is work in progress! Stay in touch via ![VerifiedByAI](https://www.twitter.com/verifiedbyai)
 
 ![Verified React logo](/verified-react-logo.png)
 
