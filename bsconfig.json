@@ -2,10 +2,6 @@
   "name": "verified-react",
   "sources": [
     {
-      "dir" : "src",
-      "subdirs" : true
-    },
-    {
       "dir": "examples",
         "subdirs": true,
         "generators": [{
