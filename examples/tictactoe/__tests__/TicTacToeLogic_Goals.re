@@ -10,7 +10,6 @@ let () =
       Imandra_client.start(
         imandraOptions(
           ~syntax="reason",
-          ~debug=true,
           ~serverCmd="imandra-http-server-dev",
           (),
         ),
