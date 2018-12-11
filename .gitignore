@@ -5,3 +5,5 @@ node_modules/
 .merlin
 _opam
 .bsb.lock
+examples/simple/SimpleModel.ml
+examples/tictactoe/TicTacToeLogic.ml
