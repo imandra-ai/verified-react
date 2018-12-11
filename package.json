@@ -7,7 +7,8 @@
     "example": "examples"
   },
   "scripts": {
-    "test": "jest -i"
+    "test": "jest -i",
+    "watch": "bsb -make-world -w"
   },
   "repository": {
     "type": "git",
