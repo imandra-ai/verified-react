@@ -7,7 +7,14 @@
     },
     {
       "dir": "examples",
-      "subdirs": true
+        "subdirs": true,
+        "generators": [{
+            "name": "imandra-extract-re",
+            "edge": ["tictactoe/TicTacToeLogic.ml", ":", "tictactoe/TicTacToeLogic.ire"]
+        },{
+            "name": "imandra-extract-re",
+            "edge": ["simple/SimpleModel.ml", ":", "simple/SimpleModel.ire"]
+        }]
     }
   ],
   "package-specs": {
@@ -27,5 +34,15 @@
   "warnings": {
     "error" : "+101"
   },
-  "refmt": 3
+    "refmt": 3,
+    "generators": [
+        {
+            "name": "imandra-extract-re",
+            "command": "imandra-extract -reason -o $out $in"
+        },
+        {
+            "name": "imandra-extract-ml",
+            "command": "imandra-extract -o $out $in"
+        }
+    ]
 }
