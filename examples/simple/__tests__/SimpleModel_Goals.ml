@@ -2,6 +2,8 @@ open Jest
 
 let runningImandraProcess = ref None
 
+let module_name = "SimpleModel"
+
 let () =
   beforeAllPromise ~timeout:10000 (fun () ->
       let open Imandra_client in
@@ -17,7 +19,7 @@ let () =
 
       beforeAllPromise (fun () ->
           let ip = !runningImandraProcess |> Belt.Option.getExn in
-          let model_path = Node.Path.join([|[%raw "__dirname"]; ".."; "SimpleModel.ire" |]) in
+          let model_path = Node.Path.join([|[%raw "__dirname"]; ".."; (Printf.sprintf "%s.ire" module_name) |]) in
           Imandra_client.Eval.by_src ip ~src:(Printf.sprintf "#mod_use \"%s\"" model_path)
           |> Js.Promise.then_ (function
               | Belt.Result.Ok _ -> Js.Promise.resolve pass
@@ -27,7 +29,8 @@ let () =
 
       testPromise "verify increment" (fun () ->
           let ip = !runningImandraProcess |> Belt.Option.getExn in
-          Imandra_client.Verify.by_name ip ~name:"SimpleModel.goal_increment"
+          let function_name = Imandra_client.function_name SimpleModel.goal_increment in
+          Imandra_client.Verify.by_name ip ~name:(Printf.sprintf "%s.%s" module_name function_name)
           |> Js.Promise.then_ (function
               | Belt.Result.Ok (Imandra_client.Verify.Proved, _) ->
                 Js.Promise.resolve pass
@@ -38,7 +41,8 @@ let () =
 
       testPromise "verify decrement" (fun () ->
           let ip = !runningImandraProcess |> Belt.Option.getExn in
-          Imandra_client.Verify.by_name ip ~name:"SimpleModel.goal_decrement"
+          let function_name = Imandra_client.function_name SimpleModel.goal_decrement in
+          Imandra_client.Verify.by_name ip ~name:(Printf.sprintf "%s.%s" module_name function_name)
           |> Js.Promise.then_ (function
               | Belt.Result.Ok (Imandra_client.Verify.Proved, _) ->
                 Js.Promise.resolve pass
