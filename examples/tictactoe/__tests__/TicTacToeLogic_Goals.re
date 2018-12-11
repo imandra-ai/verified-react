@@ -41,10 +41,12 @@ let () =
         |> Js.Promise.then_(
              fun
              | Belt.Result.Ok(_) => Js.Promise.resolve(pass)
-             | Belt.Result.Error((e, _)) =>
-               Js.Promise.resolve(
-                 fail(Printf.sprintf("error from imandra: %s", e)),
-               ),
+             | Belt.Result.Error((e, _)) => {
+                 Js.Console.error(e);
+                 Js.Promise.reject(
+                   Failure(Printf.sprintf("error from imandra: %s", e)),
+                 );
+               },
            );
       },
     );
@@ -60,11 +62,16 @@ let () =
            fun
            | Belt.Result.Ok((Imandra_client.Verify.Proved, _)) =>
              Js.Promise.resolve(pass)
-           | Belt.Result.Ok((Imandra_client.Verify.Unknown(_), _)) =>
-             Js.Promise.resolve(fail("unknown"))
-           | Belt.Result.Ok((Imandra_client.Verify.Refuted(_), _)) =>
-             Js.Promise.resolve(fail("refuted"))
-           | Belt.Result.Error((e, _)) => Js.Promise.resolve(fail(e)),
+           | Belt.Result.Ok(o) => {
+               Js.Console.error(o);
+               Js.Promise.reject(Failure("unexpected result"));
+             }
+           | Belt.Result.Error((e, _)) => {
+               Js.Console.error(e);
+               Js.Promise.reject(
+                 Failure(Printf.sprintf("error from imandra: %s", e)),
+               );
+             },
          );
     });
   });

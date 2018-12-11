@@ -23,7 +23,10 @@ let () =
           Imandra_client.Eval.by_src ip ~src:(Printf.sprintf "#mod_use \"%s\"" model_path)
           |> Js.Promise.then_ (function
               | Belt.Result.Ok _ -> Js.Promise.resolve pass
-              | Belt.Result.Error (e, _) -> Js.Promise.resolve (fail (Printf.sprintf "error from imandra: %s" e))
+              | Belt.Result.Error (e, _) -> begin
+                 Js.Console.error(e);
+                 Js.Promise.reject (Failure (Printf.sprintf "error from imandra: %s" e))
+               end
             )
         );
 
@@ -34,8 +37,14 @@ let () =
           |> Js.Promise.then_ (function
               | Belt.Result.Ok (Imandra_client.Verify.Proved, _) ->
                 Js.Promise.resolve pass
-              | _ ->
-                Js.Promise.resolve (fail "unexpected result")
+              | Belt.Result.Ok o -> begin
+                 Js.Console.error(o);
+                 Js.Promise.reject (Failure "unexpected result")
+               end
+              | Belt.Result.Error (e, _) -> begin
+                 Js.Console.error(e);
+                 Js.Promise.reject (Failure (Printf.sprintf "error from imandra: %s" e))
+               end
             )
         );
 
@@ -46,8 +55,14 @@ let () =
           |> Js.Promise.then_ (function
               | Belt.Result.Ok (Imandra_client.Verify.Proved, _) ->
                 Js.Promise.resolve pass
-              | _ ->
-                Js.Promise.resolve (fail "unexpected result")
+              | Belt.Result.Ok o -> begin
+                 Js.Console.error(o);
+                 Js.Promise.reject (Failure "unexpected result")
+               end
+              | Belt.Result.Error (e, _) -> begin
+                 Js.Console.error(e);
+                 Js.Promise.reject (Failure (Printf.sprintf "error from imandra: %s" e))
+               end
             )
         )
     )
