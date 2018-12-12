@@ -5,7 +5,7 @@ let runningImandraProcess = ref None
 let module_name = "SimpleModel"
 
 let () =
-  beforeAllPromise ~timeout:10000 (fun () ->
+  beforeAllPromise ~timeout:20000 (fun () ->
       let open Imandra_client in
       Imandra_client.start (imandraOptions ~syntax:"reason" ~serverCmd:"imandra-http-server-dev" ())
       |> Js.Promise.then_ (fun ip ->
@@ -17,7 +17,7 @@ let () =
 let () =
   describe "simple counter model" (fun () ->
 
-      beforeAllPromise (fun () ->
+      beforeAllPromise ~timeout:10000 (fun () ->
           let ip = !runningImandraProcess |> Belt.Option.getExn in
           let model_path = Node.Path.join([|[%raw "__dirname"]; ".."; (Printf.sprintf "%s.ire" module_name) |]) in
           Imandra_client.Eval.by_src ip ~src:(Printf.sprintf "#mod_use \"%s\"" model_path)
@@ -30,7 +30,7 @@ let () =
             )
         );
 
-      testPromise "verify increment" (fun () ->
+      testPromise "verify increment" ~timeout:10000 (fun () ->
           let ip = !runningImandraProcess |> Belt.Option.getExn in
           let function_name = Imandra_client.function_name SimpleModel.goal_increment in
           Imandra_client.Verify.by_name ip ~name:(Printf.sprintf "%s.%s" module_name function_name)
@@ -48,7 +48,7 @@ let () =
             )
         );
 
-      testPromise "verify decrement" (fun () ->
+      testPromise "verify decrement" ~timeout:10000 (fun () ->
           let ip = !runningImandraProcess |> Belt.Option.getExn in
           let function_name = Imandra_client.function_name SimpleModel.goal_decrement in
           Imandra_client.Verify.by_name ip ~name:(Printf.sprintf "%s.%s" module_name function_name)
