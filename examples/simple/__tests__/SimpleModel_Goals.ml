@@ -16,7 +16,7 @@ let () =
 let () =
   describe "simple counter model" (fun () ->
 
-      beforeAllPromise ~timeout:10000 (fun () ->
+      beforeAllPromise (fun () ->
           let ip = !serverInfo |> Belt.Option.getExn in
           let model_path = Node.Path.join([|[%raw "__dirname"]; ".."; (Printf.sprintf "%s.ire" module_name) |]) in
           Imandra_client.Eval.by_src ip ~syntax ~src:(Printf.sprintf "#mod_use \"%s\"" model_path)
@@ -29,7 +29,7 @@ let () =
             )
         );
 
-      testPromise "verify increment" ~timeout:10000 (fun () ->
+      testPromise "verify increment" (fun () ->
           let ip = !serverInfo |> Belt.Option.getExn in
           let function_name = Imandra_client.function_name SimpleModel.goal_increment in
           Imandra_client.Verify.by_name ip ~name:(Printf.sprintf "%s.%s" module_name function_name)
@@ -47,7 +47,7 @@ let () =
             )
         );
 
-      testPromise "verify decrement" ~timeout:10000 (fun () ->
+      testPromise "verify decrement" (fun () ->
           let ip = !serverInfo |> Belt.Option.getExn in
           let function_name = Imandra_client.function_name SimpleModel.goal_decrement in
           Imandra_client.Verify.by_name ip ~name:(Printf.sprintf "%s.%s" module_name function_name)
