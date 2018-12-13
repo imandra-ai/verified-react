@@ -232,10 +232,10 @@ let play = ({last_player, _} as game, move) => {
     (game, InvalidMove(move));
   };
 };
-/* verify((game, player, move) => */
-/*   (is_valid_game(game) && is_valid_move(game, player, move)) */
-/*   ==> is_valid_game(play_move(game, player, move)) */
-/* ); */
+
+let goal_game_progression = (game, player, move) =>
+  (is_valid_game(game) && is_valid_move(game, player, move))
+  ==> is_valid_game(play_move(game, player, move));
 /* is_valid_game(CX.game); */
 /* is_valid_move(CX.game, CX.player, CX.move); */
 /* is_valid_game(play_move(CX.game, CX.player, CX.move)); */
