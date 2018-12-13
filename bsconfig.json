@@ -3,14 +3,17 @@
   "sources": [
     {
       "dir": "examples",
-        "subdirs": true,
-        "generators": [{
-            "name": "imandra-extract-re",
-            "edge": ["tictactoe/TicTacToeLogic.ml", ":", "tictactoe/TicTacToeLogic.ire"]
-        },{
-            "name": "imandra-extract-re",
-            "edge": ["simple/SimpleModel.ml", ":", "simple/SimpleModel.ire"]
-        }]
+      "subdirs": true,
+      "generators": [{
+        "name": "imandra-extract-re",
+        "edge": ["tictactoe/TicTacToeLogic.ml", ":", "tictactoe/TicTacToeLogic.ire"]
+      },{
+        "name": "imandra-extract-re",
+        "edge": ["simple/SimpleModel.ml", ":", "simple/SimpleModel.ire"]
+      }]
+    },
+    {
+      "dir": "scripts"
     }
   ],
   "package-specs": {
