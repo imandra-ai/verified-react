@@ -2,7 +2,7 @@ open Jest;
 
 let serverInfo = ref(None);
 
-let module_name = "TicTacToeLogic";
+let moduleName = "TicTacToeLogic";
 
 let () =
   beforeAllPromise(() => {
@@ -21,7 +21,7 @@ let () =
         Node.Path.join([|
           [%raw "__dirname"],
           "..",
-          Printf.sprintf("%s.ire", module_name),
+          Printf.sprintf("%s.ire", moduleName),
         |]);
       Imandra_client.Eval.by_src(
         ip,
@@ -41,11 +41,11 @@ let () =
     });
     testPromise("verify move difference", () => {
       let ip = serverInfo^ |> Belt.Option.getExn;
-      let function_name =
+      let functionName =
         Imandra_client.function_name(
           TicTacToeLogic.goal_valid_grid_has_no_more_than_one_move_diff,
         );
-      let name = Printf.sprintf("%s.%s", module_name, function_name);
+      let name = Printf.sprintf("%s.%s", moduleName, functionName);
       Imandra_client.Verify.by_name(ip, ~name)
       |> Js.Promise.then_(
            fun
