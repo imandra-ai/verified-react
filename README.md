@@ -1,13 +1,13 @@
 # VerifiedReact
 
-Welcome to VerifiedReact! This is work in progress - stay in touch via [@VerifiedByAI](https://www.twitter.com/verifiedbyai).
+Welcome to VerifiedReact! This is work in progress - stay in touch via [@VerifiedByAI](https://www.twitter.com/verifiedbyai), or come chat with us on [Discord](https://discord.gg/byQApJ3).
 
 ![Verified React logo](/verified-react-logo.png)
 
 ## Ideas and aims
 
 - [x] Stage 1  (Counter, TicTacToe)
-  - [x] Automation of verification goals via `jest`. See:
+  - [x] Automation of verification goals via `jest`, via `imandra-http-server`. See:
     - `examples/simple/__tests__/SimpleModel_Goals.ml`
     - `examples/tictactoe/__tests__/TicTacToeLogic_Goals.re`
   - [x] Hook verified state machine up to React reducer component. See:
