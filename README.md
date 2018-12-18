@@ -4,9 +4,14 @@ Welcome to VerifiedReact! This is work in progress - stay in touch via [@Verifie
 
 ![Verified React logo](/verified-react-logo.png)
 
-## Ideas and aims
+## Ideas, aims and progress so far
 
 - [x] Stage 1  (Counter, TicTacToe)
+  - [x] Simpler automation of Imandra:
+    - added `imandra-http-server` as an alternative to `imandra-repl` to allow automation via an HTTP api, bundled with the [Imandra installer](https://docs.imandra.ai/imandra-docs/notebooks/installation-simple/). Previously you could automate our `imandra-repl` process via stdin/stdout, but having an HTTP interface to the Imandra client naturally makes life a lot easier. `imandra-http-server` is built using our `Imandra_client` OCaml library, which we're hoping to make available as an `opam` package in the future, so OCaml users can use the Imandra client directly from their code.
+    - added [`bs-imandra-client`](https://github.com/AestheticIntegration/bs-imandra-client) - bucklescript bindings to that HTTP api to be used when running on Node
+  - [x] Allow export of export of core logic verified with Imandra to code that can be compiled to executable JS
+    - Imandra comes with a prelude of pre-verified functions for use from `.iml` (Imandra-ml) or `.ire` (Imandra-reason) code. When you're done reasoning and want to compile the verified module into a larger program, you need a `.ml` version of the prelude to compile alongside your module. Previously this was available to compile as native OCaml package, but we've now also included an initial amended version that compiles to javascript via the bucklescript compiler too, which can be `npm installed` from the [`imandra-prelude`](https://github.com/AestheticIntegration/imandra-prelude) repo.
   - [x] Automation of verification goals via `jest`, via `imandra-http-server`. See:
     - `examples/simple/__tests__/SimpleModel_Goals.ml`
     - `examples/tictactoe/__tests__/TicTacToeLogic_Goals.re`
