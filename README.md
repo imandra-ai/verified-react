@@ -29,7 +29,7 @@ Make sure you have the latest version of `imandra-repl` installed via the [Imand
 
     imandra-repl
     
-and make sure it's starts up successfully (i.e. all updates are installed). Once it's started, quit it again with Ctrl-D. Next:
+and make sure it starts up successfully (i.e. all updates are installed). Once it's started, quit it again with Ctrl-D. Next:
 
     npm install
     
