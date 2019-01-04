@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>ReasonReact Examples</title>
+        <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans|Roboto" rel="stylesheet">
+        <style>
+         h2, h3 {
+             font-family: 'Roboto', sans-serif;
+         }
+
+         h1,  body {
+             font-family: 'Merriweather Sans', sans-serif;
+             font-weight: 100;
+             font-size: 1.7em;
+             color: #576483;
+             margin: 0 auto 0.3em;
+         }
+
+         p {
+             font-size: 0.4em;
+         }
+
+         button {
+             border: none !important;
+             font-size: 1em;
+             color: #3276B5;
+             background-color: #F5FAFE;
+             border-radius: 5px;
+             cursor: pointer;
+         }
+
+         button:hover {
+             background-color: #8BDFE3 !important;
+         }
+
+         #app {
+             margin-top: 2em;
+         }
+
+         button:focus {
+             outline: 0;
+         }
+
+         #logo {
+             margin-top: 2em;
+             display: flex;
+             flex-direction: column;
+             align-items: center;
+         }
+
+         img {
+             width: 9em;
+         }
+        </style>
+    </head>
+    <body>
+        <div id="app"></div>
+        <div id="logo">
+            <p>Verified with:</p>
+            <a id="logo-link" href="https://try.imandra.ai">
+                <img src="../../img/imandra_raas_logo.svg" />
+            </a>
+            <p>See <a href="https://docs.imandra.ai/imandra-docs/notebooks/reasonml-tic-tac-toe/">our notebook</a> for a full walkthrough.</p>
+        </div>
+        <script src="./Index.bs.js"></script>
+    </body>
+</html>

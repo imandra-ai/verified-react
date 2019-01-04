@@ -8,7 +8,8 @@
   },
   "scripts": {
     "test": "jest -i",
-    "watch": "bsb -make-world -w"
+    "watch": "bsb -make-world -w",
+    "watch-tictactoe": "parcel examples/tictactoe/index.html"
   },
   "repository": {
     "type": "git",
@@ -22,9 +23,11 @@
   "homepage": "https://github.com/aestheticintegration/verified-react#readme",
   "dependencies": {
     "@glennsl/bs-jest": "^0.4.6",
+    "bs-css": "^8.0.0",
     "bs-imandra-client": "git+https://github.com/aestheticintegration/bs-imandra-client.git",
     "imandra-prelude": "git+https://github.com/aestheticintegration/imandra-prelude.git",
     "jest": "^23.6.0",
+    "parcel-bundler": "^1.11.0",
     "reason-react": "^0.5.3"
   },
   "devDependencies": {

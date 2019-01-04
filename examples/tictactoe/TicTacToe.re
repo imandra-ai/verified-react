@@ -1,4 +1,4 @@
-[@bs.module "emotion"] external css : string => string = "css";
+open Css;
 
 type state = {
   game: TicTacToeLogic.game_state,
@@ -57,10 +57,15 @@ let make = (~onGameFinished, _children) => {
       };
     let buttonCss = b => {
       let base =
-        css("display: block; width: 78px; height: 78px; margin: 3px;");
+        style([
+          display(block),
+          width(px(78)),
+          height(px(78)),
+          margin(px(3)),
+        ]);
       switch (self.state.status) {
       | InvalidMove(m) when b == m =>
-        base ++ " " ++ css("border: solid 1px red !important")
+        merge([base, style([border(px(1), solid, red)])])
       | _ => base
       };
     };
@@ -71,7 +76,7 @@ let make = (~onGameFinished, _children) => {
       | Won(O) => Some("O")
       | _ => None
       };
-    let rowCss = css("display: flex; flex-direction: row");
+    let rowCss = style([display(flexBox), flexDirection(row)]);
     let elems =
       <div>
         <div className=rowCss>
@@ -142,22 +147,39 @@ let make = (~onGameFinished, _children) => {
           elems,
           <div
             className=(
-              css(
-                "position: absolute; top: 0; left: 0; width: 100%; height: 100%; text-align: center; font-size: 150px; display: flex; flex-direction: row; justify-content: space-around; background: #FBFBFB; color: #3276B5; user-select: none; cursor: pointer;",
-              )
+              style([
+                position(absolute),
+                top(px(0)),
+                left(px(0)),
+                width(pct(100.)),
+                height(pct(100.)),
+                textAlign(center),
+                fontSize(px(150)),
+                display(flexBox),
+                flexDirection(row),
+                justifyContent(spaceAround),
+                background(hex("#FBFBFB")),
+                color(hex("#3276B5")),
+                userSelect(none),
+                cursor(`pointer),
+              ])
             )
             onClick=(_event => self.send(Restart))>
             <div
               className=(
-                css(
-                  "display: flex; flex-direction: column; justify-content: space-around;",
-                )
+                style([
+                  display(flexBox),
+                  flexDirection(column),
+                  justifyContent(spaceAround),
+                ])
               )>
               (ReasonReact.string(overlayText))
             </div>
           </div>,
         |]
       };
-    <div className=(css("position: relative; display: flex;"))> ...sub </div>;
+    <div className=(style([position(relative), display(flexBox)]))>
+      ...sub
+    </div>;
   },
 };
