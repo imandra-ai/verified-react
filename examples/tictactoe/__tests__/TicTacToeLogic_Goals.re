@@ -63,31 +63,30 @@ let () =
              },
          );
     });
-    /* Disabling until /verify doesn't compute proof graphs by default for a huge speed increase. */
-    /* testPromise( */
-    /*   ~timeout=300000, */
-    /*   "verify game progression", */
-    /*   () => { */
-    /*     let ip = serverInfo^ |> Belt.Option.getExn; */
-    /*     let functionName = */
-    /*       Imandra_client.function_name(TicTacToeLogic.goal_game_progression); */
-    /*     let name = Printf.sprintf("%s.%s", moduleName, functionName); */
-    /*     Imandra_client.Verify.by_name(ip, ~name) */
-    /*     |> Js.Promise.then_( */
-    /*          fun */
-    /*          | Belt.Result.Ok((Imandra_client.Verify.Proved, _)) => */
-    /*            Js.Promise.resolve(pass) */
-    /*          | Belt.Result.Ok(o) => { */
-    /*              Js.Console.error(o); */
-    /*              Js.Promise.reject(Failure("unexpected result")); */
-    /*            } */
-    /*          | Belt.Result.Error((e, _)) => { */
-    /*              Js.Console.error(e); */
-    /*              Js.Promise.reject( */
-    /*                Failure(Printf.sprintf("error from imandra: %s", e)), */
-    /*              ); */
-    /*            }, */
-    /*        ); */
-    /*   }, */
-    /* ); */
+    testPromise(
+      ~timeout=300000,
+      "verify game progression",
+      () => {
+        let ip = serverInfo^ |> Belt.Option.getExn;
+        let functionName =
+          Imandra_client.function_name(TicTacToeLogic.goal_game_progression);
+        let name = Printf.sprintf("%s.%s", moduleName, functionName);
+        Imandra_client.Verify.by_name(ip, ~name)
+        |> Js.Promise.then_(
+             fun
+             | Belt.Result.Ok((Imandra_client.Verify.Proved, _)) =>
+               Js.Promise.resolve(pass)
+             | Belt.Result.Ok(o) => {
+                 Js.Console.error(o);
+                 Js.Promise.reject(Failure("unexpected result"));
+               }
+             | Belt.Result.Error((e, _)) => {
+                 Js.Console.error(e);
+                 Js.Promise.reject(
+                   Failure(Printf.sprintf("error from imandra: %s", e)),
+                 );
+               },
+           );
+      },
+    );
   });
