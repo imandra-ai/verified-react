@@ -1,3 +1,4 @@
+open Css;
 type action =
   | Noop;
 type state = {yo: string};
@@ -9,9 +10,12 @@ let make = children => {
     switch (action) {
     | Noop => ReasonReact.Update(s)
     },
-  render: self =>
-    <div>
-      <h1> {ReasonReact.string("Inspecting!")} </h1>
+  render: _self =>
+    <div className={style([display(flexBox), flexDirection(row)])}>
       <div> ...children </div>
+      <div className={style([display(flexBox), flexDirection(column)])}>
+        <div> {ReasonReact.string("Instance query:")} </div>
+        <textarea />
+      </div>
     </div>,
 };

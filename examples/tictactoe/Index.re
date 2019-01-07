@@ -6,23 +6,50 @@ module App = {
     | Finished;
   type state = {
     status,
-    isDebug: bool,
+    isQuerying: bool,
   };
   type action =
     | Finish
     | Restart
-    | SetDebug(bool);
+    | SetQuerying(bool);
   let component = ReasonReact.reducerComponent("App");
   let make = _children => {
     ...component,
-    initialState: () => {status: InProgress, isDebug: false},
+    initialState: () => {status: InProgress, isQuerying: false},
     reducer: (action, state) =>
       switch (action) {
       | Finish => ReasonReact.Update({...state, status: Finished})
       | Restart => ReasonReact.Update({...state, status: InProgress})
-      | SetDebug(v) => ReasonReact.Update({...state, isDebug: v})
+      | SetQuerying(v) => ReasonReact.Update({...state, isQuerying: v})
       },
-    render: self =>
+    render: self => {
+      let contents = state =>
+        <div
+          className={
+            style([
+              display(flexBox),
+              flexDirection(column),
+              fontSize(rem(1.2)),
+              marginTop(px(10)),
+            ])
+          }>
+          <TicTacToe onGameFinished={() => self.send(Finish)} state />
+          <div>
+            <input
+              type_="checkbox"
+              checked={self.state.isQuerying}
+              onChange={
+                event =>
+                  self.send(
+                    SetQuerying(ReactEvent.Form.target(event)##checked),
+                  )
+              }
+            />
+            <label className={style([paddingLeft(px(5))])}>
+              {ReasonReact.string("Query instances")}
+            </label>
+          </div>
+        </div>;
       <div
         className={
           style([
@@ -33,23 +60,14 @@ module App = {
         }>
         <h1> {ReasonReact.string("Tic Tac Toe")} </h1>
         {
-          if (self.state.isDebug) {
-            <InstanceBrowser>
-              <TicTacToe onGameFinished={() => self.send(Finish)} />
-            </InstanceBrowser>;
+          if (self.state.isQuerying) {
+            <InstanceBrowser> {contents(None)} </InstanceBrowser>;
           } else {
-            <TicTacToe onGameFinished={() => self.send(Finish)} />;
+            contents(None);
           }
         }
-        <input
-          type_="checkbox"
-          checked={self.state.isDebug}
-          onChange={
-            event =>
-              self.send(SetDebug(ReactEvent.Form.target(event)##checked))
-          }
-        />
-      </div>,
+      </div>;
+    },
   };
 };
 

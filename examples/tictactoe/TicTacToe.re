@@ -20,10 +20,14 @@ let initialState = {
 
 /* greeting and children are props. `children` isn't used, therefore ignored.
    We ignore it by prepending it with an underscore */
-let make = (~onGameFinished, _children) => {
+let make = (~onGameFinished, ~state, _children) => {
   /* spread the other default fields of component here and override a few */
   ...component,
-  initialState: () => initialState,
+  initialState: () =>
+    switch (state) {
+    | None => initialState
+    | Some(s) => s
+    },
   /* State transitions */
   reducer: (action, state) =>
     switch (action) {
@@ -81,62 +85,62 @@ let make = (~onGameFinished, _children) => {
       <div>
         <div className=rowCss>
           <button
-            className=(buttonCss(A))
-            onClick=(_event => self.send(Move(A)))
+            className={buttonCss(A)}
+            onClick={_event => self.send(Move(A))}
             disabled>
-            (ReasonReact.string(label(self.state.game.grid.a)))
+            {ReasonReact.string(label(self.state.game.grid.a))}
           </button>
           <button
-            className=(buttonCss(B))
-            onClick=(_event => self.send(Move(B)))
+            className={buttonCss(B)}
+            onClick={_event => self.send(Move(B))}
             disabled>
-            (ReasonReact.string(label(self.state.game.grid.b)))
+            {ReasonReact.string(label(self.state.game.grid.b))}
           </button>
           <button
-            className=(buttonCss(C))
-            onClick=(_event => self.send(Move(C)))
+            className={buttonCss(C)}
+            onClick={_event => self.send(Move(C))}
             disabled>
-            (ReasonReact.string(label(self.state.game.grid.c)))
-          </button>
-        </div>
-        <div className=rowCss>
-          <button
-            className=(buttonCss(D))
-            onClick=(_event => self.send(Move(D)))
-            disabled>
-            (ReasonReact.string(label(self.state.game.grid.d)))
-          </button>
-          <button
-            className=(buttonCss(E))
-            onClick=(_event => self.send(Move(E)))
-            disabled>
-            (ReasonReact.string(label(self.state.game.grid.e)))
-          </button>
-          <button
-            className=(buttonCss(F))
-            onClick=(_event => self.send(Move(F)))
-            disabled>
-            (ReasonReact.string(label(self.state.game.grid.f)))
+            {ReasonReact.string(label(self.state.game.grid.c))}
           </button>
         </div>
         <div className=rowCss>
           <button
-            className=(buttonCss(G))
-            onClick=(_event => self.send(Move(G)))
+            className={buttonCss(D)}
+            onClick={_event => self.send(Move(D))}
             disabled>
-            (ReasonReact.string(label(self.state.game.grid.g)))
+            {ReasonReact.string(label(self.state.game.grid.d))}
           </button>
           <button
-            className=(buttonCss(H))
-            onClick=(_event => self.send(Move(H)))
+            className={buttonCss(E)}
+            onClick={_event => self.send(Move(E))}
             disabled>
-            (ReasonReact.string(label(self.state.game.grid.h)))
+            {ReasonReact.string(label(self.state.game.grid.e))}
           </button>
           <button
-            className=(buttonCss(I))
-            onClick=(_event => self.send(Move(I)))
+            className={buttonCss(F)}
+            onClick={_event => self.send(Move(F))}
             disabled>
-            (ReasonReact.string(label(self.state.game.grid.i)))
+            {ReasonReact.string(label(self.state.game.grid.f))}
+          </button>
+        </div>
+        <div className=rowCss>
+          <button
+            className={buttonCss(G)}
+            onClick={_event => self.send(Move(G))}
+            disabled>
+            {ReasonReact.string(label(self.state.game.grid.g))}
+          </button>
+          <button
+            className={buttonCss(H)}
+            onClick={_event => self.send(Move(H))}
+            disabled>
+            {ReasonReact.string(label(self.state.game.grid.h))}
+          </button>
+          <button
+            className={buttonCss(I)}
+            onClick={_event => self.send(Move(I))}
+            disabled>
+            {ReasonReact.string(label(self.state.game.grid.i))}
           </button>
         </div>
       </div>;
@@ -146,7 +150,7 @@ let make = (~onGameFinished, _children) => {
       | Some(overlayText) => [|
           elems,
           <div
-            className=(
+            className={
               style([
                 position(absolute),
                 top(px(0)),
@@ -163,22 +167,22 @@ let make = (~onGameFinished, _children) => {
                 userSelect(none),
                 cursor(`pointer),
               ])
-            )
+            }
             onClick=(_event => self.send(Restart))>
             <div
-              className=(
+              className={
                 style([
                   display(flexBox),
                   flexDirection(column),
                   justifyContent(spaceAround),
                 ])
-              )>
-              (ReasonReact.string(overlayText))
+              }>
+              {ReasonReact.string(overlayText)}
             </div>
           </div>,
         |]
       };
-    <div className=(style([position(relative), display(flexBox)]))>
+    <div className={style([position(relative), display(flexBox)])}>
       ...sub
     </div>;
   },
