@@ -1,11 +1,26 @@
 open Css;
 type action =
   | Noop;
-type state = {yo: string};
+type state =
+  | ();
 let component = ReasonReact.reducerComponent("InstanceBrowser");
-let make = children => {
+let make = (~srcPath, children) => {
   ...component,
-  initialState: () => {yo: "there"},
+  initialState: () => (),
+  didMount: _c => {
+    let serverInfo: Imandra_client.ServerInfo.t = {
+      port: 3000,
+      baseUrl: "http://localhost:3000",
+    };
+    print_endline("calling eval");
+    let _p =
+      Imandra_client.Eval.by_src(
+        ~syntax=Imandra_client.Syntax.Reason,
+        ~src=Printf.sprintf("#use \"%s\"", srcPath),
+        serverInfo,
+      );
+    ();
+  },
   reducer: (action, s: state) =>
     switch (action) {
     | Noop => ReasonReact.Update(s)
