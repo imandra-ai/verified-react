@@ -61,7 +61,7 @@ module App = {
         <h1> {ReasonReact.string("Tic Tac Toe")} </h1>
         {
           if (self.state.isQuerying) {
-            <InstanceBrowser srcPath="examples/tictactoe/TicTacToeLogic.ire">
+            <InstanceBrowser setupScriptPath="examples/tictactoe/Setup.ire">
               {contents(None)}
             </InstanceBrowser>;
           } else {

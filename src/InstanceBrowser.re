@@ -4,7 +4,7 @@ type action =
 type state =
   | ();
 let component = ReasonReact.reducerComponent("InstanceBrowser");
-let make = (~srcPath, children) => {
+let make = (~setupScriptPath, children) => {
   ...component,
   initialState: () => (),
   didMount: _c => {
@@ -16,9 +16,18 @@ let make = (~srcPath, children) => {
     let _p =
       Imandra_client.Eval.by_src(
         ~syntax=Imandra_client.Syntax.Reason,
-        ~src=Printf.sprintf("#use \"%s\"", srcPath),
+        ~src=Printf.sprintf("#use \"%s\"", setupScriptPath),
         serverInfo,
-      );
+      )
+      |> Js.Promise.then_(_ => {
+           print_endline("calling instance");
+           Imandra_client.Instance.by_src(
+             ~syntax=Imandra_client.Syntax.Reason,
+             ~src="x => x.last_player == Some(X)",
+             ~printer="game_state_to_json_pp",
+             serverInfo,
+           );
+         });
     ();
   },
   reducer: (action, s: state) =>

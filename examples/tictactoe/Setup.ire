@@ -1,0 +1,106 @@
+#redef true;
+#use "examples/tictactoe/TicTacToeLogic.ire";
+
+[@program]
+let player_to_json = p =>
+  switch (p) {
+  | X => `String("X")
+  | O => `String("O")
+  };
+
+[@program]
+let square_state_to_json = s =>
+  switch (s) {
+  | None => `Null
+  | Some(p) => player_to_json(p)
+  };
+
+[@program]
+let grid_to_json = g =>
+  `Assoc([
+    ("a", square_state_to_json(g.a)),
+    ("b", square_state_to_json(g.b)),
+    ("c", square_state_to_json(g.c)),
+    ("d", square_state_to_json(g.d)),
+    ("e", square_state_to_json(g.e)),
+    ("f", square_state_to_json(g.f)),
+    ("g", square_state_to_json(g.g)),
+    ("h", square_state_to_json(g.h)),
+    ("i", square_state_to_json(g.i)),
+  ]);
+
+[@program]
+let game_state_to_json = gs =>
+  `Assoc([
+    ("grid", grid_to_json(gs.grid)),
+    ("last_player", square_state_to_json(gs.last_player)),
+  ]);
+
+[@program]
+let square_state_of_json = j =>
+  switch (j) {
+  | `Null => None
+  | `String("X") => Some(X)
+  | `String("O") => Some(O)
+  | _ => failwith("square_state: unexpected value")
+  };
+
+[@program]
+let grid_of_json = j =>
+  switch (j) {
+  | `Assoc(l) =>
+    let a = List.assoc("a", l);
+    let b = List.assoc("b", l);
+    let c = List.assoc("c", l);
+    let d = List.assoc("d", l);
+    let e = List.assoc("e", l);
+    let f = List.assoc("f", l);
+    let g = List.assoc("g", l);
+    let h = List.assoc("h", l);
+    let i = List.assoc("i", l);
+    switch (a, b, c, d, e, f, g, h, i) {
+    | (
+        Some(a),
+        Some(b),
+        Some(c),
+        Some(d),
+        Some(e),
+        Some(f),
+        Some(g),
+        Some(h),
+        Some(i),
+      ) => {
+        a,
+        b,
+        c,
+        d,
+        e,
+        f,
+        g,
+        h,
+        i,
+      }
+    | _ => failwith("grid: json missing property")
+    };
+  | _ => failwith("grid: json not an object")
+  };
+
+[@program]
+let game_state_of_json = j =>
+  switch (j) {
+  | `Assoc(l) =>
+    let grid = List.assoc("grid", l);
+    let lp = List.assoc("last_player", l);
+    switch (grid, lp) {
+    | (Some(g), Some(lp)) => {
+        grid: grid_of_json(g),
+        last_player: square_state_of_json(lp),
+      }
+    | _ => failwith("game_state: json missing property")
+    };
+  | _ => failwith("game_state: json not an object")
+  };
+
+[@program]
+let game_state_to_json_pp = gs =>
+  Yojson.Basic.to_string(game_state_to_json(gs));
