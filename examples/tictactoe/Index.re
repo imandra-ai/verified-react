@@ -25,49 +25,54 @@ module App = {
     render: self => {
       let contents = state =>
         <div
-          className={
+          className=(
             style([
               display(flexBox),
               flexDirection(column),
               fontSize(rem(1.2)),
               marginTop(px(10)),
             ])
-          }>
-          <TicTacToe onGameFinished={() => self.send(Finish)} state />
+          )>
+          <TicTacToe onGameFinished=(() => self.send(Finish)) state />
           <div>
             <input
               type_="checkbox"
-              checked={self.state.isQuerying}
-              onChange={
+              checked=self.state.isQuerying
+              onChange=(
                 event =>
                   self.send(
                     SetQuerying(ReactEvent.Form.target(event)##checked),
                   )
-              }
+              )
             />
-            <label className={style([paddingLeft(px(5))])}>
-              {ReasonReact.string("Query instances")}
+            <label className=(style([paddingLeft(px(5))]))>
+              (ReasonReact.string("Query instances"))
             </label>
           </div>
         </div>;
       <div
-        className={
+        className=(
           style([
             display(flexBox),
             flexDirection(column),
             alignItems(center),
           ])
-        }>
-        <h1> {ReasonReact.string("Tic Tac Toe")} </h1>
-        {
+        )>
+        <h1> (ReasonReact.string("Tic Tac Toe")) </h1>
+        (
           if (self.state.isQuerying) {
-            <InstanceBrowser setupScriptPath="examples/tictactoe/Setup.ire">
-              {contents(None)}
+            <InstanceBrowser
+              serverInfo=Imandra_client.ServerInfo.{
+                           port: 3000,
+                           baseUrl: "http://localhost:3000",
+                         }
+              setupScriptPath="examples/tictactoe/Setup.ire">
+              (contents(None))
             </InstanceBrowser>;
           } else {
             contents(None);
           }
-        }
+        )
       </div>;
     },
   };
