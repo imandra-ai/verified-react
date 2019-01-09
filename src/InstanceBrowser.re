@@ -14,17 +14,17 @@ let make = (~setupScriptPath, children) => {
     };
     print_endline("calling eval");
     let _p =
-      Imandra_client.Eval.by_src(
+      Imandra_client.Eval.bySrc(
         ~syntax=Imandra_client.Syntax.Reason,
         ~src=Printf.sprintf("#use \"%s\"", setupScriptPath),
         serverInfo,
       )
       |> Js.Promise.then_(_ => {
            print_endline("calling instance");
-           Imandra_client.Instance.by_src(
+           Imandra_client.Instance.bySrc(
              ~syntax=Imandra_client.Syntax.Reason,
              ~src="x => x.last_player == Some(X)",
-             ~printer="game_state_to_json_pp",
+             ~instancePrinter={ name: "game_state_to_json_pp", cx_var_name: "x" },
              serverInfo,
            );
          });

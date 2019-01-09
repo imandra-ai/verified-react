@@ -6,7 +6,7 @@ let moduleName = "TicTacToeLogic";
 
 let () =
   beforeAllPromise(() => {
-    let si = Imandra_client.ServerInfo.from_file();
+    let si = Imandra_client.ServerInfo.fromFile();
     serverInfo := Some(si);
     Imandra_client.reset(si);
   });
@@ -23,7 +23,7 @@ let () =
           "..",
           Printf.sprintf("%s.ire", moduleName),
         |]);
-      Imandra_client.Eval.by_src(
+      Imandra_client.Eval.bySrc(
         ip,
         ~syntax,
         ~src=Printf.sprintf("#mod_use \"%s\"", model_path),
@@ -46,7 +46,7 @@ let () =
           TicTacToeLogic.goal_valid_grid_has_no_more_than_one_move_diff,
         );
       let name = Printf.sprintf("%s.%s", moduleName, functionName);
-      Imandra_client.Verify.by_name(ip, ~name)
+      Imandra_client.Verify.byName(ip, ~name)
       |> Js.Promise.then_(
            fun
            | Belt.Result.Ok((Imandra_client.Verify.Proved, _)) =>
@@ -71,7 +71,7 @@ let () =
         let functionName =
           Imandra_client.function_name(TicTacToeLogic.goal_game_progression);
         let name = Printf.sprintf("%s.%s", moduleName, functionName);
-        Imandra_client.Verify.by_name(ip, ~name)
+        Imandra_client.Verify.byName(ip, ~name)
         |> Js.Promise.then_(
              fun
              | Belt.Result.Ok((Imandra_client.Verify.Proved, _)) =>

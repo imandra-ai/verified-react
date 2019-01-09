@@ -24,7 +24,7 @@
   "dependencies": {
     "@glennsl/bs-jest": "^0.4.6",
     "bs-css": "^8.0.0",
-    "bs-imandra-client": "git+https://github.com/aestheticintegration/bs-imandra-client.git",
+    "bs-imandra-client": "git+https://github.com/aestheticintegration/bs-imandra-client.git#575373704877d6a1a33b89f6efcf3489de3af82b",
     "imandra-prelude": "git+https://github.com/aestheticintegration/imandra-prelude.git",
     "jest": "^23.6.0",
     "parcel-bundler": "^1.11.0",
