@@ -10,7 +10,7 @@ type action =
 type state = {
   initialised: bool,
   loadingInstance: bool,
-  instance: option(string),
+  instance: option(Js.Json.t),
   error: option(string),
 };
 
@@ -21,7 +21,7 @@ let serverInfo: Imandra_client.ServerInfo.t = {
   baseUrl: "http://localhost:3000",
 };
 
-let make = (~serverInfo, ~setupScriptPath, children) => {
+let make = (~serverInfo, ~setupScriptPath, ~body, _children) => {
   ...component,
   initialState: () => {
     initialised: false,
@@ -82,19 +82,19 @@ let make = (~serverInfo, ~setupScriptPath, children) => {
       ReasonReact.Update({
         ...s,
         loadingInstance: false,
-        instance: Some(instance),
+        instance: Json.parse(instance),
       })
     },
   render: self =>
-    <div className=(style([display(flexBox), flexDirection(row)]))>
-      <div> ...children </div>
-      <div className=(style([display(flexBox), flexDirection(column)]))>
-        <div> (ReasonReact.string("Instance query:")) </div>
+    <div className={style([display(flexBox), flexDirection(row)])}>
+      <div> {body(self.state.instance)} </div>
+      <div className={style([display(flexBox), flexDirection(column)])}>
+        <div> {ReasonReact.string("Instance query:")} </div>
         <textarea
-          onChange=(
+          onChange={
             event =>
               self.send(QueryInstance(ReactEvent.Form.target(event)##value))
-          )
+          }
         />
       </div>
     </div>,

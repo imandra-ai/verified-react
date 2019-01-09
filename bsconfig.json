@@ -28,6 +28,7 @@
     "reason-react",
     "bs-imandra-client",
     "@glennsl/bs-jest",
+    "@glennsl/bs-json",
     "imandra-prelude",
     "bs-css"
   ],
