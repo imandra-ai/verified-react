@@ -2,13 +2,19 @@ open Css;
 
 type action =
   | Noop
+  | InitialiseError(string)
   | Initialised
   | QueryInstance(string)
   | InstanceReturned(string)
   | Error(string);
 
+type initState =
+  | Loading
+  | Error
+  | Loaded;
+
 type state = {
-  initialised: bool,
+  init: initState,
   loadingInstance: bool,
   instance: option(Js.Json.t),
   query: string,
@@ -25,7 +31,7 @@ let serverInfo: Imandra_client.ServerInfo.t = {
 let make = (~serverInfo, ~setupScriptPath, ~body, _children) => {
   ...component,
   initialState: () => {
-    initialised: false,
+    init: Loading,
     instance: None,
     loadingInstance: false,
     query: "",
@@ -38,8 +44,11 @@ let make = (~serverInfo, ~setupScriptPath, ~body, _children) => {
         ~src=Printf.sprintf("#use \"%s\"", setupScriptPath),
         serverInfo,
       )
-      |> Js.Promise.then_(_v => {
-           self.send(Initialised);
+      |> Js.Promise.then_(v => {
+           switch (v) {
+           | Belt.Result.Ok(_) => self.send(Initialised)
+           | Belt.Result.Error((e, _)) => self.send(InitialiseError(e))
+           };
            Js.Promise.resolve();
          });
     ();
@@ -48,7 +57,10 @@ let make = (~serverInfo, ~setupScriptPath, ~body, _children) => {
     switch (action) {
     | Noop => ReasonReact.Update(s)
     | Error(e) => ReasonReact.Update({...s, error: Some(e)})
-    | Initialised => ReasonReact.Update({...s, initialised: true})
+    | Initialised => ReasonReact.Update({...s, init: Loaded})
+    | InitialiseError(e) =>
+      Js.Console.error(e);
+      ReasonReact.Update({...s, init: Error});
     | QueryInstance(queryStr) =>
       ReasonReact.UpdateWithSideEffects(
         {...s, loadingInstance: true, query: queryStr},
@@ -57,7 +69,7 @@ let make = (~serverInfo, ~setupScriptPath, ~body, _children) => {
             let _p =
               Imandra_client.Instance.bySrc(
                 ~syntax=Imandra_client.Syntax.Reason,
-                ~src=Printf.sprintf("x => %s", queryStr),
+                ~src=Printf.sprintf("(x : game_state) => %s", queryStr),
                 ~instancePrinter={
                   name: "game_state_to_json_pp",
                   cx_var_name: "x",
@@ -121,15 +133,45 @@ let make = (~serverInfo, ~setupScriptPath, ~body, _children) => {
           (ReasonReact.string(" which has been loaded into Imandra."))
         </div>
         <div> (ReasonReact.string("Enter a ReasonML instance query:")) </div>
-        <pre> (ReasonReact.string("x : game_state  =>")) </pre>
-        <textarea
-          className=(style([height(px(100))]))
-          value=self.state.query
-          onChange=(
-            event =>
-              self.send(QueryInstance(ReactEvent.Form.target(event)##value))
-          )
-        />
+        <div
+          className=(
+            style([display(flexBox), justifyContent(spaceBetween)])
+          )>
+          <pre> (ReasonReact.string("x : game_state  =>")) </pre>
+          <div className=(style([display(flexBox), alignItems(center)]))>
+            <div className=(style([fontSize(px(8)), marginRight(px(5))]))>
+              (ReasonReact.string("imandra-http-server connection"))
+            </div>
+            <div
+              className=(
+                style([
+                  borderRadius(pct(50.)),
+                  height(px(20)),
+                  width(px(20)),
+                  backgroundColor(
+                    switch (self.state.init) {
+                    | Loading => grey
+                    | Loaded => green
+                    | Error => red
+                    },
+                  ),
+                ])
+              )
+            />
+          </div>
+        </div>
+        <div className=(style([display(flexBox), flexDirection(column)]))>
+          <textarea
+            className=(style([height(px(100)), padding(px(5))]))
+            value=self.state.query
+            onChange=(
+              event =>
+                self.send(
+                  QueryInstance(ReactEvent.Form.target(event)##value),
+                )
+            )
+          />
+        </div>
         <div className=(style([marginTop(px(20))]))>
           (ReasonReact.string("or try these examples:"))
         </div>
@@ -138,6 +180,7 @@ let make = (~serverInfo, ~setupScriptPath, ~body, _children) => {
           <li> (example("is_winning(x, X)")) </li>
           <li> (example("is_winning(x, O) && is_valid_game(x)")) </li>
           <li> (example("is_valid_game(x) && x.last_player == Some(O)")) </li>
+          <li> (example("true")) </li>
         </ul>
       </div>
     </div>;
