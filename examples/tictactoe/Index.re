@@ -29,95 +29,55 @@ let game_state_of_json = json => {
 };
 
 module App = {
-  type status =
-    | InProgress
-    | Finished;
-  type state = {
-    status,
-    isQuerying: bool,
-  };
-  type action =
-    | Finish
-    | Restart
-    | SetQuerying(bool);
-  let component = ReasonReact.reducerComponent("App");
+  let component = ReasonReact.statelessComponent("App");
   let make = _children => {
     ...component,
-    initialState: () => {status: InProgress, isQuerying: false},
-    reducer: (action, state) =>
-      switch (action) {
-      | Finish => ReasonReact.Update({...state, status: Finished})
-      | Restart => ReasonReact.Update({...state, status: InProgress})
-      | SetQuerying(v) => ReasonReact.Update({...state, isQuerying: v})
-      },
-    render: self => {
-      let contents = json => {
-        switch (json) {
-        | None => print_endline("none")
-        | Some(j) => print_endline(Js.Json.stringify(j))
-        };
-        let state =
-          switch (json) {
-          | None => None
-          | Some(j) =>
-            print_endline("in here");
-            Some({
-              TicTacToe.game: game_state_of_json(j),
-              TicTacToe.status: InProgress,
-            });
-          };
-        <div
-          className={
-            style([
-              display(flexBox),
-              flexDirection(column),
-              fontSize(rem(1.2)),
-              marginTop(px(10)),
-            ])
-          }>
-          <TicTacToe onGameFinished={() => self.send(Finish)} state />
-          <div>
-            <input
-              type_="checkbox"
-              checked={self.state.isQuerying}
-              onChange={
-                event =>
-                  self.send(
-                    SetQuerying(ReactEvent.Form.target(event)##checked),
-                  )
-              }
-            />
-            <label className={style([paddingLeft(px(5))])}>
-              {ReasonReact.string("Query instances")}
-            </label>
-          </div>
-        </div>;
-      };
+    render: _self =>
       <div
-        className={
+        className=(
           style([
             display(flexBox),
             flexDirection(column),
             alignItems(center),
           ])
-        }>
-        <h1> {ReasonReact.string("Tic Tac Toe")} </h1>
-        {
-          if (self.state.isQuerying) {
-            <InstanceBrowser
-              serverInfo=Imandra_client.ServerInfo.{
-                port: 3000,
-                baseUrl: "http://localhost:3000",
-              }
-              setupScriptPath="examples/tictactoe/Setup.ire"
-              body=contents
-            />;
-          } else {
-            contents(None);
-          }
-        }
-      </div>;
-    },
+        )>
+        <h1> (ReasonReact.string("Tic Tac Toe")) </h1>
+        <InstanceBrowser
+          serverInfo=Imandra_client.ServerInfo.{
+                       port: 3000,
+                       baseUrl: "http://localhost:3000",
+                     }
+          setupScriptPath="examples/tictactoe/Setup.ire"
+          body=(
+            instanceJson => {
+              let instance =
+                switch (instanceJson) {
+                | None => None
+                | Some(j) =>
+                  let game = game_state_of_json(j);
+                  Some({
+                    TicTacToe.game,
+                    TicTacToe.status: TicTacToeLogic.status(game),
+                  });
+                };
+              <div
+                className=(
+                  style([
+                    display(flexBox),
+                    flexDirection(column),
+                    fontSize(rem(1.2)),
+                    marginTop(px(10)),
+                  ])
+                )>
+                <TicTacToe
+                  onGameFinished=(() => ())
+                  customInitialLogic=instance
+                />
+              </div>;
+            }
+          )
+        />
+      </div>,
   };
 };
 

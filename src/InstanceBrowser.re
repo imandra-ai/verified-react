@@ -11,6 +11,7 @@ type state = {
   initialised: bool,
   loadingInstance: bool,
   instance: option(Js.Json.t),
+  query: string,
   error: option(string),
 };
 
@@ -27,6 +28,7 @@ let make = (~serverInfo, ~setupScriptPath, ~body, _children) => {
     initialised: false,
     instance: None,
     loadingInstance: false,
+    query: "",
     error: None,
   },
   didMount: self => {
@@ -49,7 +51,7 @@ let make = (~serverInfo, ~setupScriptPath, ~body, _children) => {
     | Initialised => ReasonReact.Update({...s, initialised: true})
     | QueryInstance(queryStr) =>
       ReasonReact.UpdateWithSideEffects(
-        {...s, loadingInstance: true},
+        {...s, loadingInstance: true, query: queryStr},
         (
           self => {
             let _p =
@@ -85,17 +87,59 @@ let make = (~serverInfo, ~setupScriptPath, ~body, _children) => {
         instance: Json.parse(instance),
       })
     },
-  render: self =>
-    <div className={style([display(flexBox), flexDirection(row)])}>
-      <div> {body(self.state.instance)} </div>
-      <div className={style([display(flexBox), flexDirection(column)])}>
-        <div> {ReasonReact.string("Instance query:")} </div>
+  render: self => {
+    let example = s =>
+      <button onClick=(_e => self.send(QueryInstance(s)))>
+        <pre> (ReasonReact.string(s)) </pre>
+      </button>;
+    <div
+      className=(
+        style([display(flexBox), flexDirection(column), fontSize(px(14))])
+      )>
+      <div> (body(self.state.instance)) </div>
+      <div
+        className=(
+          style([
+            display(flexBox),
+            flexDirection(column),
+            marginTop(px(20)),
+          ])
+        )>
+        <div
+          className=(
+            style([
+              fontSize(px(16)),
+              maxWidth(px(400)),
+              marginBottom(px(20)),
+            ])
+          )>
+          (ReasonReact.string("Generate instances based purely on "))
+          <a
+            href="https://github.com/AestheticIntegration/verified-react/blob/master/examples/tictactoe/TicTacToeLogic.ire">
+            (ReasonReact.string("the source code of the game logic"))
+          </a>
+          (ReasonReact.string(" which has been loaded into Imandra."))
+        </div>
+        <div> (ReasonReact.string("Enter a ReasonML instance query:")) </div>
+        <pre> (ReasonReact.string("x : game_state  =>")) </pre>
         <textarea
-          onChange={
+          className=(style([height(px(100))]))
+          value=self.state.query
+          onChange=(
             event =>
               self.send(QueryInstance(ReactEvent.Form.target(event)##value))
-          }
+          )
         />
+        <div className=(style([marginTop(px(20))]))>
+          (ReasonReact.string("or try these examples:"))
+        </div>
+        <ul>
+          <li> (example("is_valid_game(x)")) </li>
+          <li> (example("is_winning(x, X)")) </li>
+          <li> (example("is_winning(x, O) && is_valid_game(x)")) </li>
+          <li> (example("is_valid_game(x) && x.last_player == Some(O)")) </li>
+        </ul>
       </div>
-    </div>,
+    </div>;
+  },
 };
