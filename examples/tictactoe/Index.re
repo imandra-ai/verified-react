@@ -57,6 +57,7 @@ module App = {
             "status(x) == Won(O) && is_valid_game(x)",
             "is_valid_game(x) && x.last_player == Some(O)",
             "is_valid_game(x) && status(x) == Tied",
+            "true",
           ]
           body=(
             instanceJson => {
