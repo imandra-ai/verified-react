@@ -48,6 +48,8 @@ module App = {
                        baseUrl: "http://localhost:3000",
                      }
           setupScriptPath="examples/tictactoe/Setup.ire"
+          instanceType="game_state"
+          instancePrinterFn="game_state_to_json_pp"
           body=(
             instanceJson => {
               let instance =

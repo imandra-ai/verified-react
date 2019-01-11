@@ -28,7 +28,15 @@ let serverInfo: Imandra_client.ServerInfo.t = {
   baseUrl: "http://localhost:3000",
 };
 
-let make = (~serverInfo, ~setupScriptPath, ~body, _children) => {
+let make =
+    (
+      ~serverInfo,
+      ~setupScriptPath,
+      ~instanceType,
+      ~instancePrinterFn,
+      ~body,
+      _children,
+    ) => {
   ...component,
   initialState: () => {
     init: Loading,
@@ -69,11 +77,8 @@ let make = (~serverInfo, ~setupScriptPath, ~body, _children) => {
             let _p =
               Imandra_client.Instance.bySrc(
                 ~syntax=Imandra_client.Syntax.Reason,
-                ~src=Printf.sprintf("(x : game_state) => %s", queryStr),
-                ~instancePrinter={
-                  name: "game_state_to_json_pp",
-                  cx_var_name: "x",
-                },
+                ~src=Printf.sprintf("(x : %s) => %s", instanceType, queryStr),
+                ~instancePrinter={name: instancePrinterFn, cx_var_name: "x"},
                 serverInfo,
               )
               |> Js.Promise.then_(v => {
