@@ -5,20 +5,26 @@ type action =
   | InitialiseError(string)
   | Initialised
   | QueryInstance(string)
-  | InstanceReturned(string)
-  | Error(string);
+  | InstanceReturned(Imandra_client.Instance.instanceResult)
+  | InstanceFetchError(string);
 
 type initState =
+  | Loading
+  | Error(string)
+  | Loaded;
+
+type fetchState =
+  | Waiting
   | Loading
   | Error
   | Loaded;
 
 type state = {
   init: initState,
-  loadingInstance: bool,
+  instanceFetch: fetchState,
   instance: option(Js.Json.t),
+  instanceFeedback: option(string),
   query: string,
-  error: option(string),
 };
 
 let component = ReasonReact.reducerComponent("InstanceBrowser");
@@ -41,9 +47,9 @@ let make =
   initialState: () => {
     init: Loading,
     instance: None,
-    loadingInstance: false,
+    instanceFetch: Waiting,
+    instanceFeedback: None,
     query: "",
-    error: None,
   },
   didMount: self => {
     let _p =
@@ -64,14 +70,13 @@ let make =
   reducer: (action, s: state) =>
     switch (action) {
     | Noop => ReasonReact.Update(s)
-    | Error(e) => ReasonReact.Update({...s, error: Some(e)})
     | Initialised => ReasonReact.Update({...s, init: Loaded})
     | InitialiseError(e) =>
       Js.Console.error(e);
-      ReasonReact.Update({...s, init: Error});
+      ReasonReact.Update({...s, init: Error(e)});
     | QueryInstance(queryStr) =>
       ReasonReact.UpdateWithSideEffects(
-        {...s, loadingInstance: true, query: queryStr},
+        {...s, instanceFetch: Loading, query: queryStr},
         (
           self => {
             let _p =
@@ -83,13 +88,10 @@ let make =
               )
               |> Js.Promise.then_(v => {
                    switch (v) {
-                   | Belt.Result.Ok((Imandra_client.Instance.Sat(s), _)) =>
-                     self.send(
-                       InstanceReturned(
-                         s.instance.printed |> Belt.Option.getExn,
-                       ),
-                     )
-                   | _ => self.send(Error("error calling instance"))
+                   | Belt.Result.Ok((r, _)) =>
+                     self.send(InstanceReturned(r))
+                   | Belt.Result.Error((e, _)) =>
+                     self.send(InstanceFetchError(e))
                    };
                    Js.Promise.resolve();
                  });
@@ -97,12 +99,36 @@ let make =
           }
         ),
       )
-    | InstanceReturned(instance) =>
+    | InstanceFetchError(e) =>
+      Js.Console.error(e);
       ReasonReact.Update({
         ...s,
-        loadingInstance: false,
-        instance: Json.parse(instance),
-      })
+        instanceFetch: Error,
+        instanceFeedback: Some(Printf.sprintf("Error: %s", e)),
+      });
+    | InstanceReturned(r) =>
+      switch (r) {
+      | Imandra_client.Instance.Sat(i) =>
+        ReasonReact.Update({
+          ...s,
+          instanceFetch: Loaded,
+          instanceFeedback: None,
+          instance: Json.parse(i.instance.printed |> Belt.Option.getExn),
+        })
+      | Imandra_client.Instance.Unknown(u) =>
+        ReasonReact.Update({
+          ...s,
+          instanceFetch: Loaded,
+          instanceFeedback:
+            Some(Printf.sprintf("Instance unknown: %s", u.reason)),
+        })
+      | Imandra_client.Instance.Unsat =>
+        ReasonReact.Update({
+          ...s,
+          instanceFetch: Loaded,
+          instanceFeedback: Some("Unsat."),
+        })
+      }
     },
   render: self => {
     let example = s =>
@@ -155,9 +181,9 @@ let make =
                   width(px(20)),
                   backgroundColor(
                     switch (self.state.init) {
-                    | Loading => grey
+                    | Loading => blue
                     | Loaded => green
-                    | Error => red
+                    | Error(_) => red
                     },
                   ),
                 ])
@@ -167,6 +193,12 @@ let make =
         </div>
         <div className=(style([display(flexBox), flexDirection(column)]))>
           <textarea
+            disabled=(
+              switch (self.state.init) {
+              | Loaded => false
+              | _ => true
+              }
+            )
             className=(style([height(px(100)), padding(px(5))]))
             value=self.state.query
             onChange=(
@@ -176,6 +208,61 @@ let make =
                 )
             )
           />
+        </div>
+        <div
+          className=(
+            style([
+              display(flexBox),
+              width(pct(100.)),
+              justifyContent(spaceBetween),
+            ])
+          )>
+          <div
+            className=(
+              style([
+                width(pct(70.)),
+                fontSize(px(10)),
+                paddingTop(px(5)),
+              ])
+            )>
+            (
+              ReasonReact.string(
+                switch (self.state.instanceFeedback) {
+                | None => ""
+                | Some(f) => f
+                },
+              )
+            )
+          </div>
+          <div
+            className=(
+              style([
+                display(flexBox),
+                alignItems(center),
+                marginTop(px(10)),
+              ])
+            )>
+            <div className=(style([fontSize(px(8)), marginRight(px(5))]))>
+              (ReasonReact.string("Query result"))
+            </div>
+            <div
+              className=(
+                style([
+                  borderRadius(pct(50.)),
+                  height(px(20)),
+                  width(px(20)),
+                  backgroundColor(
+                    switch (self.state.instanceFetch) {
+                    | Loading => blue
+                    | Waiting => grey
+                    | Loaded => green
+                    | Error(_) => red
+                    },
+                  ),
+                ])
+              )
+            />
+          </div>
         </div>
         <div className=(style([marginTop(px(20))]))>
           (ReasonReact.string("or try these examples:"))
