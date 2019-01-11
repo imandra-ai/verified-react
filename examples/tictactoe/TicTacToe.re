@@ -109,108 +109,66 @@ let make = (~customInitialLogic, ~onGameFinished, _children) => {
       };
     let rowCss = style([display(flexBox), flexDirection(row)]);
     let elems =
-      <div className=(style([display(flexBox), flexDirection(row)]))>
-        <div>
-          <div className=rowCss>
-            <button
-              className=(buttonCss(A))
-              onClick=(_event => self.send(Move(A)))
-              disabled>
-              (ReasonReact.string(label(self.state.logic.game.grid.a)))
-            </button>
-            <button
-              className=(buttonCss(B))
-              onClick=(_event => self.send(Move(B)))
-              disabled>
-              (ReasonReact.string(label(self.state.logic.game.grid.b)))
-            </button>
-            <button
-              className=(buttonCss(C))
-              onClick=(_event => self.send(Move(C)))
-              disabled>
-              (ReasonReact.string(label(self.state.logic.game.grid.c)))
-            </button>
-          </div>
-          <div className=rowCss>
-            <button
-              className=(buttonCss(D))
-              onClick=(_event => self.send(Move(D)))
-              disabled>
-              (ReasonReact.string(label(self.state.logic.game.grid.d)))
-            </button>
-            <button
-              className=(buttonCss(E))
-              onClick=(_event => self.send(Move(E)))
-              disabled>
-              (ReasonReact.string(label(self.state.logic.game.grid.e)))
-            </button>
-            <button
-              className=(buttonCss(F))
-              onClick=(_event => self.send(Move(F)))
-              disabled>
-              (ReasonReact.string(label(self.state.logic.game.grid.f)))
-            </button>
-          </div>
-          <div className=rowCss>
-            <button
-              className=(buttonCss(G))
-              onClick=(_event => self.send(Move(G)))
-              disabled>
-              (ReasonReact.string(label(self.state.logic.game.grid.g)))
-            </button>
-            <button
-              className=(buttonCss(H))
-              onClick=(_event => self.send(Move(H)))
-              disabled>
-              (ReasonReact.string(label(self.state.logic.game.grid.h)))
-            </button>
-            <button
-              className=(buttonCss(I))
-              onClick=(_event => self.send(Move(I)))
-              disabled>
-              (ReasonReact.string(label(self.state.logic.game.grid.i)))
-            </button>
-          </div>
+      <div>
+        <div className=rowCss>
+          <button
+            className=(buttonCss(A))
+            onClick=(_event => self.send(Move(A)))
+            disabled>
+            (ReasonReact.string(label(self.state.logic.game.grid.a)))
+          </button>
+          <button
+            className=(buttonCss(B))
+            onClick=(_event => self.send(Move(B)))
+            disabled>
+            (ReasonReact.string(label(self.state.logic.game.grid.b)))
+          </button>
+          <button
+            className=(buttonCss(C))
+            onClick=(_event => self.send(Move(C)))
+            disabled>
+            (ReasonReact.string(label(self.state.logic.game.grid.c)))
+          </button>
         </div>
-        <div
-          className=(
-            style([
-              display(flexBox),
-              flexDirection(column),
-              alignItems(center),
-              marginLeft(px(10)),
-            ])
-          )>
-          <div className=(style([marginBottom(px(10))]))>
-            (ReasonReact.string("Next player:"))
-          </div>
-          <div
-            className=(
-              style([
-                padding(px(10)),
-                paddingTop(px(25)),
-                paddingBottom(px(25)),
-                minWidth(px(50)),
-                backgroundColor(hex("F5FAFE")),
-                textAlign(center),
-              ])
-            )>
-            (
-              ReasonReact.string(
-                {
-                  let next_player =
-                    switch (self.state.logic.game.last_player) {
-                    | None => TicTacToeLogic.initial_player
-                    | Some(p) => TicTacToeLogic.other_player(p)
-                    };
-                  switch (next_player) {
-                  | X => "X"
-                  | O => "O"
-                  };
-                },
-              )
-            )
-          </div>
+        <div className=rowCss>
+          <button
+            className=(buttonCss(D))
+            onClick=(_event => self.send(Move(D)))
+            disabled>
+            (ReasonReact.string(label(self.state.logic.game.grid.d)))
+          </button>
+          <button
+            className=(buttonCss(E))
+            onClick=(_event => self.send(Move(E)))
+            disabled>
+            (ReasonReact.string(label(self.state.logic.game.grid.e)))
+          </button>
+          <button
+            className=(buttonCss(F))
+            onClick=(_event => self.send(Move(F)))
+            disabled>
+            (ReasonReact.string(label(self.state.logic.game.grid.f)))
+          </button>
+        </div>
+        <div className=rowCss>
+          <button
+            className=(buttonCss(G))
+            onClick=(_event => self.send(Move(G)))
+            disabled>
+            (ReasonReact.string(label(self.state.logic.game.grid.g)))
+          </button>
+          <button
+            className=(buttonCss(H))
+            onClick=(_event => self.send(Move(H)))
+            disabled>
+            (ReasonReact.string(label(self.state.logic.game.grid.h)))
+          </button>
+          <button
+            className=(buttonCss(I))
+            onClick=(_event => self.send(Move(I)))
+            disabled>
+            (ReasonReact.string(label(self.state.logic.game.grid.i)))
+          </button>
         </div>
       </div>;
     let sub =
@@ -249,8 +207,57 @@ let make = (~customInitialLogic, ~onGameFinished, _children) => {
           </div>,
         |]
       };
-    <div className=(style([position(relative), display(flexBox)]))>
-      ...sub
+    <div>
+      <div
+        className=(
+          style([
+            position(relative),
+            display(flexBox),
+            justifyContent(spaceAround),
+          ])
+        )>
+        ...sub
+      </div>
+      <div
+        className=(
+          style([
+            display(flexBox),
+            flexDirection(column),
+            alignItems(center),
+            marginLeft(px(10)),
+          ])
+        )>
+        <div className=(style([marginBottom(px(10))]))>
+          (ReasonReact.string("Next player:"))
+        </div>
+        <div
+          className=(
+            style([
+              padding(px(10)),
+              paddingTop(px(25)),
+              paddingBottom(px(25)),
+              minWidth(px(50)),
+              backgroundColor(hex("F5FAFE")),
+              textAlign(center),
+            ])
+          )>
+          (
+            ReasonReact.string(
+              {
+                let next_player =
+                  switch (self.state.logic.game.last_player) {
+                  | None => TicTacToeLogic.initial_player
+                  | Some(p) => TicTacToeLogic.other_player(p)
+                  };
+                switch (next_player) {
+                | X => "X"
+                | O => "O"
+                };
+              },
+            )
+          )
+        </div>
+      </div>
     </div>;
   },
 };
