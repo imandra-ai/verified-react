@@ -132,7 +132,14 @@ let make =
     },
   render: self => {
     let example = s =>
-      <button onClick=(_e => self.send(QueryInstance(s)))>
+      <button
+        onClick=(_e => self.send(QueryInstance(s)))
+        disabled=(
+          switch (self.state.init) {
+          | Loaded => false
+          | _ => true
+          }
+        )>
         <pre> (ReasonReact.string(s)) </pre>
       </button>;
     <div
