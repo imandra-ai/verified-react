@@ -170,6 +170,19 @@ let make =
           </a>
           (ReasonReact.string(" which has been loaded into Imandra."))
         </div>
+        <div>
+          (ReasonReact.string("Make sure "))
+          <a
+            href="https://docs.imandra.ai/imandra-docs/notebooks/installation-simple/"
+            className=(style([fontFamily("monospace"), whiteSpace(`pre)]))>
+            (ReasonReact.string("imandra-http-server"))
+          </a>
+          (
+            ReasonReact.string(
+              " is running in the background on localhost:3000",
+            )
+          )
+        </div>
         <div> (ReasonReact.string("Enter a ReasonML instance query:")) </div>
         <div
           className=(
@@ -188,7 +201,7 @@ let make =
                   width(px(20)),
                   backgroundColor(
                     switch (self.state.init) {
-                    | Loading => blue
+                    | Loading => red
                     | Loaded => green
                     | Error(_) => red
                     },
