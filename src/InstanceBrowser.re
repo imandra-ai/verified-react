@@ -276,9 +276,10 @@ let make =
         </div>
         <ul>
           <li> (example("is_valid_game(x)")) </li>
-          <li> (example("is_winning(x, X)")) </li>
-          <li> (example("is_winning(x, O) && is_valid_game(x)")) </li>
+          <li> (example("status(x) == Won(X)")) </li>
+          <li> (example("status(x) == Won(O) && is_valid_game(x)")) </li>
           <li> (example("is_valid_game(x) && x.last_player == Some(O)")) </li>
+          <li> (example("is_valid_game(x) && status(x) == Tied")) </li>
           <li> (example("true")) </li>
         </ul>
       </div>
