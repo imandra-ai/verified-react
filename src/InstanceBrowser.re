@@ -41,6 +41,7 @@ let make =
       ~instanceType,
       ~instancePrinterFn,
       ~body,
+      ~examples=[],
       _children,
     ) => {
   ...component,
@@ -90,6 +91,11 @@ let make =
                    switch (v) {
                    | Belt.Result.Ok((r, _)) =>
                      self.send(InstanceReturned(r))
+                   | Belt.Result.Error((
+                       "Imandra_reason_parser__Reason_syntax_util.Error(_, _)",
+                       _,
+                     )) =>
+                     self.send(InstanceFetchError("Reason parse error"))
                    | Belt.Result.Error((e, _)) =>
                      self.send(InstanceFetchError(e))
                    };
@@ -287,14 +293,18 @@ let make =
         <div className=(style([marginTop(px(20))]))>
           (ReasonReact.string("or try these examples:"))
         </div>
-        <ul>
-          <li> (example("is_valid_game(x)")) </li>
-          <li> (example("status(x) == Won(X)")) </li>
-          <li> (example("status(x) == Won(O) && is_valid_game(x)")) </li>
-          <li> (example("is_valid_game(x) && x.last_player == Some(O)")) </li>
-          <li> (example("is_valid_game(x) && status(x) == Tied")) </li>
-          <li> (example("true")) </li>
-        </ul>
+        <div>
+          (
+            if (List.length(examples) > 0) {
+              let children =
+                List.map(e => <li> (example(e)) </li>, examples)
+                |> Array.of_list;
+              <ul> ...children </ul>;
+            } else {
+              <div />;
+            }
+          )
+        </div>
       </div>
     </div>;
   },

@@ -50,6 +50,15 @@ module App = {
           setupScriptPath="examples/tictactoe/Setup.ire"
           instanceType="game_state"
           instancePrinterFn="game_state_to_json_pp"
+          examples=[
+            "is_valid_game(x)",
+            "x.grid.c == Some(X)",
+            "status(x) == Won(X)",
+            "status(x) == Won(O) && is_valid_game(x)",
+            "is_valid_game(x) && x.last_player == Some(O)",
+            "is_valid_game(x) && status(x) == Tied",
+            "true",
+          ]
           body=(
             instanceJson => {
               let instance =
