@@ -282,7 +282,7 @@ let make =
                     | Loading => blue
                     | Waiting => grey
                     | Loaded => green
-                    | Error(_) => red
+                    | Error => red
                     },
                   ),
                 ])
