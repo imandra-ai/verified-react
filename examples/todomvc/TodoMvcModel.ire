@@ -34,9 +34,11 @@ type state = {
 let initialState = {todos: [], newTodoText: "", viewing: All, nextId: 0};
 
 let updateTodo = (todos, id, f) => {
-  let before = Imandra_prelude.List.take(id, todos);
-  let [target, ...rest] = Imandra_prelude.List.drop(id, todos);
-  before @ [f(target)] @ rest;
+  let before = List.take(id, todos);
+  switch (List.drop(id, todos)) {
+  | [target, ...rest] => before @ [f(target)] @ rest
+  | _ => todos
+  };
 };
 
 let update = (state, msg) =>
@@ -53,53 +55,32 @@ let update = (state, msg) =>
       ...state,
       nextId: state.nextId + 1,
       newTodoText: "",
-      todos: state.todos @ [Some(newTodo)],
+      todos: List.append(state.todos, [Some(newTodo)]),
     };
     newState;
   | HoverTodo(id) => {
       ...state,
       todos:
-        updateTodo(
-          state.todos,
-          id,
-          Imandra_prelude.Option.map(t => {...t, hovered: true}),
-        ),
+        updateTodo(state.todos, id, Option.map(t => {...t, hovered: true})),
     }
   | StartEditingTodo(id) => {
       ...state,
       todos:
-        updateTodo(
-          state.todos,
-          id,
-          Imandra_prelude.Option.map(t => {...t, editing: true}),
-        ),
+        updateTodo(state.todos, id, Option.map(t => {...t, editing: true})),
     }
   | EditTodo(id, text) => {
       ...state,
-      todos:
-        updateTodo(
-          state.todos,
-          id,
-          Imandra_prelude.Option.map(t => {...t, text}),
-        ),
+      todos: updateTodo(state.todos, id, Option.map(t => {...t, text})),
     }
   | DoneEditingTodo(id) => {
       ...state,
       todos:
-        updateTodo(
-          state.todos,
-          id,
-          Imandra_prelude.Option.map(t => {...t, editing: false}),
-        ),
+        updateTodo(state.todos, id, Option.map(t => {...t, editing: false})),
     }
   | DoneTodo(id) => {
       ...state,
       todos:
-        updateTodo(
-          state.todos,
-          id,
-          Imandra_prelude.Option.map(t => {...t, done_: true}),
-        ),
+        updateTodo(state.todos, id, Option.map(t => {...t, done_: true})),
     }
   | DeleteTodo(id) => {
       ...state,
@@ -110,9 +91,9 @@ let update = (state, msg) =>
       ...state,
       todos:
         state.todos
-        |> Imandra_prelude.List.map(t =>
+        |> List.map(t =>
              t
-             |> Imandra_prelude.Option.flat_map(t =>
+             |> Option.flat_map(t =>
                   if (t.done_) {
                     None;
                   } else {
@@ -122,3 +103,12 @@ let update = (state, msg) =>
            ),
     }
   };
+
+[@auto] [@rw] lemma len_append = (x, y) =>
+  List.length(x @ y) == List.length(x) + List.length(y);
+
+[@induct]
+let vg_add_todo = s => {
+  let s' = update(s, AddNewTodo);
+  List.length(s'.todos) == List.length(s.todos) + 1;
+};
