@@ -249,6 +249,8 @@ let make =
                 width(pct(70.)),
                 fontSize(px(10)),
                 paddingTop(px(5)),
+                fontFamily("monospace"),
+                whiteSpace(`pre),
               ])
             )>
             (
