@@ -76,8 +76,6 @@ to start Imandra's http server with `reason` syntax loaded. Then for bucklescrip
 
     npm run watch
     
-**NOTE: If you see errors about missing modules, you may need to Ctrl-C this, and re-run it a few times consecutively - this appears to be a cold start problem with bucklescript's generators which are used for `imandra-extract`.**
-    
 Then, to start the parcel.js dev server, (in another terminal) run:
 
     npm run watch-tictactoe
