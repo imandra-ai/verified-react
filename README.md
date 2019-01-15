@@ -21,8 +21,8 @@ For an overview, read our Medium post [Introducing Verified React](https://mediu
     - `examples/tictactoe/TicTacToe.re`
   
 - [ ] Stage 2 
+  - [x] [Viewing instances](#viewing-instances)
   - [ ] TodoMVC as a larger example
-  - [ ] Displaying instances
   - [ ] Decomposition visualisation
 
 - [ ] Stage 3
@@ -65,3 +65,19 @@ For runtime:
 To run the verification goals:
 
     npm run test
+
+## Viewing instances
+
+The TicTacToe example is hooked up with an example of viewing instances. To run it, run:
+
+    imandra-http-server -reason
+    
+to start Imandra's http server with `reason` syntax loaded. Then (in another terminal) run:
+
+    npm run watch
+    
+for bucklescript compilation, then (in another terminal) run:
+
+    npm run watch-tic-tac-toe
+    
+for the parcel dev server (there might be a couple of warnings about `fs` argument but this should not cause a problem). You should now be able to visit `http://localhost:1234` to see/play the TicTacToe game (verified via the `npm run test` Jest tests), and also query for instances from Imandra.
