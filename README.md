@@ -68,7 +68,7 @@ To run the verification goals:
 
 ## Viewing instances
 
-The TicTacToe example is hooked up with an example of viewing instances. To run it, run:
+The TicTacToe example is hooked up to Imandra to allow querying and viewing instances. To run it, run:
 
     imandra-http-server -reason
     
