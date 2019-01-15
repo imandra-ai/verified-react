@@ -68,7 +68,7 @@ To run the verification goals:
 
 ## Viewing instances
 
-![Viewing instances with Imandra](https://i.imgur.com/FMd8yrf.gif)
+![Viewing instances with Imandra](https://i.imgur.com/FMd8yrf.mp4)
 
 The TicTacToe example is hooked up to Imandra to allow querying and viewing instances. To start it, from the `verified-react` repo root run:
 
