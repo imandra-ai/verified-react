@@ -76,7 +76,7 @@ to start Imandra's http server with `reason` syntax loaded. Then (in another ter
 
     npm run watch
     
-for bucklescript compilation, then (in another terminal) run:
+for bucklescript compilation. If you see errors, you may need to Ctrl-C this, and re-run it a few times consecutively - this appears to be a cold start problem with bucklescript's generators (used for `imandra-extract`). Then (in another terminal) run:
 
     npm run watch-tic-tac-toe
     
