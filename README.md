@@ -81,3 +81,13 @@ for bucklescript compilation, then (in another terminal) run:
     npm run watch-tic-tac-toe
     
 for the parcel dev server (there might be a couple of warnings about `fs` argument but this should not cause a problem). You should now be able to visit `http://localhost:1234` to see/play the TicTacToe game (verified via the `npm run test` Jest tests), and also query for instances from Imandra.
+
+### How it works
+
+The TicTacToe UI is [wrapped in an InstanceBrowser component](./examples/tictactoe/Index.re), which loads the game logic into Imandra (along with some JSON encoders and decoders) via [`examples/tictactoe/Setup.ire`](examples/tictactoe/Setup.ire).
+
+The TicTacToe UI component has been edited slightly to allow a default intial state to be passed from its parent via the `customInitialLogicState` prop. 
+
+When the instance query box's contents change, the query is sent to `imandra-http-server`'s `/instance/by-src` endpoint as a lambda expression, `x : game_state => <constraint>`, so an instance of type `game_state` matching the constraint is returned, printed to a JSON string via a serialisation function (`instancePrinterFn`).
+
+This returned instance is then passed to the `customInitialLogicState` prop and rendered by the UI component.
