@@ -81,7 +81,7 @@ Then, to start the parcel.js dev server, (in another terminal) run:
 
     npm run watch-tictactoe
     
-Here there might be a couple of warnings about `fs` argument but this should not cause a problem. You should now be able to visit `http://localhost:1234` to see/play the TicTacToe game (verified via the `npm run test` Jest tests), and also query for instances from Imandra.
+You should now be able to visit `http://localhost:1234` to see/play the TicTacToe game (verified via the `npm run test` Jest tests), and also query for instances from Imandra.
 
 ### How it works
 
