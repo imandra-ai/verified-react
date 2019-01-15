@@ -74,6 +74,7 @@ The TicTacToe example is hooked up to Imandra to allow querying and viewing inst
     
 to start Imandra's http server with `reason` syntax loaded. Then for bucklescript compilation, (in another terminal** run:
 
+    npm install
     npm run watch
     
 Then, to start the parcel.js dev server, (in another terminal) run:
