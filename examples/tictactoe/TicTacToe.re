@@ -6,7 +6,7 @@ type logic_state = {
 };
 
 type state = {
-  customInitialLogic: option(logic_state),
+  customInitialLogicState: option(logic_state),
   logic: logic_state,
 };
 
@@ -25,19 +25,19 @@ let defaultInitialState = {
 
 /* greeting and children are props. `children` isn't used, therefore ignored.
    We ignore it by prepending it with an underscore */
-let make = (~customInitialLogic, ~onGameFinished, _children) => {
+let make = (~customInitialLogicState, ~onGameFinished, _children) => {
   /* spread the other default fields of component here and override a few */
   ...component,
   initialState: () =>
-    switch (customInitialLogic) {
-    | None => {logic: defaultInitialState, customInitialLogic: None}
-    | Some(il) => {logic: il, customInitialLogic: Some(il)}
+    switch (customInitialLogicState) {
+    | None => {logic: defaultInitialState, customInitialLogicState: None}
+    | Some(il) => {logic: il, customInitialLogicState: Some(il)}
     },
   willReceiveProps: self =>
-    switch (customInitialLogic, self.state.customInitialLogic) {
+    switch (customInitialLogicState, self.state.customInitialLogicState) {
     | (Some(l1) as a, b) when a != b => {
         logic: l1,
-        customInitialLogic: Some(l1),
+        customInitialLogicState: Some(l1),
       }
     | _ => self.state
     },
@@ -48,7 +48,7 @@ let make = (~customInitialLogic, ~onGameFinished, _children) => {
       ReasonReact.Update({
         ...state,
         logic:
-          switch (customInitialLogic) {
+          switch (customInitialLogicState) {
           | None => defaultInitialState
           | Some(s) => s
           },

@@ -82,7 +82,7 @@ module App = {
                 )>
                 <TicTacToe
                   onGameFinished=(() => ())
-                  customInitialLogic=instance
+                  customInitialLogicState=instance
                 />
               </div>;
             }
