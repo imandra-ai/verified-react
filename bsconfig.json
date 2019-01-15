@@ -2,17 +2,24 @@
   "name": "verified-react",
   "sources": [
     {
-      "dir": "examples",
-      "subdirs": true,
+      "dir": "examples/simple",
       "generators": [{
         "name": "imandra-extract-re",
-        "edge": ["simple/SimpleModel.ml", ":", "simple/SimpleModel.ire"]
-      },{
+        "edge": ["SimpleModel.ml", ":", "SimpleModel.ire"]
+      }]
+    },
+    {
+      "dir": "examples/tictactoe",
+      "generators": [{
         "name": "imandra-extract-re",
-        "edge": ["tictactoe/TicTacToeLogic.ml", ":", "tictactoe/TicTacToeLogic.ire"]
-      },{
+        "edge": ["TicTacToeLogic.ml", ":", "TicTacToeLogic.ire"]
+      }]
+    },
+    {
+      "dir": "examples/todomvc",
+      "generators": [{
         "name": "imandra-extract-re",
-        "edge": ["todomvc/TodoMvcModel.ml", ":", "todomvc/TodoMvcModel.ire"]
+        "edge": ["TodoMvcModel.ml", ":", "TodoMvcModel.ire"]
       }]
     },
     {
