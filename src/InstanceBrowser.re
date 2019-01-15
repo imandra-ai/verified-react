@@ -181,7 +181,7 @@ let make =
           <a
             href="https://docs.imandra.ai/imandra-docs/notebooks/installation-simple/"
             className=(style([fontFamily("monospace"), whiteSpace(`pre)]))>
-            (ReasonReact.string("imandra-http-server"))
+            (ReasonReact.string("imandra-http-server -reason"))
           </a>
           (
             ReasonReact.string(
