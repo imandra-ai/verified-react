@@ -72,15 +72,17 @@ The TicTacToe example is hooked up to Imandra to allow querying and viewing inst
 
     imandra-http-server -reason
     
-to start Imandra's http server with `reason` syntax loaded. Then (in another terminal) run:
+to start Imandra's http server with `reason` syntax loaded. Then for bucklescript compilation, (in another terminal** run:
 
     npm run watch
     
-for bucklescript compilation. If you see errors, you may need to Ctrl-C this, and re-run it a few times consecutively - this appears to be a cold start problem with bucklescript's generators (used for `imandra-extract`). Then (in another terminal) run:
+**NOTE: If you see errors about missing modules, you may need to Ctrl-C this, and re-run it a few times consecutively - this appears to be a cold start problem with bucklescript's generators which are used for `imandra-extract`.**
+    
+Then, to start the parcel.js dev server, (in another terminal) run:
 
     npm run watch-tictactoe
     
-for the parcel dev server (there might be a couple of warnings about `fs` argument but this should not cause a problem). You should now be able to visit `http://localhost:1234` to see/play the TicTacToe game (verified via the `npm run test` Jest tests), and also query for instances from Imandra.
+Here there might be a couple of warnings about `fs` argument but this should not cause a problem. You should now be able to visit `http://localhost:1234` to see/play the TicTacToe game (verified via the `npm run test` Jest tests), and also query for instances from Imandra.
 
 ### How it works
 
