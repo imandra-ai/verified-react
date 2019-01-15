@@ -28,42 +28,6 @@ let a_grid = {
   i: None,
 };
 
-/* [@program] */
-/* let doc_of_square_state = (s: square_state) => */
-/*   switch (s) { */
-/*   | Some(X) => "X" */
-/*   | Some(O) => "O" */
-/*   | None => " " */
-/*   }; */
-/* [@program] */
-/* let doc_of_grid = (g: grid) => { */
-/*   let f = doc_of_square_state; */
-/*   Document.s( */
-/*     "\n" */
-/*     ++ f(g.a) */
-/*     ++ "|" */
-/*     ++ f(g.b) */
-/*     ++ "|" */
-/*     ++ f(g.c) */
-/*     ++ "\n" */
-/*     ++ "-----" */
-/*     ++ "\n" */
-/*     ++ f(g.d) */
-/*     ++ "|" */
-/*     ++ f(g.e) */
-/*     ++ "|" */
-/*     ++ f(g.f) */
-/*     ++ "\n" */
-/*     ++ "-----" */
-/*     ++ "\n" */
-/*     ++ f(g.g) */
-/*     ++ "|" */
-/*     ++ f(g.h) */
-/*     ++ "|" */
-/*     ++ f(g.i), */
-/*   ); */
-/* }; */
-/* #install_doc doc_of_grid; */
 type move =
   | A
   | B

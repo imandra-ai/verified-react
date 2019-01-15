@@ -6,14 +6,20 @@
       "subdirs": true,
       "generators": [{
         "name": "imandra-extract-re",
+        "edge": ["simple/SimpleModel.ml", ":", "simple/SimpleModel.ire"]
+      },{
+        "name": "imandra-extract-re",
         "edge": ["tictactoe/TicTacToeLogic.ml", ":", "tictactoe/TicTacToeLogic.ire"]
       },{
         "name": "imandra-extract-re",
-        "edge": ["simple/SimpleModel.ml", ":", "simple/SimpleModel.ire"]
+        "edge": ["todomvc/TodoMvcModel.ml", ":", "todomvc/TodoMvcModel.ire"]
       }]
     },
     {
       "dir": "scripts"
+    },
+    {
+      "dir": "src"
     }
   ],
   "package-specs": {
@@ -25,6 +31,7 @@
     "reason-react",
     "bs-imandra-client",
     "@glennsl/bs-jest",
+    "@glennsl/bs-json",
     "imandra-prelude",
     "bs-css"
   ],

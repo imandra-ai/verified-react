@@ -1,0 +1,114 @@
+type id = int;
+
+type view =
+  | All
+  | Active
+  | Completed;
+
+type msg =
+  | AddNewTodo
+  | HoverTodo(id)
+  | StartEditingTodo(id)
+  | EditTodo(id, string)
+  | DoneEditingTodo(id)
+  | DoneTodo(id)
+  | DeleteTodo(id)
+  | View(view)
+  | ClearCompleted;
+
+type todo = {
+  id: int,
+  done_: bool,
+  text: string,
+  hovered: bool,
+  editing: bool,
+};
+
+type state = {
+  todos: list(option(todo)),
+  newTodoText: string,
+  viewing: view,
+  nextId: int,
+};
+
+let initialState = {todos: [], newTodoText: "", viewing: All, nextId: 0};
+
+let updateTodo = (todos, id, f) => {
+  let before = List.take(id, todos);
+  switch (List.drop(id, todos)) {
+  | [target, ...rest] => before @ [f(target)] @ rest
+  | _ => todos
+  };
+};
+
+let update = (state, msg) =>
+  switch (msg) {
+  | AddNewTodo =>
+    let newTodo = {
+      id: state.nextId,
+      done_: false,
+      text: state.newTodoText,
+      hovered: false,
+      editing: false,
+    };
+    let newState = {
+      ...state,
+      nextId: state.nextId + 1,
+      newTodoText: "",
+      todos: List.append(state.todos, [Some(newTodo)]),
+    };
+    newState;
+  | HoverTodo(id) => {
+      ...state,
+      todos:
+        updateTodo(state.todos, id, Option.map(t => {...t, hovered: true})),
+    }
+  | StartEditingTodo(id) => {
+      ...state,
+      todos:
+        updateTodo(state.todos, id, Option.map(t => {...t, editing: true})),
+    }
+  | EditTodo(id, text) => {
+      ...state,
+      todos: updateTodo(state.todos, id, Option.map(t => {...t, text})),
+    }
+  | DoneEditingTodo(id) => {
+      ...state,
+      todos:
+        updateTodo(state.todos, id, Option.map(t => {...t, editing: false})),
+    }
+  | DoneTodo(id) => {
+      ...state,
+      todos:
+        updateTodo(state.todos, id, Option.map(t => {...t, done_: true})),
+    }
+  | DeleteTodo(id) => {
+      ...state,
+      todos: updateTodo(state.todos, id, _t => None),
+    }
+  | View(type_) => {...state, viewing: type_}
+  | ClearCompleted => {
+      ...state,
+      todos:
+        state.todos
+        |> List.map(t =>
+             t
+             |> Option.flat_map(t =>
+                  if (t.done_) {
+                    None;
+                  } else {
+                    Some(t);
+                  }
+                )
+           ),
+    }
+  };
+
+[@auto] [@rw] lemma len_append = (x, y) =>
+  List.length(x @ y) == List.length(x) + List.length(y);
+
+[@induct]
+let vg_add_todo = s => {
+  let s' = update(s, AddNewTodo);
+  List.length(s'.todos) == List.length(s.todos) + 1;
+};

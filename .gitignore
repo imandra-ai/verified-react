@@ -7,3 +7,4 @@ _opam
 .bsb.lock
 examples/simple/SimpleModel.ml
 examples/tictactoe/TicTacToeLogic.ml
+examples/todomvc/TodoMvcModel.ml

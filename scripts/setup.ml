@@ -5,6 +5,6 @@ let default = fun () ->
   Imandra_client.start (imandraOptions ())
   |> Js.Promise.then_ (fun (np, isi) ->
       set_imandra_node_process np;
-      Imandra_client.ServerInfo.to_file isi;
+      Imandra_client.ServerInfo.toFile isi;
       Js.Promise.resolve ()
     )
