@@ -1,17 +1,19 @@
 open Jest;
 
+module I = Imandra_client;
+
 let serverInfo = ref(None);
 
 let moduleName = "TodoMvcModel";
 
 let () =
   beforeAllPromise(() => {
-    let si = Imandra_client.ServerInfo.fromFile();
+    let si = Imandra_client.ServerInfo.fromFile() |> Belt.Result.getExn;
     serverInfo := Some(si);
     Imandra_client.reset(si);
   });
 
-let syntax = Imandra_client.Syntax.Reason;
+let syntax = I.Api.Reason;
 
 describe("todomvc model", () => {
   beforeAllPromise(() => {
@@ -30,11 +32,9 @@ describe("todomvc model", () => {
     |> Js.Promise.then_(
          fun
          | Belt.Result.Ok(_) => Js.Promise.resolve(pass)
-         | Belt.Result.Error((e, _)) => {
-             Js.Console.error(e);
-             Js.Promise.reject(
-               Failure(Printf.sprintf("error from imandra: %s", e)),
-             );
+         | Belt.Result.Error(e) => {
+             Js.Console.error(I.Error.pp_str(e));
+             Js.Promise.reject(Failure(I.Error.pp_str(e)));
            },
        );
   });
@@ -45,17 +45,15 @@ describe("todomvc model", () => {
     Imandra_client.Verify.byName(ip, ~name)
     |> Js.Promise.then_(
          fun
-         | Belt.Result.Ok((Imandra_client.Verify.Proved, _)) =>
+         | Belt.Result.Ok(I.Api.Response.V_proved) =>
            Js.Promise.resolve(pass)
          | Belt.Result.Ok(o) => {
              Js.Console.error(o);
              Js.Promise.reject(Failure("unexpected result"));
            }
-         | Belt.Result.Error((e, _)) => {
-             Js.Console.error(e);
-             Js.Promise.reject(
-               Failure(Printf.sprintf("error from imandra: %s", e)),
-             );
+         | Belt.Result.Error(e) => {
+             Js.Console.error(I.Error.pp_str(e));
+             Js.Promise.reject(Failure(I.Error.pp_str(e)));
            },
        );
   });

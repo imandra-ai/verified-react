@@ -36,8 +36,6 @@ let serverInfo: I.ServerInfo.t = {
   baseUrl: "http://localhost:3000",
 };
 
-let ppE = e => Format.asprintf("%a", I.Error.pp, e);
-
 let make =
     (
       ~serverInfo,
@@ -77,8 +75,8 @@ let make =
     | Noop => ReasonReact.Update(s)
     | Initialised => ReasonReact.Update({...s, init: Loaded})
     | InitialiseError(e) =>
-      Js.Console.error(ppE(e));
-      ReasonReact.Update({...s, init: Error(ppE(e))});
+      Js.Console.error(I.Error.pp_str(e));
+      ReasonReact.Update({...s, init: Error(I.Error.pp_str(e))});
     | QueryInstance(queryStr) =>
       ReasonReact.UpdateWithSideEffects(
         {...s, instanceFetch: Loading, query: queryStr},
@@ -102,7 +100,7 @@ let make =
                      ) =>
                      self.send(InstanceFetchError("Reason parse error"))
                    | Belt.Result.Error(e) =>
-                     self.send(InstanceFetchError(ppE(e)))
+                     self.send(InstanceFetchError(I.Error.pp_str(e)))
                    };
                    Js.Promise.resolve();
                  });
