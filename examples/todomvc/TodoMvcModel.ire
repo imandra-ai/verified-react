@@ -107,7 +107,6 @@ let update = (state, msg) =>
 [@auto] [@rw] lemma len_append = (x, y) =>
   List.length(x @ y) == List.length(x) + List.length(y);
 
-[@induct]
 let vg_add_todo = s => {
   let s' = update(s, AddNewTodo);
   List.length(s'.todos) == List.length(s.todos) + 1;

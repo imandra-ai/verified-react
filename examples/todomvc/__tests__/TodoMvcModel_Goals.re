@@ -42,7 +42,8 @@ describe("todomvc model", () => {
     let ip = serverInfo^ |> Belt.Option.getExn;
     let functionName = Imandra_client.function_name(TodoMvcModel.vg_add_todo);
     let name = Printf.sprintf("%s.%s", moduleName, functionName);
-    Imandra_client.Verify.byName(ip, ~name)
+    let hints = I.Api.Request.Hints.{method_: Induct(Default)};
+    Imandra_client.Verify.byName(ip, ~name, ~hints)
     |> Js.Promise.then_(
          fun
          | Belt.Result.Ok(I.Api.Response.V_proved) =>
