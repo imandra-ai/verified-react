@@ -1,5 +1,7 @@
 # VerifiedReact
 
+[![Build Status](https://travis-ci.org/AestheticIntegration/verified-react.svg?branch=master)](https://travis-ci.org/AestheticIntegration/bs-imandra-client)
+
 Welcome to VerifiedReact! This is work in progress - stay in touch via [@VerifiedByAI](https://www.twitter.com/verifiedbyai), or come chat with us on [Discord](https://discord.gg/byQApJ3).
 
 For an overview, read our Medium post [Introducing Verified React](https://medium.com/imandra/introducing-verified-react-9c2ef03f821b).
