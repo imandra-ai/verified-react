@@ -7,7 +7,9 @@
     "example": "examples"
   },
   "scripts": {
-    "test": "jest -i",
+    "test": "npm run build && jest -i",
+    "build": "bsb -make-world",
+    "clean": "rm -rf dist && bsb -clean-world",
     "watch": "bsb -make-world -w",
     "watch-tictactoe": "parcel examples/tictactoe/index.html"
   },
