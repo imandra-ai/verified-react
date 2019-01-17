@@ -1,4 +1,6 @@
 language: node_js
 node_js:
   - 6
-script: npm run build
+script: |
+  jq '."cut-generators" = true' bsconfig.json > bsconfig.json.tmp && mv bsconfig.json.tmp bsconfig.json
+  npm run build
