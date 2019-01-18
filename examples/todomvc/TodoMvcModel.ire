@@ -12,7 +12,7 @@ type msg =
   | StartEditingTodo(id)
   | EditTodo(id, string)
   | DoneEditingTodo(id)
-  | DoneTodo(id)
+  | ToggleTodo(id)
   | DeleteTodo(id)
   | View(view)
   | ToggleAll
@@ -72,6 +72,18 @@ let completedCount = state =>
 let totalCount = state =>
   state.todos |> List.filter_map(t => t) |> List.length;
 
+let shownTodos = state => {
+  let flat_m = t =>
+    switch (state.viewing, t.done_) {
+    | (AllTodos, _) => Some(t)
+    | (ActiveTodos, false) => Some(t)
+    | (CompletedTodos, true) => Some(t)
+    | _ => None
+    };
+  let fil_m = ot => Option.flat_map(flat_m, ot);
+  List.filter_map(fil_m, state.todos);
+};
+
 let update = (msg, state) =>
   switch (msg) {
   | EditNewTodo(text) => {...state, newTodoText: text}
@@ -109,10 +121,14 @@ let update = (msg, state) =>
       todos:
         updateTodo(Option.map(t => {...t, editing: false}), state.todos, id),
     }
-  | DoneTodo(id) => {
+  | ToggleTodo(id) => {
       ...state,
       todos:
-        updateTodo(Option.map(t => {...t, done_: true}), state.todos, id),
+        updateTodo(
+          Option.map(t => {...t, done_: ! t.done_}),
+          state.todos,
+          id,
+        ),
     }
   | ToggleAll =>
     let anyNotDone =
@@ -157,3 +173,17 @@ let vg_add_todo = s => {
   let s' = update(AddNewTodo, s);
   List.length(s'.todos) == List.length(s.todos) + 1;
 };
+/* let vg_edit_todo = (s, n) => { */
+/*   /\* let pre = *\/ */
+/*   /\*   switch (List.nth(n, s.todos)) { *\/ */
+/*   /\*   | Some(Some(_)) => true *\/ */
+/*   /\*   | _ => false *\/ */
+/*   /\*   }; *\/ */
+/*   /\* pre *\/ */
+/*   /\* ==>  *\/ */
+/*   let s' = updateTodo(EditTodo(n, "updated"), s); */
+/*   switch (List.nth(n, s'.todos)) { */
+/*   | Some(Some(t')) => t'.text == "updated" */
+/*   | _ => false */
+/*   }; */
+/* }; */

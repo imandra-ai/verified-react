@@ -49,6 +49,7 @@ let make = (~customInitialState, _children) => {
     let activeTodoCount = Z.to_int(TodoMvcModel.activeCount(self.state.it));
     let completedTodoCount =
       Z.to_int(TodoMvcModel.completedCount(self.state.it));
+    let shownTodos = TodoMvcModel.shownTodos(self.state.it);
     <div>
       <header className="header">
         <h1> (ReasonReact.string("todos")) </h1>
@@ -80,7 +81,28 @@ let make = (~customInitialState, _children) => {
               onChange=(_e => self.send(Model(ToggleAll)))
             />
             <label htmlFor="toggle-all" />
-            <ul className="todo-list" />
+            <ul className="todo-list">
+              (
+                Belt.List.map(shownTodos, todo =>
+                  <TodoItem
+                    key=(Z.to_string(todo.id))
+                    todo
+                    onToggle=(() => self.send(Model(ToggleTodo(todo.id))))
+                    onDestroy=(() => self.send(Model(DeleteTodo(todo.id))))
+                    onStartEdit=(
+                      () => self.send(Model(StartEditingTodo(todo.id)))
+                    )
+                    onEdit=(s => self.send(Model(EditTodo(todo.id, s))))
+                    editing=todo.editing
+                    onSave=(
+                      () => self.send(Model(DoneEditingTodo(todo.id)))
+                    )
+                  />
+                )
+                |> Array.of_list
+                |> ReasonReact.array
+              )
+            </ul>
           </section>;
         } else {
           ReasonReact.null;
