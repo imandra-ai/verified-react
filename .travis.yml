@@ -3,5 +3,5 @@ node_js:
   - 6
 script:
   - docker pull imandra/imandra-client-switch
-  - sed -i 's#imandra-extract #docker run --entrypoint imandra-extract imandra/imandra-client-switch #' bsconfig.json
+  - "sed -i 's#imandra-extract #docker run --entrypoint imandra-extract imandra/imandra-client-switch #' bsconfig.json"
   - npm run build
