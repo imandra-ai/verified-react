@@ -1,11 +1,12 @@
 type id = int;
 
 type view =
-  | All
-  | Active
-  | Completed;
+  | AllTodos
+  | ActiveTodos
+  | CompletedTodos;
 
 type msg =
+  | EditNewTodo(string)
   | AddNewTodo
   | HoverTodo(id)
   | StartEditingTodo(id)
@@ -31,7 +32,7 @@ type state = {
   nextId: int,
 };
 
-let initialState = {todos: [], newTodoText: "", viewing: All, nextId: 0};
+let initialState = {todos: [], newTodoText: "", viewing: AllTodos, nextId: 0};
 
 let updateTodo = (todos, id, f) => {
   let before = List.take(id, todos);
@@ -41,8 +42,35 @@ let updateTodo = (todos, id, f) => {
   };
 };
 
-let update = (state, msg) =>
+let activeCount = state =>
+  state.todos
+  |> List.filter_map(
+       Option.flat_map(t =>
+         if (t.done_) {
+           None;
+         } else {
+           Some(t);
+         }
+       ),
+     )
+  |> List.length;
+
+let completedCount = state =>
+  state.todos
+  |> List.filter_map(
+       Option.flat_map(t =>
+         if (t.done_) {
+           Some(t);
+         } else {
+           None;
+         }
+       ),
+     )
+  |> List.length;
+
+let update = (msg, state) =>
   switch (msg) {
+  | EditNewTodo(text) => {...state, newTodoText: text}
   | AddNewTodo =>
     let newTodo = {
       id: state.nextId,
@@ -108,6 +136,6 @@ let update = (state, msg) =>
   List.length(x @ y) == List.length(x) + List.length(y);
 
 let vg_add_todo = s => {
-  let s' = update(s, AddNewTodo);
+  let s' = update(AddNewTodo, s);
   List.length(s'.todos) == List.length(s.todos) + 1;
 };
