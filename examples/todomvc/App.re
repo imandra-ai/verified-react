@@ -80,7 +80,7 @@ let make = (~customInitialState, _children) => {
       {
         let activeTodoCount = TodoMvcModel.activeCount(self.state.it);
         let completedTodoCount = TodoMvcModel.completedCount(self.state.it);
-        if (activeTodoCount > Z.zero || completedTodoCount > Z.zero) {
+        if (Z.to_int(activeTodoCount) > 0 || Z.to_int(completedTodoCount) > 0) {
           <TodoFooter
             count=activeTodoCount
             completedCount=completedTodoCount

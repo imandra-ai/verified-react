@@ -11,9 +11,9 @@ let make =
     ) => {
   ...component,
   render: _self => {
-    let activeTodoWord = count === Z.one ? "item" : "items";
+    let activeTodoWord = Z.to_int(count) == 1 ? "item" : "items";
     let clearButton =
-      completedCount > Z.zero ?
+      Z.to_int(completedCount) > 0 ?
         <button className="clear-completed" onClick=(_e => onClearCompleted())>
           (ReasonReact.string("Clear completed"))
         </button> :
