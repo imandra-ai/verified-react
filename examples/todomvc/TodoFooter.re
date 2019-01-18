@@ -11,9 +11,9 @@ let make =
     ) => {
   ...component,
   render: _self => {
-    let activeTodoWord = Z.to_int(count) == 1 ? "item" : "items";
+    let activeTodoWord = count == 1 ? "item" : "items";
     let clearButton =
-      Z.to_int(completedCount) > 0 ?
+      completedCount > 0 ?
         <button className="clear-completed" onClick=(_e => onClearCompleted())>
           (ReasonReact.string("Clear completed"))
         </button> :
@@ -26,7 +26,7 @@ let make =
       };
     <footer className="footer">
       <span className="todo-count">
-        <strong> (ReasonReact.string(Z.to_string(count))) </strong>
+        <strong> (ReasonReact.string(string_of_int(count))) </strong>
         (ReasonReact.string(" " ++ activeTodoWord ++ " left"))
       </span>
       <ul className="filters">

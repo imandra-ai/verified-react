@@ -15,6 +15,7 @@ type msg =
   | DoneTodo(id)
   | DeleteTodo(id)
   | View(view)
+  | ToggleAll
   | ClearCompleted;
 
 type todo = {
@@ -34,7 +35,7 @@ type state = {
 
 let initialState = {todos: [], newTodoText: "", viewing: AllTodos, nextId: 0};
 
-let updateTodo = (todos, id, f) => {
+let updateTodo = (f, todos, id) => {
   let before = List.take(id, todos);
   switch (List.drop(id, todos)) {
   | [target, ...rest] => before @ [f(target)] @ rest
@@ -68,6 +69,9 @@ let completedCount = state =>
      )
   |> List.length;
 
+let totalCount = state =>
+  state.todos |> List.filter_map(t => t) |> List.length;
+
 let update = (msg, state) =>
   switch (msg) {
   | EditNewTodo(text) => {...state, newTodoText: text}
@@ -89,45 +93,59 @@ let update = (msg, state) =>
   | HoverTodo(id) => {
       ...state,
       todos:
-        updateTodo(state.todos, id, Option.map(t => {...t, hovered: true})),
+        updateTodo(Option.map(t => {...t, hovered: true}), state.todos, id),
     }
   | StartEditingTodo(id) => {
       ...state,
       todos:
-        updateTodo(state.todos, id, Option.map(t => {...t, editing: true})),
+        updateTodo(Option.map(t => {...t, editing: true}), state.todos, id),
     }
   | EditTodo(id, text) => {
       ...state,
-      todos: updateTodo(state.todos, id, Option.map(t => {...t, text})),
+      todos: updateTodo(Option.map(t => {...t, text}), state.todos, id),
     }
   | DoneEditingTodo(id) => {
       ...state,
       todos:
-        updateTodo(state.todos, id, Option.map(t => {...t, editing: false})),
+        updateTodo(Option.map(t => {...t, editing: false}), state.todos, id),
     }
   | DoneTodo(id) => {
       ...state,
       todos:
-        updateTodo(state.todos, id, Option.map(t => {...t, done_: true})),
+        updateTodo(Option.map(t => {...t, done_: true}), state.todos, id),
     }
+  | ToggleAll =>
+    let anyNotDone =
+      List.exists(
+        ot =>
+          switch (ot) {
+          | None => false
+          | Some(t) => ! t.done_
+          },
+        state.todos,
+      );
+    {
+      ...state,
+      todos:
+        List.map(Option.map(t => {...t, done_: anyNotDone}), state.todos),
+    };
   | DeleteTodo(id) => {
       ...state,
-      todos: updateTodo(state.todos, id, _t => None),
+      todos: updateTodo(_t => None, state.todos, id),
     }
   | View(type_) => {...state, viewing: type_}
   | ClearCompleted => {
       ...state,
       todos:
         state.todos
-        |> List.map(t =>
-             t
-             |> Option.flat_map(t =>
-                  if (t.done_) {
-                    None;
-                  } else {
-                    Some(t);
-                  }
-                )
+        |> List.map(
+             Option.flat_map(t =>
+               if (t.done_) {
+                 None;
+               } else {
+                 Some(t);
+               }
+             ),
            ),
     }
   };

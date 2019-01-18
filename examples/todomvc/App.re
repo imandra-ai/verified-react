@@ -45,7 +45,10 @@ let make = (~customInitialState, _children) => {
       let newState = TodoMvcModel.update(m, state.it);
       ReasonReact.Update({...state, it: newState});
     },
-  render: self =>
+  render: self => {
+    let activeTodoCount = Z.to_int(TodoMvcModel.activeCount(self.state.it));
+    let completedTodoCount =
+      Z.to_int(TodoMvcModel.completedCount(self.state.it));
     <div>
       <header className="header">
         <h1> (ReasonReact.string("todos")) </h1>
@@ -67,9 +70,15 @@ let make = (~customInitialState, _children) => {
         />
       </header>
       (
-        if (List.length(self.state.it.todos) > 0) {
+        if (Z.to_int(TodoMvcModel.totalCount(self.state.it)) > 0) {
           <section className="main">
-            <input id="toggle-all" className="toggle-all" type_="checkbox" />
+            <input
+              id="toggle-all"
+              className="toggle-all"
+              type_="checkbox"
+              checked=(activeTodoCount == 0)
+              onChange=(_e => self.send(Model(ToggleAll)))
+            />
             <label htmlFor="toggle-all" />
             <ul className="todo-list" />
           </section>;
@@ -77,10 +86,8 @@ let make = (~customInitialState, _children) => {
           ReasonReact.null;
         }
       )
-      {
-        let activeTodoCount = TodoMvcModel.activeCount(self.state.it);
-        let completedTodoCount = TodoMvcModel.completedCount(self.state.it);
-        if (Z.to_int(activeTodoCount) > 0 || Z.to_int(completedTodoCount) > 0) {
+      (
+        if (activeTodoCount > 0 || completedTodoCount > 0) {
           <TodoFooter
             count=activeTodoCount
             completedCount=completedTodoCount
@@ -90,7 +97,8 @@ let make = (~customInitialState, _children) => {
           />;
         } else {
           ReasonReact.null;
-        };
-      }
-    </div>,
+        }
+      )
+    </div>;
+  },
 };
