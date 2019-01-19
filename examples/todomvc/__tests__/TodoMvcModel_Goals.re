@@ -48,10 +48,10 @@ describe("todomvc model", () => {
          Js.Promise.resolve(Imandra_expect.toBeProved(res))
        );
   });
-  testPromise("vg_edit_todo", () => {
+  testPromise("vg_update_todo", () => {
     let ip = serverInfo^ |> Belt.Option.getExn;
     let functionName =
-      Imandra_client.function_name(TodoMvcModel.vg_edit_todo);
+      Imandra_client.function_name(TodoMvcModel.vg_update_todo);
     let name = Printf.sprintf("%s.%s", moduleName, functionName);
     let hints = I.Api.Request.Hints.{method_: Induct(Default)};
     Imandra_client.Verify.byName(ip, ~name, ~hints)
