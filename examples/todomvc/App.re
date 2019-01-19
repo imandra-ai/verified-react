@@ -52,75 +52,75 @@ let make = (~customInitialState, _children) => {
     let shownTodos = TodoMvcModel.shownTodos(self.state.it);
     <div>
       <header className="header">
-        <h1> (ReasonReact.string("todos")) </h1>
+        <h1> {ReasonReact.string("todos")} </h1>
         <input
           className="new-todo"
           placeholder="What needs to be done?"
-          value=self.state.it.newTodoText
-          onKeyDown=(
+          value={self.state.it.newTodoText}
+          onKeyDown={
             event =>
               self.send(NewTodoKeyDown(ReactEvent.Keyboard.which(event)))
-          )
-          onChange=(
+          }
+          onChange={
             event =>
               self.send(
                 Model(EditNewTodo(ReactEvent.Form.target(event)##value)),
               )
-          )
+          }
           autoFocus=true
         />
       </header>
-      (
+      {
         if (Z.to_int(TodoMvcModel.totalCount(self.state.it)) > 0) {
           <section className="main">
             <input
               id="toggle-all"
               className="toggle-all"
               type_="checkbox"
-              checked=(activeTodoCount == 0)
-              onChange=(_e => self.send(Model(ToggleAll)))
+              checked={activeTodoCount == 0}
+              onChange={_e => self.send(Model(ToggleAll))}
             />
             <label htmlFor="toggle-all" />
             <ul className="todo-list">
-              (
+              {
                 Belt.List.map(shownTodos, todo =>
                   <TodoItem
-                    key=(Z.to_string(todo.id))
+                    key={Z.to_string(todo.id)}
                     todo
-                    onToggle=(() => self.send(Model(ToggleTodo(todo.id))))
-                    onDestroy=(() => self.send(Model(DeleteTodo(todo.id))))
-                    onStartEdit=(
+                    onToggle={() => self.send(Model(ToggleTodo(todo.id)))}
+                    onDestroy={() => self.send(Model(DeleteTodo(todo.id)))}
+                    onStartEdit={
                       () => self.send(Model(StartEditingTodo(todo.id)))
-                    )
-                    onEdit=(s => self.send(Model(EditTodo(todo.id, s))))
-                    editing=todo.editing
-                    onSave=(
+                    }
+                    onEdit={s => self.send(Model(EditTodo(todo.id, s)))}
+                    editing={todo.editing}
+                    onSave={
                       () => self.send(Model(DoneEditingTodo(todo.id)))
-                    )
+                    }
                   />
                 )
                 |> Array.of_list
                 |> ReasonReact.array
-              )
+              }
             </ul>
           </section>;
         } else {
           ReasonReact.null;
         }
-      )
-      (
+      }
+      {
         if (activeTodoCount > 0 || completedTodoCount > 0) {
           <TodoFooter
             count=activeTodoCount
             completedCount=completedTodoCount
-            nowShowing=self.state.it.viewing
-            onClearCompleted=(_e => self.send(Model(ClearCompleted)))
-            onViewClick=(v => self.send(Model(View(v))))
+            nowShowing={self.state.it.viewing}
+            onClearCompleted={_e => self.send(Model(ClearCompleted))}
+            onViewClick={v => self.send(Model(View(v)))}
           />;
         } else {
           ReasonReact.null;
         }
-      )
+      }
     </div>;
   },
 };

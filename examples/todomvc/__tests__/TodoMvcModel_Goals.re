@@ -44,18 +44,19 @@ describe("todomvc model", () => {
     let name = Printf.sprintf("%s.%s", moduleName, functionName);
     let hints = I.Api.Request.Hints.{method_: Induct(Default)};
     Imandra_client.Verify.byName(ip, ~name, ~hints)
-    |> Js.Promise.then_(
-         fun
-         | Belt.Result.Ok(I.Api.Response.V_proved) =>
-           Js.Promise.resolve(pass)
-         | Belt.Result.Ok(o) => {
-             Js.Console.error(o);
-             Js.Promise.reject(Failure("unexpected result"));
-           }
-         | Belt.Result.Error(e) => {
-             Js.Console.error(I.Error.pp_str(e));
-             Js.Promise.reject(Failure(I.Error.pp_str(e)));
-           },
+    |> Js.Promise.then_(res =>
+         Js.Promise.resolve(Imandra_expect.toBeProved(res))
+       );
+  });
+  testPromise("vg_edit_todo", () => {
+    let ip = serverInfo^ |> Belt.Option.getExn;
+    let functionName =
+      Imandra_client.function_name(TodoMvcModel.vg_edit_todo);
+    let name = Printf.sprintf("%s.%s", moduleName, functionName);
+    let hints = I.Api.Request.Hints.{method_: Induct(Default)};
+    Imandra_client.Verify.byName(ip, ~name, ~hints)
+    |> Js.Promise.then_(res =>
+         Js.Promise.resolve(Imandra_expect.toBeProved(res))
        );
   });
 });

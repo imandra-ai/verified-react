@@ -125,7 +125,7 @@ let update = (msg, state) =>
       ...state,
       todos:
         updateTodo(
-          Option.map(t => {...t, done_: ! t.done_}),
+          Option.map(t => {...t, done_: !t.done_}),
           state.todos,
           id,
         ),
@@ -136,7 +136,7 @@ let update = (msg, state) =>
         ot =>
           switch (ot) {
           | None => false
-          | Some(t) => ! t.done_
+          | Some(t) => !t.done_
           },
         state.todos,
       );
@@ -166,24 +166,29 @@ let update = (msg, state) =>
     }
   };
 
-[@auto] [@rw] lemma len_append = (x, y) =>
-  List.length(x @ y) == List.length(x) + List.length(y);
+[@auto] [@rw] lemma len_append = (
+  (x, y) => List.length(x @ y) == List.length(x) + List.length(y)
+);
 
 let vg_add_todo = s => {
   let s' = update(AddNewTodo, s);
   List.length(s'.todos) == List.length(s.todos) + 1;
 };
-/* let vg_edit_todo = (s, n) => { */
-/*   /\* let pre = *\/ */
-/*   /\*   switch (List.nth(n, s.todos)) { *\/ */
-/*   /\*   | Some(Some(_)) => true *\/ */
-/*   /\*   | _ => false *\/ */
-/*   /\*   }; *\/ */
-/*   /\* pre *\/ */
-/*   /\* ==>  *\/ */
-/*   let s' = updateTodo(EditTodo(n, "updated"), s); */
-/*   switch (List.nth(n, s'.todos)) { */
-/*   | Some(Some(t')) => t'.text == "updated" */
-/*   | _ => false */
-/*   }; */
-/* }; */
+
+let vg_update_todo = (todos, n) => {
+  let todos' =
+    updateTodo(x => Option.map(t => {...t, text: "updated"}, x), todos, n);
+  n > 0
+  && (
+    switch (List.nth(n, todos)) {
+    | Some(Some(t)) => true
+    | _ => false
+    }
+  )
+  ==> (
+    switch (List.nth(n, todos')) {
+    | Some(Some(t)) => t.text == "updated"
+    | _ => false
+    }
+  );
+};
