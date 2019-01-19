@@ -166,9 +166,11 @@ let update = (msg, state) =>
     }
   };
 
-[@auto] [@rw] lemma len_append = (
-  (x, y) => List.length(x @ y) == List.length(x) + List.length(y)
-);
+[@auto]
+[@rw]
+[@imandra_theorem]
+let len_append = (x, y) =>
+  List.length(x @ y) == List.length(x) + List.length(y);
 
 let vg_add_todo = s => {
   let s' = update(AddNewTodo, s);
