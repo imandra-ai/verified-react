@@ -42,8 +42,10 @@ let make = (~customInitialState, _children) => {
         ),
       )
     | Model(m) =>
-      let newState = TodoMvcModel.update(m, state.it);
-      ReasonReact.Update({...state, it: newState});
+      switch (TodoMvcModel.update(m, state.it)) {
+      | Ok(newState) => ReasonReact.Update({...state, it: newState})
+      | Error(s) => ReasonReact.SideEffects((_s => Js.Console.error(s)))
+      }
     },
   render: self => {
     let activeTodoCount = Z.to_int(TodoMvcModel.activeCount(self.state.it));
