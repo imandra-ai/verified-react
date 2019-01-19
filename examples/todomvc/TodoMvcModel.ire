@@ -183,7 +183,7 @@ let vg_update_todo = (todos, n) => {
   n > 0
   && (
     switch (List.nth(n, todos)) {
-    | Some(Some(t)) => true
+    | Some(Some(_)) => true
     | _ => false
     }
   )
