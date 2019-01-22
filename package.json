@@ -29,6 +29,7 @@
     "@glennsl/bs-json": "^3.0.0",
     "bs-css": "^8.0.0",
     "bs-imandra-client": "git+https://github.com/aestheticintegration/bs-imandra-client.git#ce9cae63a7200821963c913609808b6de2a8509a",
+    "bs-decoders": "https://github.com/mattjbray/ocaml-decoders.git#27deef2c5d32366950955ea96a2ada3ed12e6f5e",
     "imandra-prelude": "git+https://github.com/aestheticintegration/imandra-prelude.git",
     "jest": "^23.6.0",
     "parcel-bundler": "^1.11.0",

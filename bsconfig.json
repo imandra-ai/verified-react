@@ -43,7 +43,8 @@
     "@glennsl/bs-jest",
     "@glennsl/bs-json",
     "imandra-prelude",
-    "bs-css"
+    "bs-css",
+    "bs-decoders"
   ],
   "reason": {
     "react-jsx": 2
