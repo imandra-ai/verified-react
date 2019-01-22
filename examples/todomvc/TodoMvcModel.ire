@@ -35,17 +35,17 @@ type state = {
 
 let initialState = {todos: [], newTodoText: "", viewing: AllTodos, nextId: 0};
 
-let updateTodo = (f, state, id) => {
+let updateTodo = (f, state, id) =>
   if (id < 0) {
-    Error("id must be non negative")
+    Error("id must be non negative");
   } else {
     let before = List.take(id, state.todos);
     switch (List.drop(id, state.todos)) {
-    | [target, ...rest] => Ok({...state, todos: before @ [f(target)] @ rest})
+    | [target, ...rest] =>
+      Ok({...state, todos: before @ [f(target)] @ rest})
     | _ => Error("No todo with id")
-    }
-  }
-};
+    };
+  };
 
 let activeCount = state =>
   state.todos
@@ -114,16 +114,15 @@ let update = (msg, state) =>
     updateTodo(Option.map(t => {...t, text}), state, id)
   | DoneEditingTodo(id) =>
     updateTodo(Option.map(t => {...t, editing: false}), state, id)
-
   | ToggleTodo(id) =>
-    updateTodo(Option.map(t => {...t, done_: !t.done_}), state, id)
+    updateTodo(Option.map(t => {...t, done_: ! t.done_}), state, id)
   | ToggleAll =>
     let anyNotDone =
       List.exists(
         ot =>
           switch (ot) {
           | None => false
-          | Some(t) => !t.done_
+          | Some(t) => ! t.done_
           },
         state.todos,
       );
@@ -161,11 +160,13 @@ let len_append = (x, y) =>
 [@imandra_theorem]
 let vg_edit_ok = (state, todos, n, text) => {
   let state = {...state, todos};
-  Option.is_some(List.nth (n, state.todos)) ==>
-  switch (update(EditTodo(n, text), state)) {
-  | Ok(_) => true
-  | Error(_) => false
-  }
+  Option.is_some(List.nth(n, state.todos))
+  ==> (
+    switch (update(EditTodo(n, text), state)) {
+    | Ok(_) => true
+    | Error(_) => false
+    }
+  );
 };
 
 [@auto]
@@ -178,19 +179,24 @@ let vg_add_todo = s =>
 
 [@auto]
 [@imandra_verify]
-let _ = (state, todos, n, text) => {
-  let state = {...state, todos};
-  switch (List.nth(n, state.todos)) {
-  | Some(Some(_)) => true
-  | _ => false
-  }
-  ==>
-  switch (update(EditTodo(n, text), state)) {
-  | Ok(state') =>
-    switch (List.nth(n, state'.todos)) {
-    | Some(Some(t)) => t.text == text
-    | _ => false
-    }
-  | _ => false
-  }
+let _ =
+  (state, todos, n, text) => {
+    let state = {...state, todos};
+    (
+      switch (List.nth(n, state.todos)) {
+      | Some(Some(_)) => true
+      | _ => false
+      }
+    )
+    ==> (
+      switch (update(EditTodo(n, text), state)) {
+      | Ok(state') =>
+        switch (List.nth(n, state'.todos)) {
+        | Some(Some(t)) => t.text == text
+        | _ => false
+        }
+      | _ => false
+      }
+    );
+  };
 };
