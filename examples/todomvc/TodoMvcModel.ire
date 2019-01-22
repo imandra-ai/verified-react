@@ -36,11 +36,15 @@ type state = {
 let initialState = {todos: [], newTodoText: "", viewing: AllTodos, nextId: 0};
 
 let updateTodo = (f, state, id) => {
-  let before = List.take(id, state.todos);
-  switch (List.drop(id, state.todos)) {
-  | [target, ...rest] => Ok({...state, todos: before @ [f(target)] @ rest})
-  | _ => Error("No todo with id")
-  };
+  if (id < 0) {
+    Error("id must be non negative")
+  } else {
+    let before = List.take(id, state.todos);
+    switch (List.drop(id, state.todos)) {
+    | [target, ...rest] => Ok({...state, todos: before @ [f(target)] @ rest})
+    | _ => Error("No todo with id")
+    }
+  }
 };
 
 let activeCount = state =>
