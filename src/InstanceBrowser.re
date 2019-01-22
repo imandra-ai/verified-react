@@ -31,7 +31,7 @@ type state = {
 
 let component = ReasonReact.reducerComponent("InstanceBrowser");
 
-let serverInfo: I.ServerInfo.t = {
+let serverInfo: I.Server_info.t = {
   port: 3000,
   baseUrl: "http://localhost:3000",
 };
@@ -56,7 +56,7 @@ let make =
   },
   didMount: self => {
     let _p =
-      I.Eval.bySrc(
+      I.Eval.by_src(
         ~syntax=Imandra_client.Api.Reason,
         ~src=Printf.sprintf("#use \"%s\"", setupScriptPath),
         serverInfo,
@@ -83,7 +83,7 @@ let make =
         (
           self => {
             let _p =
-              I.Instance.bySrc(
+              I.Instance.by_src(
                 ~syntax=Imandra_client.Api.Reason,
                 ~src=Printf.sprintf("(x : %s) => %s", instanceType, queryStr),
                 ~instancePrinter={name: instancePrinterFn, cx_var_name: "x"},

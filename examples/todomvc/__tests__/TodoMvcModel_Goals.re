@@ -8,7 +8,7 @@ let moduleName = "TodoMvcModel";
 
 let () =
   beforeAllPromise(() => {
-    let si = Imandra_client.ServerInfo.fromFile() |> Belt.Result.getExn;
+    let si = Imandra_client.Server_info.from_file() |> Belt.Result.getExn;
     serverInfo := Some(si);
     Imandra_client.reset(si);
   });
@@ -24,7 +24,7 @@ describe("todomvc model", () => {
         "..",
         Printf.sprintf("%s.ire", moduleName),
       |]);
-    Imandra_client.Eval.bySrc(
+    Imandra_client.Eval.by_src(
       ip,
       ~syntax,
       ~src=Printf.sprintf("#mod_use \"%s\"", model_path),
@@ -43,7 +43,7 @@ describe("todomvc model", () => {
     let functionName = Imandra_client.function_name(TodoMvcModel.vg_add_todo);
     let name = Printf.sprintf("%s.%s", moduleName, functionName);
     let hints = I.Api.Request.Hints.{method_: Induct(Default)};
-    Imandra_client.Verify.byName(ip, ~name, ~hints)
+    Imandra_client.Verify.by_name(ip, ~name, ~hints)
     |> Js.Promise.then_(res =>
          Js.Promise.resolve(Imandra_expect.toBeProved(res))
        );
@@ -54,7 +54,7 @@ describe("todomvc model", () => {
       Imandra_client.function_name(TodoMvcModel.vg_update_todo);
     let name = Printf.sprintf("%s.%s", moduleName, functionName);
     let hints = I.Api.Request.Hints.{method_: Induct(Default)};
-    Imandra_client.Verify.byName(ip, ~name, ~hints)
+    Imandra_client.Verify.by_name(ip, ~name, ~hints)
     |> Js.Promise.then_(res =>
          Js.Promise.resolve(Imandra_expect.toBeProved(res))
        );

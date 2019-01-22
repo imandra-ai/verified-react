@@ -43,7 +43,7 @@ module App = {
         )>
         <h1> (ReasonReact.string("Tic Tac Toe")) </h1>
         <InstanceBrowser
-          serverInfo=Imandra_client.ServerInfo.{
+          serverInfo=Imandra_client.Server_info.{
                        port: 3000,
                        baseUrl: "http://localhost:3000",
                      }
