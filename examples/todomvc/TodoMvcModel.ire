@@ -230,3 +230,98 @@ let vg_toggle_all = (state, todos) => {
   | _ => false
   };
 };
+
+[@program]
+module D = Decoders;
+
+[@program]
+module Decoders = (D: D.Decode.S) => {
+  open D;
+  let viewingTodo: decoder(view) =
+    string
+    >>= (
+      fun
+      | "AllTodos" => succeed(AllTodos)
+      | "ActiveTodos" => succeed(ActiveTodos)
+      | "CompletedTodos" => succeed(CompletedTodos)
+      | _ => fail("Expected 'AllTodos', 'ActiveTodos' or 'CompletedTodos'")
+    );
+  let todo: decoder(todo) =
+    field("id", int)
+    >>= (
+      id =>
+        field("done", bool)
+        >>= (
+          done_ =>
+            field("text", string)
+            >>= (
+              text =>
+                field("hovered", bool)
+                >>= (
+                  hovered =>
+                    field("editing", bool)
+                    >>= (
+                      editing =>
+                        succeed({
+                          id: Z.of_int(id),
+                          done_,
+                          text,
+                          hovered,
+                          editing,
+                        })
+                    )
+                )
+            )
+        )
+    );
+  let state: decoder(state) =
+    field("newTodoText", string)
+    >>= (
+      newTodoText =>
+        field("nextId", int)
+        >>= (
+          nextId =>
+            field("viewing", viewingTodo)
+            >>= (
+              viewing =>
+                field("todos", list(nullable(todo)))
+                >>= (
+                  todos =>
+                    succeed({
+                      todos,
+                      viewing,
+                      nextId: Z.of_int(nextId),
+                      newTodoText,
+                    })
+                )
+            )
+        )
+    );
+};
+
+[@program]
+module Encoders = (E: D.Encode.S) => {
+  open E;
+  let viewingTodo: encoder(view) =
+    fun
+    | AllTodos => string("AllTodos")
+    | ActiveTodos => string("ActiveTodos")
+    | CompletedTodos => string("CompletedTodos");
+  let todo: encoder(todo) =
+    x =>
+      obj([
+        ("id", int(Z.to_int(x.id))),
+        ("done", bool(x.done_)),
+        ("text", string(x.text)),
+        ("hovered", bool(x.hovered)),
+        ("editing", bool(x.editing)),
+      ]);
+  let state: encoder(state) =
+    x =>
+      obj([
+        ("newTodoText", string(x.newTodoText)),
+        ("nextId", int(Z.to_int(x.nextId))),
+        ("viewing", viewingTodo(x.viewing)),
+        ("todos", list(option(todo), x.todos)),
+      ]);
+};
