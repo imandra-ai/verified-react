@@ -166,8 +166,8 @@ let vg_add_todo = s =>
   };
 
 [@auto]
-[@imandra_theorem]
-let vg_update_todo = (state, todos, n, text) => {
+[@imandra_verify]
+let _ = (state, todos, n, text) => {
   let state = {...state, todos};
   switch (List.nth(n, state.todos)) {
   | Some(Some(_)) => true
