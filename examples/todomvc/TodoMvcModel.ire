@@ -164,6 +164,11 @@ let vg_add_todo = s =>
   };
 
 let vg_update_todo = (state, n) =>
+  switch (List.nth(n, state.todos)) {
+  | Some(Some(_)) => true
+  | _ => false
+  }
+  ==>
   switch (update(EditTodo(n, "update"), state)) {
   | Ok(state') =>
     switch (List.nth(n, state'.todos)) {
