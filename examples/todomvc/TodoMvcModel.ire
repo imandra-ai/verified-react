@@ -163,17 +163,21 @@ let vg_add_todo = s =>
   | _ => false
   };
 
-let vg_update_todo = (state, n) =>
+[@auto]
+[@imandra_theorem]
+let vg_update_todo = (state, todos, n, text) => {
+  let state = {...state, todos};
   switch (List.nth(n, state.todos)) {
   | Some(Some(_)) => true
   | _ => false
   }
   ==>
-  switch (update(EditTodo(n, "update"), state)) {
+  switch (update(EditTodo(n, text), state)) {
   | Ok(state') =>
     switch (List.nth(n, state'.todos)) {
-    | Some(Some(t)) => t.text == "updated"
+    | Some(Some(t)) => t.text == text
     | _ => false
     }
   | _ => false
-  };
+  }
+};
