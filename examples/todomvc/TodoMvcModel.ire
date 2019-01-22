@@ -235,7 +235,7 @@ let vg_toggle_all = (state, todos) => {
 module D = Decoders;
 
 [@program]
-module Decoders = (D: D.Decode.S) => {
+module Decode = (D: D.Decode.S) => {
   open D;
   let viewingTodo: decoder(view) =
     string
@@ -300,7 +300,7 @@ module Decoders = (D: D.Decode.S) => {
 };
 
 [@program]
-module Encoders = (E: D.Encode.S) => {
+module Encode = (E: D.Encode.S) => {
   open E;
   let viewingTodo: encoder(view) =
     fun
