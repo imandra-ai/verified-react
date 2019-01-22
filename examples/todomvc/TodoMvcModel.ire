@@ -157,6 +157,8 @@ let update = (msg, state) =>
 let len_append = (x, y) =>
   List.length(x @ y) == List.length(x) + List.length(y);
 
+[@auto]
+[@imandra_theorem]
 let vg_add_todo = s =>
   switch (update(AddNewTodo, s)) {
   | Ok(s') => List.length(s'.todos) == List.length(s.todos) + 1
