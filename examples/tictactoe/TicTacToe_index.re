@@ -45,7 +45,7 @@ module App = {
         <InstanceBrowser
           serverInfo=Imandra_client.Server_info.{
                        port: 3000,
-                       baseUrl: "http://localhost:3000",
+                       base_url: "http://localhost:3000",
                      }
           setupScriptPath="examples/tictactoe/TicTacToe_setup.ire"
           instanceType="game_state"

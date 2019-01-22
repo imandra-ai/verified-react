@@ -33,7 +33,7 @@ let component = ReasonReact.reducerComponent("InstanceBrowser");
 
 let serverInfo: I.Server_info.t = {
   port: 3000,
-  baseUrl: "http://localhost:3000",
+  base_url: "http://localhost:3000",
 };
 
 let make =
@@ -86,7 +86,7 @@ let make =
               I.Instance.by_src(
                 ~syntax=Imandra_client.Api.Reason,
                 ~src=Printf.sprintf("(x : %s) => %s", instanceType, queryStr),
-                ~instancePrinter={name: instancePrinterFn, cx_var_name: "x"},
+                ~instance_printer={name: instancePrinterFn, cx_var_name: "x"},
                 serverInfo,
               )
               |> Js.Promise.then_(v => {
