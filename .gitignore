@@ -8,3 +8,5 @@ _opam
 examples/simple/SimpleModel.ml
 examples/tictactoe/TicTacToeLogic.ml
 examples/todomvc/TodoMvcModel.ml
+.cache/
+dist/
