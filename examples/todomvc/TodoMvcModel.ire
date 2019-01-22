@@ -159,6 +159,17 @@ let len_append = (x, y) =>
 
 [@auto]
 [@imandra_theorem]
+let vg_edit_ok = (state, todos, n, text) => {
+  let state = {...state, todos};
+  Option.is_some(List.nth (n, state.todos)) ==>
+  switch (update(EditTodo(n, text), state)) {
+  | Ok(_) => true
+  | Error(_) => false
+  }
+};
+
+[@auto]
+[@imandra_theorem]
 let vg_add_todo = s =>
   switch (update(AddNewTodo, s)) {
   | Ok(s') => List.length(s'.todos) == List.length(s.todos) + 1
