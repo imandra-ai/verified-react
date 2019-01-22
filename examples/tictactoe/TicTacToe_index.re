@@ -43,11 +43,11 @@ module App = {
         )>
         <h1> (ReasonReact.string("Tic Tac Toe")) </h1>
         <InstanceBrowser
-          serverInfo=Imandra_client.ServerInfo.{
+          serverInfo=Imandra_client.Server_info.{
                        port: 3000,
-                       baseUrl: "http://localhost:3000",
+                       base_url: "http://localhost:3000",
                      }
-          setupScriptPath="examples/tictactoe/Setup.ire"
+          setupScriptPath="examples/tictactoe/TicTacToe_setup.ire"
           instanceType="game_state"
           instancePrinterFn="game_state_to_json_pp"
           examples=[

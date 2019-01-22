@@ -1,11 +1,13 @@
 open Css;
 
+module I = Imandra_client;
+
 type action =
   | Noop
-  | InitialiseError(string)
+  | InitialiseError(I.Error.t)
   | Initialised
   | QueryInstance(string)
-  | InstanceReturned(Imandra_client.Instance.instanceResult)
+  | InstanceReturned(I.Api.Response.instance_result)
   | InstanceFetchError(string);
 
 type initState =
@@ -29,9 +31,9 @@ type state = {
 
 let component = ReasonReact.reducerComponent("InstanceBrowser");
 
-let serverInfo: Imandra_client.ServerInfo.t = {
+let serverInfo: I.Server_info.t = {
   port: 3000,
-  baseUrl: "http://localhost:3000",
+  base_url: "http://localhost:3000",
 };
 
 let make =
@@ -54,15 +56,15 @@ let make =
   },
   didMount: self => {
     let _p =
-      Imandra_client.Eval.bySrc(
-        ~syntax=Imandra_client.Syntax.Reason,
+      I.Eval.by_src(
+        ~syntax=Imandra_client.Api.Reason,
         ~src=Printf.sprintf("#use \"%s\"", setupScriptPath),
         serverInfo,
       )
       |> Js.Promise.then_(v => {
            switch (v) {
            | Belt.Result.Ok(_) => self.send(Initialised)
-           | Belt.Result.Error((e, _)) => self.send(InitialiseError(e))
+           | Belt.Result.Error(e) => self.send(InitialiseError(e))
            };
            Js.Promise.resolve();
          });
@@ -73,31 +75,32 @@ let make =
     | Noop => ReasonReact.Update(s)
     | Initialised => ReasonReact.Update({...s, init: Loaded})
     | InitialiseError(e) =>
-      Js.Console.error(e);
-      ReasonReact.Update({...s, init: Error(e)});
+      Js.Console.error(I.Error.pp_str(e));
+      ReasonReact.Update({...s, init: Error(I.Error.pp_str(e))});
     | QueryInstance(queryStr) =>
       ReasonReact.UpdateWithSideEffects(
         {...s, instanceFetch: Loading, query: queryStr},
         (
           self => {
             let _p =
-              Imandra_client.Instance.bySrc(
-                ~syntax=Imandra_client.Syntax.Reason,
+              I.Instance.by_src(
+                ~syntax=Imandra_client.Api.Reason,
                 ~src=Printf.sprintf("(x : %s) => %s", instanceType, queryStr),
-                ~instancePrinter={name: instancePrinterFn, cx_var_name: "x"},
+                ~instance_printer={name: instancePrinterFn, cx_var_name: "x"},
                 serverInfo,
               )
               |> Js.Promise.then_(v => {
                    switch (v) {
-                   | Belt.Result.Ok((r, _)) =>
-                     self.send(InstanceReturned(r))
-                   | Belt.Result.Error((
-                       "Imandra_reason_parser__Reason_syntax_util.Error(_, _)",
-                       _,
-                     )) =>
+                   | Belt.Result.Ok(r) => self.send(InstanceReturned(r))
+                   | Belt.Result.Error(
+                       I.Error.Imandra_error({
+                         error:
+                           "Imandra_reason_parser__Reason_syntax_util.Error(_, _)",
+                       }),
+                     ) =>
                      self.send(InstanceFetchError("Reason parse error"))
-                   | Belt.Result.Error((e, _)) =>
-                     self.send(InstanceFetchError(e))
+                   | Belt.Result.Error(e) =>
+                     self.send(InstanceFetchError(I.Error.pp_str(e)))
                    };
                    Js.Promise.resolve();
                  });
@@ -114,21 +117,21 @@ let make =
       });
     | InstanceReturned(r) =>
       switch (r) {
-      | Imandra_client.Instance.Sat(i) =>
+      | I.Api.Response.I_sat(i) =>
         ReasonReact.Update({
           ...s,
           instanceFetch: Loaded,
           instanceFeedback: None,
           instance: Json.parse(i.instance.printed |> Belt.Option.getExn),
         })
-      | Imandra_client.Instance.Unknown(u) =>
+      | I.Api.Response.I_unknown(u) =>
         ReasonReact.Update({
           ...s,
           instanceFetch: Loaded,
           instanceFeedback:
-            Some(Printf.sprintf("Instance unknown: %s", u.reason)),
+            Some(Printf.sprintf("Instance unknown: %s", u.unknown_reason)),
         })
-      | Imandra_client.Instance.Unsat =>
+      | I.Api.Response.I_unsat =>
         ReasonReact.Update({
           ...s,
           instanceFetch: Loaded,

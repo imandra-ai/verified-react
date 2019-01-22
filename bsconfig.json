@@ -3,6 +3,7 @@
   "sources": [
     {
       "dir": "examples/simple",
+      "subdirs": true,
       "generators": [{
         "name": "imandra-extract-re",
         "edge": ["SimpleModel.ml", ":", "SimpleModel.ire"]
@@ -10,6 +11,7 @@
     },
     {
       "dir": "examples/tictactoe",
+      "subdirs": true,
       "generators": [{
         "name": "imandra-extract-re",
         "edge": ["TicTacToeLogic.ml", ":", "TicTacToeLogic.ire"]
@@ -17,6 +19,7 @@
     },
     {
       "dir": "examples/todomvc",
+      "subdirs": true,
       "generators": [{
         "name": "imandra-extract-re",
         "edge": ["TodoMvcModel.ml", ":", "TodoMvcModel.ire"]
@@ -40,7 +43,8 @@
     "@glennsl/bs-jest",
     "@glennsl/bs-json",
     "imandra-prelude",
-    "bs-css"
+    "bs-css",
+    "bs-decoders"
   ],
   "reason": {
     "react-jsx": 2

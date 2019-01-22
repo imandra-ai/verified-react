@@ -2,7 +2,7 @@ let get_imandra_process : unit -> Node.Child_process.spawnResult Js.Undefined.t 
 
 let default = fun () ->
   let np = get_imandra_process () in
-  Imandra_client.ServerInfo.cleanup ();
+  Imandra_client.Server_info.cleanup ();
   match (Js.Undefined.toOption np) with
   | None ->
     Js.Promise.resolve()

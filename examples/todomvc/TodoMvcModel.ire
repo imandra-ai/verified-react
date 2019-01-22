@@ -1,19 +1,21 @@
 type id = int;
 
 type view =
-  | All
-  | Active
-  | Completed;
+  | AllTodos
+  | ActiveTodos
+  | CompletedTodos;
 
 type msg =
+  | EditNewTodo(string)
   | AddNewTodo
   | HoverTodo(id)
   | StartEditingTodo(id)
   | EditTodo(id, string)
   | DoneEditingTodo(id)
-  | DoneTodo(id)
+  | ToggleTodo(id)
   | DeleteTodo(id)
   | View(view)
+  | ToggleAll
   | ClearCompleted;
 
 type todo = {
@@ -31,18 +33,64 @@ type state = {
   nextId: int,
 };
 
-let initialState = {todos: [], newTodoText: "", viewing: All, nextId: 0};
+let initialState = {todos: [], newTodoText: "", viewing: AllTodos, nextId: 0};
 
-let updateTodo = (todos, id, f) => {
-  let before = List.take(id, todos);
-  switch (List.drop(id, todos)) {
-  | [target, ...rest] => before @ [f(target)] @ rest
-  | _ => todos
+let updateTodo = (f, state, id) =>
+  if (id < 0) {
+    Error("id must be non negative");
+  } else {
+    let before = List.take(id, state.todos);
+    switch (List.drop(id, state.todos)) {
+    | [target, ...rest] =>
+      Ok({...state, todos: before @ [f(target)] @ rest})
+    | _ => Error("No todo with id")
+    };
   };
+
+let activeCount = state =>
+  state.todos
+  |> List.filter_map(
+       Option.flat_map(t =>
+         if (t.done_) {
+           None;
+         } else {
+           Some(t);
+         }
+       ),
+     )
+  |> List.length;
+
+let completedCount = state =>
+  state.todos
+  |> List.filter_map(
+       Option.flat_map(t =>
+         if (t.done_) {
+           Some(t);
+         } else {
+           None;
+         }
+       ),
+     )
+  |> List.length;
+
+let totalCount = state =>
+  state.todos |> List.filter_map(t => t) |> List.length;
+
+let shownTodos = state => {
+  let flat_m = t =>
+    switch (state.viewing, t.done_) {
+    | (AllTodos, _) => Some(t)
+    | (ActiveTodos, false) => Some(t)
+    | (CompletedTodos, true) => Some(t)
+    | _ => None
+    };
+  let fil_m = ot => Option.flat_map(flat_m, ot);
+  List.filter_map(fil_m, state.todos);
 };
 
-let update = (state, msg) =>
+let update = (msg, state) =>
   switch (msg) {
+  | EditNewTodo(text) => Ok({...state, newTodoText: text})
   | AddNewTodo =>
     let newTodo = {
       id: state.nextId,
@@ -57,58 +105,97 @@ let update = (state, msg) =>
       newTodoText: "",
       todos: List.append(state.todos, [Some(newTodo)]),
     };
-    newState;
-  | HoverTodo(id) => {
+    Ok(newState);
+  | HoverTodo(id) =>
+    updateTodo(Option.map(t => {...t, hovered: true}), state, id)
+  | StartEditingTodo(id) =>
+    updateTodo(Option.map(t => {...t, editing: true}), state, id)
+  | EditTodo(id, text) =>
+    updateTodo(Option.map(t => {...t, text}), state, id)
+  | DoneEditingTodo(id) =>
+    updateTodo(Option.map(t => {...t, editing: false}), state, id)
+  | ToggleTodo(id) =>
+    updateTodo(Option.map(t => {...t, done_: ! t.done_}), state, id)
+  | ToggleAll =>
+    let anyNotDone =
+      List.exists(
+        ot =>
+          switch (ot) {
+          | None => false
+          | Some(t) => ! t.done_
+          },
+        state.todos,
+      );
+    Ok({
       ...state,
       todos:
-        updateTodo(state.todos, id, Option.map(t => {...t, hovered: true})),
-    }
-  | StartEditingTodo(id) => {
-      ...state,
-      todos:
-        updateTodo(state.todos, id, Option.map(t => {...t, editing: true})),
-    }
-  | EditTodo(id, text) => {
-      ...state,
-      todos: updateTodo(state.todos, id, Option.map(t => {...t, text})),
-    }
-  | DoneEditingTodo(id) => {
-      ...state,
-      todos:
-        updateTodo(state.todos, id, Option.map(t => {...t, editing: false})),
-    }
-  | DoneTodo(id) => {
-      ...state,
-      todos:
-        updateTodo(state.todos, id, Option.map(t => {...t, done_: true})),
-    }
-  | DeleteTodo(id) => {
-      ...state,
-      todos: updateTodo(state.todos, id, _t => None),
-    }
-  | View(type_) => {...state, viewing: type_}
-  | ClearCompleted => {
+        List.map(Option.map(t => {...t, done_: anyNotDone}), state.todos),
+    });
+  | DeleteTodo(id) => updateTodo(_t => None, state, id)
+  | View(type_) => Ok({...state, viewing: type_})
+  | ClearCompleted =>
+    Ok({
       ...state,
       todos:
         state.todos
-        |> List.map(t =>
-             t
-             |> Option.flat_map(t =>
-                  if (t.done_) {
-                    None;
-                  } else {
-                    Some(t);
-                  }
-                )
+        |> List.map(
+             Option.flat_map(t =>
+               if (t.done_) {
+                 None;
+               } else {
+                 Some(t);
+               }
+             ),
            ),
-    }
+    })
   };
 
-[@auto] [@rw] lemma len_append = (x, y) =>
+[@auto]
+[@rw]
+[@imandra_theorem]
+let len_append = (x, y) =>
   List.length(x @ y) == List.length(x) + List.length(y);
 
-[@induct]
-let vg_add_todo = s => {
-  let s' = update(s, AddNewTodo);
-  List.length(s'.todos) == List.length(s.todos) + 1;
+[@auto]
+[@imandra_theorem]
+let vg_edit_ok = (state, todos, n, text) => {
+  let state = {...state, todos};
+  Option.is_some(List.nth(n, state.todos))
+  ==> (
+    switch (update(EditTodo(n, text), state)) {
+    | Ok(_) => true
+    | Error(_) => false
+    }
+  );
 };
+
+[@auto]
+[@imandra_theorem]
+let vg_add_todo = s =>
+  switch (update(AddNewTodo, s)) {
+  | Ok(s') => List.length(s'.todos) == List.length(s.todos) + 1
+  | _ => false
+  };
+
+[@auto]
+[@imandra_verify]
+let _ =
+  (state, todos, n, text) => {
+    let state = {...state, todos};
+    (
+      switch (List.nth(n, state.todos)) {
+      | Some(Some(_)) => true
+      | _ => false
+      }
+    )
+    ==> (
+      switch (update(EditTodo(n, text), state)) {
+      | Ok(state') =>
+        switch (List.nth(n, state'.todos)) {
+        | Some(Some(t)) => t.text == text
+        | _ => false
+        }
+      | _ => false
+      }
+    );
+  };

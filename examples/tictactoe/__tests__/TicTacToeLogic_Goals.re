@@ -4,14 +4,18 @@ let serverInfo = ref(None);
 
 let moduleName = "TicTacToeLogic";
 
+module I = Imandra_client;
+
 let () =
   beforeAllPromise(() => {
-    let si = Imandra_client.ServerInfo.fromFile();
+    let si = Imandra_client.Server_info.from_file() |> Belt.Result.getExn;
     serverInfo := Some(si);
     Imandra_client.reset(si);
   });
 
-let syntax = Imandra_client.Syntax.Reason;
+let syntax = I.Api.Reason;
+
+let ppErr = e => Format.asprintf("%a", I.Error.pp, e);
 
 let () =
   describe("tic tac toe model", () => {
@@ -23,7 +27,7 @@ let () =
           "..",
           Printf.sprintf("%s.ire", moduleName),
         |]);
-      Imandra_client.Eval.bySrc(
+      Imandra_client.Eval.by_src(
         ip,
         ~syntax,
         ~src=Printf.sprintf("#mod_use \"%s\"", model_path),
@@ -31,11 +35,9 @@ let () =
       |> Js.Promise.then_(
            fun
            | Belt.Result.Ok(_) => Js.Promise.resolve(pass)
-           | Belt.Result.Error((e, _)) => {
-               Js.Console.error(e);
-               Js.Promise.reject(
-                 Failure(Printf.sprintf("error from imandra: %s", e)),
-               );
+           | Belt.Result.Error(e) => {
+               Js.Console.error(ppErr(e));
+               Js.Promise.reject(Failure(ppErr(e)));
              },
          );
     });
@@ -46,20 +48,18 @@ let () =
           TicTacToeLogic.goal_valid_grid_has_no_more_than_one_move_diff,
         );
       let name = Printf.sprintf("%s.%s", moduleName, functionName);
-      Imandra_client.Verify.byName(ip, ~name)
+      Imandra_client.Verify.by_name(ip, ~name)
       |> Js.Promise.then_(
            fun
-           | Belt.Result.Ok((Imandra_client.Verify.Proved, _)) =>
+           | Belt.Result.Ok(I.Api.Response.V_proved) =>
              Js.Promise.resolve(pass)
            | Belt.Result.Ok(o) => {
                Js.Console.error(o);
                Js.Promise.reject(Failure("unexpected result"));
              }
-           | Belt.Result.Error((e, _)) => {
-               Js.Console.error(e);
-               Js.Promise.reject(
-                 Failure(Printf.sprintf("error from imandra: %s", e)),
-               );
+           | Belt.Result.Error(e) => {
+               Js.Console.error(ppErr(e));
+               Js.Promise.reject(Failure(ppErr(e)));
              },
          );
     });
@@ -71,20 +71,18 @@ let () =
         let functionName =
           Imandra_client.function_name(TicTacToeLogic.goal_game_progression);
         let name = Printf.sprintf("%s.%s", moduleName, functionName);
-        Imandra_client.Verify.byName(ip, ~name)
+        Imandra_client.Verify.by_name(ip, ~name)
         |> Js.Promise.then_(
              fun
-             | Belt.Result.Ok((Imandra_client.Verify.Proved, _)) =>
+             | Belt.Result.Ok(I.Api.Response.V_proved) =>
                Js.Promise.resolve(pass)
              | Belt.Result.Ok(o) => {
                  Js.Console.error(o);
                  Js.Promise.reject(Failure("unexpected result"));
                }
-             | Belt.Result.Error((e, _)) => {
-                 Js.Console.error(e);
-                 Js.Promise.reject(
-                   Failure(Printf.sprintf("error from imandra: %s", e)),
-                 );
+             | Belt.Result.Error(e) => {
+                 Js.Console.error(ppErr(e));
+                 Js.Promise.reject(Failure(ppErr(e)));
                },
            );
       },
