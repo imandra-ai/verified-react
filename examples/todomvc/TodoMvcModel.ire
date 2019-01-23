@@ -173,16 +173,12 @@ let vg_edit_ok = (state, todos, n, text) => {
   );
 };
 
-[@auto]
-[@imandra_theorem]
 let vg_add_todo = s =>
   switch (update(AddNewTodo, s)) {
   | Ok(s') => List.length(s'.todos) == List.length(s.todos) + 1
   | _ => false
   };
 
-[@auto]
-[@imandra_verify]
 let _ =
   (state, todos, n, text) => {
     let state = {...state, todos};
