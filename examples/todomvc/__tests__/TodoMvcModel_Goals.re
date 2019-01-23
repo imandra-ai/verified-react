@@ -48,6 +48,28 @@ describe("todomvc model", () => {
          Js.Promise.resolve(Imandra_client_expect.to_be_proved(res))
        );
   });
+  testPromise("vg_clear_completed", () => {
+    let ip = serverInfo^ |> Belt.Option.getExn;
+    let functionName =
+      Imandra_client.function_name(TodoMvcModel.vg_clear_completed);
+    let name = Printf.sprintf("%s.%s", moduleName, functionName);
+    let hints = I.Api.Request.Hints.{method_: Induct(Default)};
+    Imandra_client.Verify.by_name(ip, ~name, ~hints)
+    |> Js.Promise.then_(res =>
+         Js.Promise.resolve(Imandra_client_expect.to_be_proved(res))
+       );
+  });
+  testPromise("vg_toggle_all", () => {
+    let ip = serverInfo^ |> Belt.Option.getExn;
+    let functionName =
+      Imandra_client.function_name(TodoMvcModel.vg_toggle_all);
+    let name = Printf.sprintf("%s.%s", moduleName, functionName);
+    let hints = I.Api.Request.Hints.{method_: Induct(Default)};
+    Imandra_client.Verify.by_name(ip, ~name, ~hints)
+    |> Js.Promise.then_(res =>
+         Js.Promise.resolve(Imandra_client_expect.to_be_proved(res))
+       );
+  });
   /* testPromise("vg_update_todo", () => { */
   /*   let ip = serverInfo^ |> Belt.Option.getExn; */
   /*   let functionName = */

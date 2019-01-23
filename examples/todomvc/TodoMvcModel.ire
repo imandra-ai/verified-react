@@ -157,7 +157,11 @@ let len_append = (x, y) =>
   List.length(x @ y) == List.length(x) + List.length(y);
 
 [@auto]
+[@rw]
 [@imandra_theorem]
+let forall_map = (f, g, l) =>
+  List.for_all(f, List.map(g, l)) == List.for_all(x => f(g(x)), l);
+
 let vg_edit_ok = (state, todos, n, text) => {
   let state = {...state, todos};
   Option.is_some(List.nth(n, state.todos))
@@ -199,3 +203,35 @@ let _ =
       }
     );
   };
+
+let vg_clear_completed = (state, todos) => {
+  let state = {...state, todos};
+  switch (update(ClearCompleted, state)) {
+  | Ok(state') =>
+    List.for_all(
+      t =>
+        switch (t) {
+        | Some(t) => !t.done_
+        | None => true
+        },
+      state'.todos,
+    )
+  | _ => false
+  };
+};
+
+let vg_toggle_all = (state, todos) => {
+  let state = {...state, todos};
+  let allDoneP = f =>
+    List.for_all(ot =>
+      switch (ot) {
+      | None => true
+      | Some(t) => f(t.done_)
+      }
+    );
+  let anyNotDone = !allDoneP(id, state.todos);
+  switch (update(ToggleAll, state)) {
+  | Ok(state') => allDoneP((==)(anyNotDone), state'.todos)
+  | _ => false
+  };
+};
