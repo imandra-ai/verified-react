@@ -231,6 +231,8 @@ let vg_toggle_all = (state, todos) => {
   };
 };
 
+[@require "decoders"];
+
 [@program]
 module D = Decoders;
 
