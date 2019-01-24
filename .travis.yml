@@ -2,6 +2,7 @@ language: node_js
 node_js:
 - 6
 script:
+- echo "travis_fold:start:imandra-setup"
 - docker pull imandra/imandra-client-switch
 - 'sed -i "s#imandra-extract #docker run -v `pwd`:`pwd` -w `pwd` --user root --entrypoint imandra-extract imandra/imandra-client-switch #" bsconfig.json'
 - mkdir ~/.imandra
@@ -11,7 +12,10 @@ script:
 - echo 'docker run -v ~/.imandra:/home/opam/.imandra -v `pwd`:`pwd` -w `pwd` --user root --entrypoint imandra-http-server imandra/imandra-client-switch' > bin/imandra-http-server
 - chmod +x bin/imandra-http-server
 - export PATH="`pwd`/bin":"$PATH"
+- echo "travis_fold:end:imandra-setup"
+- echo "travis_fold:start:npm-build"
 - npm run build
+- echo "travis_fold:end:npm-build"
 - npm run test
 env:
   global:
