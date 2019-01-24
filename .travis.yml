@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-- 6
+- 11
 script:
 - echo "travis_fold:start:imandra-setup"
 - docker pull imandra/imandra-client-switch
