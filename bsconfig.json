@@ -22,7 +22,7 @@
       "subdirs": true,
       "generators": [{
         "name": "imandra-extract-re",
-        "edge": ["TodoMvcModel.ml", ":", "TodoMvcModel.ire"]
+        "edge": ["TodoMvc_Model.ml", ":", "TodoMvc_Model.ire"]
       }]
     },
     {

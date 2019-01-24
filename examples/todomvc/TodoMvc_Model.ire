@@ -115,14 +115,14 @@ let update = (msg, state) =>
   | DoneEditingTodo(id) =>
     updateTodo(Option.map(t => {...t, editing: false}), state, id)
   | ToggleTodo(id) =>
-    updateTodo(Option.map(t => {...t, done_: ! t.done_}), state, id)
+    updateTodo(Option.map(t => {...t, done_: !t.done_}), state, id)
   | ToggleAll =>
     let anyNotDone =
       List.exists(
         ot =>
           switch (ot) {
           | None => false
-          | Some(t) => ! t.done_
+          | Some(t) => !t.done_
           },
         state.todos,
       );

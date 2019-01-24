@@ -2,7 +2,7 @@
 
 [@require "decoders-yojson"];
 
-[@use "examples/todomvc/TodoMvcModel.ire"];
+[@use "examples/todomvc/TodoMvc_Model.ire"];
 
 [@program]
 module E = Encode(Decoders_yojson.Basic.Encode);
@@ -27,7 +27,7 @@ let uniq_by = (f, xs) => {
     switch (ys) {
     | [] => true
     | [y, ...ys] =>
-      ! List.exists(a => f(a) == f(y), acc) && go(ys, [y, ...acc])
+      !List.exists(a => f(a) == f(y), acc) && go(ys, [y, ...acc])
     };
   go(xs, []);
 };
