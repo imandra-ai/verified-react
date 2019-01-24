@@ -12,7 +12,7 @@ script:
 - echo 'docker run -v ~/.imandra:/home/opam/.imandra -v `pwd`:`pwd` -w `pwd` --user root --entrypoint imandra-http-server imandra/imandra-client-switch $@' > bin/imandra-http-server
 - chmod +x bin/imandra-http-server
 - export PATH="`pwd`/bin":"$PATH"
-- imandra-http-server --force-kill
+- docker run -v ~/.imandra:/home/opam/.imandra -v `pwd`:`pwd` -w `pwd` --user root --entrypoint /bin/sh imandra/imandra-client-switch -c 'imandra-http-server --force-kill && sleep 5'
 - echo "travis_fold:end:imandra-setup"
 - echo "travis_fold:start:npm-build"
 - npm run build
