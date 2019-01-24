@@ -9,7 +9,7 @@ script:
 - echo "$IMANDRA_LOGIN_TOKEN" > ~/.imandra/login_token
 - echo "core-us-central1" > ~/.imandra/zone
 - mkdir bin
-- echo 'docker run -v ~/.imandra:/home/opam/.imandra -v `pwd`:`pwd` -w `pwd` --user root --entrypoint imandra-http-server imandra/imandra-client-switch' > bin/imandra-http-server
+- echo 'docker run -v ~/.imandra:/home/opam/.imandra -v `pwd`:`pwd` -w `pwd` --user root --entrypoint imandra-http-server imandra/imandra-client-switch $@' > bin/imandra-http-server
 - chmod +x bin/imandra-http-server
 - export PATH="`pwd`/bin":"$PATH"
 - imandra-http-server --force-kill
