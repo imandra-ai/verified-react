@@ -1,7 +1,25 @@
 language: node_js
+cache: npm
 node_js:
-  - 6
+- 11
 script:
-  - docker pull imandra/imandra-client-switch
-  - 'sed -i "s#imandra-extract #docker run -v `pwd`:`pwd` -w `pwd` --user root --entrypoint imandra-extract imandra/imandra-client-switch #" bsconfig.json'
-  - npm run build
+- echo "travis_fold:start:imandra-setup"
+- docker pull imandra/imandra-client-switch
+- 'sed -i "s#imandra-extract #docker run -v `pwd`:`pwd` -w `pwd` --user root --entrypoint imandra-extract imandra/imandra-client-switch #" bsconfig.json'
+- mkdir ~/.imandra
+- echo "$IMANDRA_LOGIN_TOKEN" > ~/.imandra/login_token
+- echo "core-us-central1" > ~/.imandra/zone
+- mkdir bin
+- echo 'docker run -v ~/.imandra:/home/opam/.imandra -v ~/.imandra:/home/opam/.imandra-dev -p 8000:8000 -v `pwd`:`pwd` -w `pwd` --user root --entrypoint /bin/sh imandra/imandra-client-switch -c "imandra-http-server $(echo $@)"' > bin/imandra-http-server
+- chmod +x bin/imandra-http-server
+- export PATH="`pwd`/bin":"$PATH"
+- docker run -v ~/.imandra:/home/opam/.imandra -v `pwd`:`pwd` -w `pwd` --user root --entrypoint /bin/sh imandra/imandra-client-switch -c 'imandra-http-server --force-kill && sleep 5'
+- echo "travis_fold:end:imandra-setup"
+- echo "travis_fold:start:npm-build"
+- npm run build
+- echo "travis_fold:end:npm-build"
+- npm run test
+- docker run -v ~/.imandra:/home/opam/.imandra -v `pwd`:`pwd` -w `pwd` --user root --entrypoint /bin/sh imandra/imandra-client-switch -c 'imandra-http-server --force-kill && sleep 5'
+env:
+  global:
+    secure: GapEQSw1PHvQYsHHCMYsDP7nIeYcr1QmraaT9JSvl1CDeH6dvxwWzQQTbv3fAahPbpoyfZC05jJmqNXrmXM3w3ldLLcY0W05i/WdgKR3Tx7gApw2ty0JUJrdNYc3r0tlv8pGdLKch5r2yibwLIJsoBs2cfBrVeUqJ4NYOJ3AQdvX+EOlYg+qz1pdzKfEhuISBN1AjCSci3UwdAyfdph6nLGgVsvTD0+UyAKRtNRaUWZtSWE2AgMLh8aNoLtfkO0QMqdJ0lgsgOs4cZbXF+q2KQ2hd5CAgIpoNjTFMiK1z/KrjhwiOeLAZsNF3aaTahiyKh9/tXtgSE11BFk2WfRF81qYNLuKtaL+zgpyy1uGjnxqLurRhIaIGpgPtjxT2UzqTn4G9fwX9X8DXZNlWC/nDyFzrLHxoOztD+3S6dirUfe6ntyvdmt6bBR0A460n4kM8BmVd3e28K5QrjpIPlVjRMoQFFsdczs/AoRj0VE1w/xOesVO3X+Fyj5YeO6Fnh4XQ1DakdimI1HhCvM4I8Ovuladk8j6ByhGhfznElzupSgmOGApI47pz/7qGd6wKUMRHc8I6VvS/2URFiwd7q14qfnfv59UQu0VuFMKgnyEI9wdIf5jNNdddY4NZyMR1zEXLiWOPshRS0QHBHBCSoUmK1oW2UxYdU4p9SpS2o/pxTE=
