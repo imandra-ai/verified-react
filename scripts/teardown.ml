@@ -1,13 +1,11 @@
-let get_imandra_process : unit -> Node.Child_process.spawnResult Js.Undefined.t = [%raw fun x -> "{return global.imandraNodeProcess}"]
+let clear_imandra_process : unit -> unit Js.Undefined.t = [%raw fun x -> "{delete global.imandraNodeProcess; return }"]
 
 let default = fun () ->
-  let np = get_imandra_process () in
-  Imandra_client.Server_info.cleanup ();
-  match (Js.Undefined.toOption np) with
-  | None ->
-    Js.Promise.resolve()
-  | Some np ->
-    begin
-      Imandra_client.stop np
-      |> Js.Promise.then_ (fun _ -> Js.Promise.resolve ())
-    end
+  let si = Imandra_client.Server_info.from_file () |> Belt.Result.getExn in
+  Imandra_client.shutdown si
+  |> Js.Promise.then_ (fun _ ->
+      Imandra_client.Server_info.cleanup ();
+      clear_imandra_process () |> ignore;
+      Js.Promise.resolve ()
+    )
+  |> ignore
