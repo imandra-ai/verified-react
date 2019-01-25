@@ -130,14 +130,14 @@ let is_tie = ({grid: {a, b, c, d, e, f, g, h, i}, _}) =>
    }); */
 let goal_valid_grid_has_no_more_than_one_move_diff = game => {
   let (x, o) = move_counts(game.grid);
-  ! (is_valid_grid(game.grid, game.last_player) && x - o >= 2);
+  !(is_valid_grid(game.grid, game.last_player) && x - o >= 2);
 };
 
 let is_valid_game = game => {
   let winning_X = is_winning(game, X);
   let winning_O = is_winning(game, O);
   is_valid_grid(game.grid, game.last_player)
-  && (! winning_X && ! winning_O || winning_X != winning_O);
+  && (!winning_X && !winning_O || winning_X != winning_O);
 };
 
 /* instance((game) => is_valid_game(game)); */
@@ -145,7 +145,7 @@ let is_valid_game = game => {
 /* instance((game) => is_valid_game(game) && is_winning(game, O)); */
 /* instance((game) => is_valid_game(game) && is_tie(game)); */
 let is_valid_move = (game, player, move) =>
-  ! (is_winning(game, X) || is_winning(game, O) || is_tie(game))
+  !(is_winning(game, X) || is_winning(game, O) || is_tie(game))
   && is_valid_game(game)
   && (
     game.last_player == None

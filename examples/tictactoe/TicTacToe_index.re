@@ -34,19 +34,17 @@ module App = {
     ...component,
     render: _self =>
       <div
-        className=(
-          style([
-            display(flexBox),
-            flexDirection(column),
-            alignItems(center),
-          ])
-        )>
-        <h1> (ReasonReact.string("Tic Tac Toe")) </h1>
+        className={style([
+          display(flexBox),
+          flexDirection(column),
+          alignItems(center),
+        ])}>
+        <h1> {ReasonReact.string("Tic Tac Toe")} </h1>
         <InstanceBrowser
           serverInfo=Imandra_client.Server_info.{
-                       port: 3000,
-                       base_url: "http://localhost:3000",
-                     }
+            port: 3000,
+            base_url: "http://localhost:3000",
+          }
           setupScriptPath="examples/tictactoe/TicTacToe_setup.ire"
           instanceType="game_state"
           instancePrinterFn="game_state_to_json_pp"
@@ -59,34 +57,30 @@ module App = {
             "is_valid_game(x) && status(x) == Tied",
             "true",
           ]
-          body=(
-            instanceJson => {
-              let instance =
-                switch (instanceJson) {
-                | None => None
-                | Some(j) =>
-                  let game = game_state_of_json(j);
-                  Some({
-                    TicTacToe.game,
-                    TicTacToe.status: TicTacToeLogic.status(game),
-                  });
-                };
-              <div
-                className=(
-                  style([
-                    display(flexBox),
-                    flexDirection(column),
-                    fontSize(rem(1.2)),
-                    marginTop(px(10)),
-                  ])
-                )>
-                <TicTacToe
-                  onGameFinished=(() => ())
-                  customInitialLogicState=instance
-                />
-              </div>;
-            }
-          )
+          body={instanceJson => {
+            let instance =
+              switch (instanceJson) {
+              | None => None
+              | Some(j) =>
+                let game = game_state_of_json(j);
+                Some({
+                  TicTacToe.game,
+                  TicTacToe.status: TicTacToeLogic.status(game),
+                });
+              };
+            <div
+              className={style([
+                display(flexBox),
+                flexDirection(column),
+                fontSize(rem(1.2)),
+                marginTop(px(10)),
+              ])}>
+              <TicTacToe
+                onGameFinished={() => ()}
+                customInitialLogicState=instance
+              />
+            </div>;
+          }}
         />
       </div>,
   };
