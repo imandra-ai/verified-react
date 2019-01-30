@@ -75,6 +75,20 @@ module App = {
                 fontSize(rem(1.2)),
                 marginTop(px(10)),
               ])}>
+              <div
+                className={style([
+                  fontSize(rem(0.8)),
+                  marginBottom(px(30)),
+                ])}>
+                {ReasonReact.string(
+                   "Generate instances of TicTacToe based purely on ",
+                 )}
+                <a
+                  href="https://github.com/AestheticIntegration/verified-react/blob/master/examples/tictactoe/TicTacToe_Logic.ire">
+                  {ReasonReact.string("the source code of the game logic")}
+                </a>
+                {ReasonReact.string(" which has been loaded into Imandra.")}
+              </div>
               <TicTacToe
                 onGameFinished={() => ()}
                 customInitialLogicState=instance

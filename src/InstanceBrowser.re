@@ -167,14 +167,8 @@ let make =
             fontSize(px(16)),
             maxWidth(px(400)),
             marginBottom(px(20)),
-          ])}>
-          {ReasonReact.string("Generate instances based purely on ")}
-          <a
-            href="https://github.com/AestheticIntegration/verified-react/blob/master/examples/tictactoe/TicTacToe_Logic.ire">
-            {ReasonReact.string("the source code of the game logic")}
-          </a>
-          {ReasonReact.string(" which has been loaded into Imandra.")}
-        </div>
+          ])}
+        />
         <div>
           {ReasonReact.string("Make sure ")}
           <a
