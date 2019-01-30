@@ -24,7 +24,7 @@ For an overview, read our Medium post [Introducing Verified React](https://mediu
   
 - [ ] Stage 2 
   - [x] [Viewing instances](#viewing-instances)
-  - [ ] TodoMVC as a larger example
+  - [x] TodoMVC as a larger example
   - [ ] Decomposition visualisation
 
 - [ ] Stage 3
