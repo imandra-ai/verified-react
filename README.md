@@ -17,8 +17,9 @@ For an overview, read our Medium post [Introducing Verified React](https://mediu
   - [x] Allow export of export of core logic verified with Imandra to code that can be compiled to executable JS
     - Imandra comes with a prelude of pre-verified functions for use from `.iml` (Imandra-ml) or `.ire` (Imandra-reason) code. When you're done reasoning and want to compile the verified module into a larger program, you need a `.ml` version of the prelude to compile alongside your module. Previously this was available to compile as native OCaml package, but we've now also included an initial amended version that compiles to javascript via the bucklescript compiler too, which can be `npm installed` from the [`imandra-prelude`](https://github.com/AestheticIntegration/imandra-prelude) repo.
   - [x] Automation of verification goals via `jest`, via `imandra-http-server`. See:
-    - `examples/simple/__tests__/SimpleModel_Goals.ml`
-    - `examples/tictactoe/__tests__/TicTacToeLogic_Goals.re`
+    - `examples/simple/__tests__/Counter_Goals.ml`
+    - `examples/tictactoe/__tests__/TicTacToe_Logic_Goals.re`
+    - `examples/todomvc/__tests__/TodoMvc_Model_Goals.re`
   - [x] Hook verified state machine up to React reducer component. See:
     - `examples/tictactoe/TicTacToe.re`
   

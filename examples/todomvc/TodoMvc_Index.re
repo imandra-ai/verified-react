@@ -22,7 +22,7 @@ ReactDOMRe.renderToElementWithId(
     examples=[]
     instancePrinterFn="state_to_json"
     instanceType="state"
-    setupScriptPath="examples/todomvc/TodoMvc_setup.ire"
+    setupScriptPath="examples/todomvc/TodoMvc_Setup.ire"
   />,
   "main",
 );

@@ -170,7 +170,7 @@ let make =
           ])}>
           {ReasonReact.string("Generate instances based purely on ")}
           <a
-            href="https://github.com/AestheticIntegration/verified-react/blob/master/examples/tictactoe/TicTacToeLogic.ire">
+            href="https://github.com/AestheticIntegration/verified-react/blob/master/examples/tictactoe/TicTacToe_Logic.ire">
             {ReasonReact.string("the source code of the game logic")}
           </a>
           {ReasonReact.string(" which has been loaded into Imandra.")}

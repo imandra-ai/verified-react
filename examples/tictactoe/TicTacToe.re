@@ -1,8 +1,8 @@
 open Css;
 
 type logic_state = {
-  game: TicTacToeLogic.game_state,
-  status: TicTacToeLogic.game_status,
+  game: TicTacToe_Logic.game_state,
+  status: TicTacToe_Logic.game_status,
 };
 
 type state = {
@@ -11,7 +11,7 @@ type state = {
 };
 
 type action =
-  | Move(TicTacToeLogic.move)
+  | Move(TicTacToe_Logic.move)
   | Restart;
 
 /* Component template declaration.
@@ -19,8 +19,8 @@ type action =
 let component = ReasonReact.reducerComponent("Example");
 
 let defaultInitialState = {
-  game: TicTacToeLogic.initial_game,
-  status: TicTacToeLogic.status(TicTacToeLogic.initial_game),
+  game: TicTacToe_Logic.initial_game,
+  status: TicTacToe_Logic.status(TicTacToe_Logic.initial_game),
 };
 
 /* greeting and children are props. `children` isn't used, therefore ignored.
@@ -54,7 +54,7 @@ let make = (~customInitialLogicState, ~onGameFinished, _children) => {
           },
       })
     | Move(move) =>
-      let (next, status) = TicTacToeLogic.play(state.logic.game, move);
+      let (next, status) = TicTacToe_Logic.play(state.logic.game, move);
       let newState = {
         ...state,
         logic: {
@@ -74,8 +74,8 @@ let make = (~customInitialLogicState, ~onGameFinished, _children) => {
     let label = s =>
       switch (s) {
       | None => ""
-      | Some(TicTacToeLogic.X) => "X"
-      | Some(TicTacToeLogic.O) => "O"
+      | Some(TicTacToe_Logic.X) => "X"
+      | Some(TicTacToe_Logic.O) => "O"
       };
     let disabled =
       switch (self.state.logic.status) {
@@ -231,8 +231,8 @@ let make = (~customInitialLogicState, ~onGameFinished, _children) => {
           {ReasonReact.string(
              {let next_player =
                 switch (self.state.logic.game.last_player) {
-                | None => TicTacToeLogic.initial_player
-                | Some(p) => TicTacToeLogic.other_player(p)
+                | None => TicTacToe_Logic.initial_player
+                | Some(p) => TicTacToe_Logic.other_player(p)
                 }
               switch (next_player) {
               | X => "X"

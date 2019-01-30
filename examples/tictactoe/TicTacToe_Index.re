@@ -3,8 +3,8 @@ open Css;
 let player_of_json = json => {
   let s = Json.Decode.optional(Json.Decode.string, json);
   switch (s) {
-  | Some("X") => Some(TicTacToeLogic.X)
-  | Some("O") => Some(TicTacToeLogic.O)
+  | Some("X") => Some(TicTacToe_Logic.X)
+  | Some("O") => Some(TicTacToe_Logic.O)
   | _ => None
   };
 };
@@ -19,13 +19,13 @@ let grid_of_json = json => {
   let g = Json.Decode.field("g", player_of_json, json);
   let h = Json.Decode.field("h", player_of_json, json);
   let i = Json.Decode.field("i", player_of_json, json);
-  TicTacToeLogic.{a, b, c, d, e, f, g, h, i};
+  TicTacToe_Logic.{a, b, c, d, e, f, g, h, i};
 };
 
 let game_state_of_json = json => {
   let last_player = Json.Decode.field("last_player", player_of_json, json);
   let grid = Json.Decode.field("grid", grid_of_json, json);
-  TicTacToeLogic.{grid, last_player};
+  TicTacToe_Logic.{grid, last_player};
 };
 
 module App = {
@@ -45,7 +45,7 @@ module App = {
             port: 3000,
             base_url: "http://localhost:3000",
           }
-          setupScriptPath="examples/tictactoe/TicTacToe_setup.ire"
+          setupScriptPath="examples/tictactoe/TicTacToe_Setup.ire"
           instanceType="game_state"
           instancePrinterFn="game_state_to_json_pp"
           examples=[
@@ -65,7 +65,7 @@ module App = {
                 let game = game_state_of_json(j);
                 Some({
                   TicTacToe.game,
-                  TicTacToe.status: TicTacToeLogic.status(game),
+                  TicTacToe.status: TicTacToe_Logic.status(game),
                 });
               };
             <div

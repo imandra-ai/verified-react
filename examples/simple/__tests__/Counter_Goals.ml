@@ -4,7 +4,7 @@ module I = Imandra_client
 
 let serverInfo = ref None
 
-let module_name = "SimpleModel"
+let module_name = "Counter"
 
 let syntax = I.Api.Reason
 
@@ -33,7 +33,7 @@ let () =
 
       testPromise "verify increment" (fun () ->
           let ip = !serverInfo |> Belt.Option.getExn in
-          let function_name = Imandra_client.function_name SimpleModel.goal_increment in
+          let function_name = Imandra_client.function_name Counter.goal_increment in
           Imandra_client.Verify.by_name ip ~name:(Printf.sprintf "%s.%s" module_name function_name)
           |> Js.Promise.then_ (function
               | Belt.Result.Ok (I.Api.Response.V_proved) ->
@@ -51,7 +51,7 @@ let () =
 
       testPromise "verify decrement" (fun () ->
           let ip = !serverInfo |> Belt.Option.getExn in
-          let function_name = Imandra_client.function_name SimpleModel.goal_decrement in
+          let function_name = Imandra_client.function_name Counter.goal_decrement in
           Imandra_client.Verify.by_name ip ~name:(Printf.sprintf "%s.%s" module_name function_name)
           |> Js.Promise.then_ (function
               | Belt.Result.Ok I.Api.Response.V_proved ->

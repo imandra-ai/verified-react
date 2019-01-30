@@ -2,7 +2,7 @@ open Jest;
 
 let serverInfo = ref(None);
 
-let moduleName = "TicTacToeLogic";
+let moduleName = "TicTacToe_Logic";
 
 module I = Imandra_client;
 
@@ -45,7 +45,7 @@ let () =
       let ip = serverInfo^ |> Belt.Option.getExn;
       let functionName =
         Imandra_client.function_name(
-          TicTacToeLogic.goal_valid_grid_has_no_more_than_one_move_diff,
+          TicTacToe_Logic.goal_valid_grid_has_no_more_than_one_move_diff,
         );
       let name = Printf.sprintf("%s.%s", moduleName, functionName);
       Imandra_client.Verify.by_name(ip, ~name)
@@ -69,7 +69,7 @@ let () =
       () => {
         let ip = serverInfo^ |> Belt.Option.getExn;
         let functionName =
-          Imandra_client.function_name(TicTacToeLogic.goal_game_progression);
+          Imandra_client.function_name(TicTacToe_Logic.goal_game_progression);
         let name = Printf.sprintf("%s.%s", moduleName, functionName);
         Imandra_client.Verify.by_name(ip, ~name)
         |> Js.Promise.then_(
