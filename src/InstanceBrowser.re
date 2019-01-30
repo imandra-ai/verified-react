@@ -186,7 +186,9 @@ let make =
             display(flexBox),
             justifyContent(spaceBetween),
           ])}>
-          <pre> {ReasonReact.string("x : game_state  =>")} </pre>
+          <pre>
+            {ReasonReact.string(Printf.sprintf("x : %s  =>", instanceType))}
+          </pre>
           <div className={style([display(flexBox), alignItems(center)])}>
             <div className={style([fontSize(px(8)), marginRight(px(5))])}>
               {ReasonReact.string("imandra-http-server connection")}
