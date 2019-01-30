@@ -1,3 +1,4 @@
+open Css;
 module D = TodoMvc_Model.Decode(Decoders_bs.Decode);
 
 ReactDOMRe.renderToElementWithId(
@@ -11,9 +12,21 @@ ReactDOMRe.renderToElementWithId(
           |> Belt.Result.getExn
           |> (x => Some(x))
         };
-      <section className="todoapp">
-        <TodoMvc_App customInitialState=instance />
-      </section>;
+      <div>
+        <section className="todoapp">
+          <TodoMvc_App customInitialState=instance />
+        </section>
+        <div>
+          {ReasonReact.string(
+             "Generate instances of TodoMVC state based purely on ",
+           )}
+          <a
+            href="https://github.com/AestheticIntegration/verified-react/blob/master/examples/todomvc/TodoMvc_Model.ire">
+            {ReasonReact.string("the source code of the app logic")}
+          </a>
+          {ReasonReact.string(" which has been loaded into Imandra.")}
+        </div>
+      </div>;
     }}
     serverInfo=Imandra_client.Server_info.{
       port: 3000,
