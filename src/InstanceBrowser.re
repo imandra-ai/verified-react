@@ -200,9 +200,9 @@ let make =
                 width(px(20)),
                 backgroundColor(
                   switch (self.state.init) {
-                  | Loading => red
-                  | Loaded => green
-                  | Error(_) => red
+                  | Loading => hex("f33333")
+                  | Loaded => hex("22e0b6")
+                  | Error(_) => hex("f33333")
                   },
                 ),
               ])}
@@ -261,10 +261,10 @@ let make =
                 width(px(20)),
                 backgroundColor(
                   switch (self.state.instanceFetch) {
-                  | Loading => blue
-                  | Waiting => grey
-                  | Loaded => green
-                  | Error => red
+                  | Loading => hex("0088FF")
+                  | Waiting => lightgrey
+                  | Loaded => hex("22e0b6")
+                  | Error(_) => hex("f33333")
                   },
                 ),
               ])}

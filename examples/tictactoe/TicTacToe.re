@@ -71,11 +71,13 @@ let make = (~customInitialLogicState, ~onGameFinished, _children) => {
       };
     },
   render: self => {
-    let label = s =>
+   let s_x = "x";
+   let s_o ="o";
+   let label = s =>
       switch (s) {
       | None => ""
-      | Some(TicTacToe_Logic.X) => "X"
-      | Some(TicTacToe_Logic.O) => "O"
+      | Some(TicTacToe_Logic.X) => s_x
+      | Some(TicTacToe_Logic.O) => s_o
       };
     let disabled =
       switch (self.state.logic.status) {
@@ -235,8 +237,8 @@ let make = (~customInitialLogicState, ~onGameFinished, _children) => {
                 | Some(p) => TicTacToe_Logic.other_player(p)
                 }
               switch (next_player) {
-              | X => "X"
-              | O => "O"
+              | X => "x2"
+              | O => "o2"
               }},
            )}
         </div>

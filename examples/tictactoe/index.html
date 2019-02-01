@@ -4,65 +4,31 @@
         <meta charset="UTF-8">
         <title>ReasonReact Examples</title>
         <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans|Roboto" rel="stylesheet">
-        <style>
-         h2, h3 {
-             font-family: 'Roboto', sans-serif;
-         }
-
-         h1,  body {
-             font-family: 'Merriweather Sans', sans-serif;
-             font-weight: 100;
-             font-size: 1.7em;
-             color: #576483;
-             margin: 0 auto 0.3em;
-         }
-
-         p {
-             font-size: 0.4em;
-         }
-
-         button {
-             border: none !important;
-             font-size: 1em;
-             color: #3276B5;
-             background-color: #F5FAFE;
-             border-radius: 5px;
-             cursor: pointer;
-         }
-
-         button:hover {
-             background-color: #8BDFE3 !important;
-         }
-
-         #app {
-             margin-top: 2em;
-         }
-
-         button:focus {
-             outline: 0;
-         }
-
-         #logo {
-             margin-top: 2em;
-             display: flex;
-             flex-direction: column;
-             align-items: center;
-         }
-
-         img {
-             width: 9em;
-         }
-
-        </style>
+        <link href="../../styles/style.less" rel="stylesheet">
     </head>
-    <body>
-        <div id="app"></div>
-        <div id="logo">
-            <p>Powered by:</p>
+    <body class="app">
+        <header class="app__top">
             <a id="logo-link" href="https://www.imandra.ai">
-                <img src="../../img/imandra_raas_logo.svg" />
+                <img class="app__logo--ai" src="../../img/ai-logo-blue.svg" />
             </a>
-        </div>
+            <!-- <p>Powered by:</p> -->
+            <a id="logo-link" href="https://www.imandra.ai">
+                <img class="app__logo--irs" src="../../img/imandra-rs-logo.svg" />
+            </a>
+
+            <a id="logo-link" href="https://www.imandra.ai">
+                <img class="app__logo--vre" src="../../img/verified-react-logo.svg" />
+            </a>
+
+        </header>
+
+        <div id="app" class="app__main app__main--tictactoe"></div>
+        
+        <footer id="logo" class="app__footer">
+
+            <p>© 2014 - 2019 Aesthetic Integration Ltd. All rights reserved. | Legal</p>
+        </footer>
+
         <script src="./TicTacToe_index.bs.js"></script>
     </body>
 </html>
