@@ -4,7 +4,7 @@ module I = Imandra_client;
 
 let serverInfo = ref(None);
 
-let moduleName = "TodoMvcModel";
+let moduleName = "TodoMvc_Model";
 
 let () =
   beforeAllPromise(() => {
@@ -40,7 +40,8 @@ describe("todomvc model", () => {
   });
   testPromise("vg_add_todo", () => {
     let ip = serverInfo^ |> Belt.Option.getExn;
-    let functionName = Imandra_client.function_name(TodoMvcModel.vg_add_todo);
+    let functionName =
+      Imandra_client.function_name(TodoMvc_Model.vg_add_todo);
     let name = Printf.sprintf("%s.%s", moduleName, functionName);
     let hints = I.Api.Request.Hints.{method_: Induct(Default)};
     Imandra_client.Verify.by_name(ip, ~name, ~hints)
@@ -51,7 +52,7 @@ describe("todomvc model", () => {
   testPromise("vg_clear_completed", () => {
     let ip = serverInfo^ |> Belt.Option.getExn;
     let functionName =
-      Imandra_client.function_name(TodoMvcModel.vg_clear_completed);
+      Imandra_client.function_name(TodoMvc_Model.vg_clear_completed);
     let name = Printf.sprintf("%s.%s", moduleName, functionName);
     let hints = I.Api.Request.Hints.{method_: Induct(Default)};
     Imandra_client.Verify.by_name(ip, ~name, ~hints)
@@ -62,7 +63,7 @@ describe("todomvc model", () => {
   testPromise("vg_toggle_all", () => {
     let ip = serverInfo^ |> Belt.Option.getExn;
     let functionName =
-      Imandra_client.function_name(TodoMvcModel.vg_toggle_all);
+      Imandra_client.function_name(TodoMvc_Model.vg_toggle_all);
     let name = Printf.sprintf("%s.%s", moduleName, functionName);
     let hints = I.Api.Request.Hints.{method_: Induct(Default)};
     Imandra_client.Verify.by_name(ip, ~name, ~hints)
@@ -73,7 +74,7 @@ describe("todomvc model", () => {
   testPromise("vg_edit_todo", () => {
     let ip = serverInfo^ |> Belt.Option.getExn;
     let functionName =
-      Imandra_client.function_name(TodoMvcModel.vg_edit_todo);
+      Imandra_client.function_name(TodoMvc_Model.vg_edit_todo);
     let name = Printf.sprintf("%s.%s", moduleName, functionName);
     let hints = I.Api.Request.Hints.{method_: Induct(Default)};
     Imandra_client.Verify.by_name(ip, ~name, ~hints)

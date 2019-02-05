@@ -1,0 +1,52 @@
+[@redef "true"];
+
+[@require "decoders-yojson"];
+
+[@use "examples/todomvc/TodoMvc_Model.ire"];
+
+[@program]
+module E = Encode(Decoders_yojson.Basic.Encode);
+
+[@program]
+let state_to_json = (s: state) =>
+  Decoders_yojson.Basic.Encode.encode_string(E.state, s);
+
+let todo_texts = [
+  "Buy gym",
+  "Practice mindlessness",
+  "Iron saucepan",
+  "Go to shirts",
+  "Ring printer",
+  "Eat parents",
+  "Write more todos",
+  "Wear piano",
+];
+
+let uniq_by = (f, xs) => {
+  let rec go = (ys, acc) =>
+    switch (ys) {
+    | [] => true
+    | [y, ...ys] =>
+      !List.exists(a => f(a) == f(y), acc) && go(ys, [y, ...acc])
+    };
+  go(xs, []);
+};
+
+let with_todo_text = s =>
+  List.for_all(
+    fun
+    | Some(x) => List.exists(y => x.text == y, todo_texts)
+    | None => false,
+    s.todos,
+  )
+  && uniq_by(
+       fun
+       | Some(x) => x.text
+       | None => "x",
+       s.todos,
+     );
+
+let empty_new_todo = s => s.newTodoText == "";
+
+let num_todos = (s, n) =>
+  List.length(List.filter_map(x => x, s.todos)) == n;

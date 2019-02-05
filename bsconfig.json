@@ -6,7 +6,7 @@
       "subdirs": true,
       "generators": [{
         "name": "imandra-extract-re",
-        "edge": ["SimpleModel.ml", ":", "SimpleModel.ire"]
+        "edge": ["Counter.ml", ":", "Counter.ire"]
       }]
     },
     {
@@ -14,7 +14,7 @@
       "subdirs": true,
       "generators": [{
         "name": "imandra-extract-re",
-        "edge": ["TicTacToeLogic.ml", ":", "TicTacToeLogic.ire"]
+        "edge": ["TicTacToe_Logic.ml", ":", "TicTacToe_Logic.ire"]
       }]
     },
     {
@@ -22,7 +22,7 @@
       "subdirs": true,
       "generators": [{
         "name": "imandra-extract-re",
-        "edge": ["TodoMvcModel.ml", ":", "TodoMvcModel.ire"]
+        "edge": ["TodoMvc_Model.ml", ":", "TodoMvc_Model.ire"]
       }]
     },
     {

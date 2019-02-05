@@ -2,7 +2,7 @@ let component = ReasonReact.statelessComponent("TodoItemRe");
 
 let make =
     (
-      ~todo: TodoMvcModel.todo,
+      ~todo: TodoMvc_Model.todo,
       ~editing,
       ~onDestroy,
       ~onSave,
@@ -21,19 +21,19 @@ let make =
         <input
           className="toggle"
           type_="checkbox"
-          checked=todo.done_
-          onChange=(_e => onToggle())
+          checked={todo.done_}
+          onChange={_e => onToggle()}
         />
-        <label onDoubleClick=(_event => onStartEdit())>
-          (ReasonReact.string(todo.text))
+        <label onDoubleClick={_event => onStartEdit()}>
+          {ReasonReact.string(todo.text)}
         </label>
-        <button className="destroy" onClick=(_e => onDestroy()) />
+        <button className="destroy" onClick={_e => onDestroy()} />
       </div>
       <input
         className="edit"
-        value=todo.text
-        onBlur=(_event => onSave())
-        onChange=(event => onEdit(ReactEvent.Form.target(event)##value))
+        value={todo.text}
+        onBlur={_event => onSave()}
+        onChange={event => onEdit(ReactEvent.Form.target(event)##value)}
       />
     </li>;
   },
