@@ -1,4 +1,3 @@
-open Css;
 module D = TodoMvc_Model.Decode(Decoders_bs.Decode);
 
 ReactDOMRe.renderToElementWithId(
