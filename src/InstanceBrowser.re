@@ -137,9 +137,10 @@ let make =
         })
       }
     },
+
   render: self => {
     let example = s =>
-      <button
+      <button className="app__button--example "
         onClick={_e => self.send(QueryInstance(s))}
         disabled={
           switch (self.state.init) {
@@ -149,43 +150,33 @@ let make =
         }>
         <pre> {ReasonReact.string(s)} </pre>
       </button>;
-    <div
-      className={style([
-        display(flexBox),
-        flexDirection(column),
-        fontSize(px(14)),
-      ])}>
-      <div> {body(self.state.instance)} </div>
-      <div
-        className={style([
-          display(flexBox),
-          flexDirection(column),
-          marginTop(px(20)),
-        ])}>
-        <div
-          className={style([
-            fontSize(px(16)),
-            maxWidth(px(400)),
-            marginBottom(px(20)),
-          ])}
-        />
-        <div>
-          {ReasonReact.string("Make sure ")}
+    
+    
+    
+      <div className="app__columns">
+        <div className="app__column"> {body(self.state.instance)} </div>
+        <div className="app__column">
+        
+        <h1 className="app__title"> {ReasonReact.string("Instance Browser")} </h1>
+        
+        <h2 className="app__description"> {ReasonReact.string("Make sure ")}
           <a
             href="https://docs.imandra.ai/imandra-docs/notebooks/installation-simple/"
-            className={style([fontFamily("monospace"), whiteSpace(`pre)])}>
+            className={"app__description--link " ++ {style([fontFamily("monospace"), whiteSpace(`pre)])}}>
             {ReasonReact.string("imandra-http-server -reason")}
           </a>
           {ReasonReact.string(
              " is running in the background on localhost:3000",
            )}
-        </div>
-        <div> {ReasonReact.string("Enter a ReasonML instance query:")} </div>
-        <div
-          className={style([
+        </h2>
+
+        <h2 className="app__call-to-action"> {ReasonReact.string("Enter a ReasonML instance query:")} </h2>
+        
+        <div className={"app__query-header " ++ { style([
             display(flexBox),
             justifyContent(spaceBetween),
-          ])}>
+            marginBottom(px(8)),
+          ])}}>
           <pre>
             {ReasonReact.string(Printf.sprintf("x : %s  =>", instanceType))}
           </pre>
@@ -193,11 +184,10 @@ let make =
             <div className={style([fontSize(px(8)), marginRight(px(5))])}>
               {ReasonReact.string("imandra-http-server connection")}
             </div>
-            <div
-              className={style([
+            <div className={style([
                 borderRadius(pct(50.)),
-                height(px(20)),
-                width(px(20)),
+                height(px(16)),
+                width(px(16)),
                 backgroundColor(
                   switch (self.state.init) {
                   | Loading => hex("f33333")
@@ -217,7 +207,7 @@ let make =
               | _ => true
               }
             }
-            className={style([height(px(100)), padding(px(5))])}
+            className={ "app__query " ++ {style([height(px(100)), padding(px(5))])}}
             value={self.state.query}
             onChange={event =>
               self.send(QueryInstance(ReactEvent.Form.target(event)##value))
@@ -257,24 +247,24 @@ let make =
             <div
               className={style([
                 borderRadius(pct(50.)),
-                height(px(20)),
-                width(px(20)),
+                height(px(16)),
+                width(px(16)),
                 backgroundColor(
                   switch (self.state.instanceFetch) {
                   | Loading => hex("0088FF")
                   | Waiting => lightgrey
                   | Loaded => hex("22e0b6")
-                  | Error(_) => hex("f33333")
+                  | Error => hex("f33333")
                   },
                 ),
               ])}
             />
           </div>
         </div>
-        <div className={style([marginTop(px(20))])}>
-          {ReasonReact.string("or try these examples:")}
-        </div>
-        <div>
+
+        <div className="app__examples">
+          <h3 className="app__call-to-action"> {ReasonReact.string("or try these examples:")}</h3>
+
           {if (List.length(examples) > 0) {
              let children =
                List.map(e => <li> {example(e)} </li>, examples)
@@ -283,7 +273,11 @@ let make =
            } else {
              <div />;
            }}
+
         </div>
+
+
+
       </div>
     </div>;
   },

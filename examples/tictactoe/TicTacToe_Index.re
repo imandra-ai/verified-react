@@ -33,13 +33,9 @@ module App = {
   let make = _children => {
     ...component,
     render: _self =>
-      <div
-        className={style([
-          display(flexBox),
-          flexDirection(column),
-          alignItems(center),
-        ])}>
-        <h1> {ReasonReact.string("Tic Tac Toe")} </h1>
+
+
+
         <InstanceBrowser
           serverInfo=Imandra_client.Server_info.{
             port: 3000,
@@ -68,36 +64,33 @@ module App = {
                   TicTacToe.status: TicTacToe_Logic.status(game),
                 });
               };
-            <div
-              className={style([
-                display(flexBox),
-                flexDirection(column),
-                fontSize(rem(1.2)),
-                marginTop(px(10)),
-              ])}>
-              <div
-                className={style([
-                  fontSize(rem(0.8)),
-                  marginBottom(px(30)),
-                ])}>
-                {ReasonReact.string(
-                   "Generate instances of TicTacToe based purely on ",
-                 )}
-                <a
-                  href="https://github.com/AestheticIntegration/verified-react/blob/master/examples/tictactoe/TicTacToe_Logic.ire">
-                  {ReasonReact.string("the source code of the game logic")}
-                </a>
-                {ReasonReact.string(" which has been loaded into Imandra.")}
+
+
+
+            <div className="instance">
+              <div className="instance__header">
+                <h2 className="instance__subtitle"> {ReasonReact.string("Generate instances of TicTacToe based purely on ",)}
+                  <a className="instance__subtitle--link" href="https://github.com/AestheticIntegration/verified-react/blob/master/examples/tictactoe/TicTacToe_Logic.ire">
+                    {ReasonReact.string("the source code of the game logic")}
+                  </a>
+                    {ReasonReact.string(" which has been loaded into Imandra.")}
+                </h2>
               </div>
+              
+              <h1 className="instance__title"> {ReasonReact.string("Tic Tac Toe")} </h1>
               <TicTacToe
                 onGameFinished={() => ()}
                 customInitialLogicState=instance
               />
+
             </div>;
+            
           }}
         />
-      </div>,
+ ,
   };
 };
+
+
 
 ReactDOMRe.renderToElementWithId(<App />, "app");
