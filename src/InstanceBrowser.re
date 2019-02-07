@@ -154,7 +154,7 @@ let make =
     
     
       <div className="app__columns">
-        <div className="app__column"> {body(self.state.instance)} </div>
+        <div className="app__column app__column--dark-bg "> {body(self.state.instance)} </div>
         <div className="app__column">
         
         <h1 className="app__title"> {ReasonReact.string("Instance Browser")} </h1>

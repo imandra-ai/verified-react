@@ -23,6 +23,12 @@ let defaultInitialState = {
   status: TicTacToe_Logic.status(TicTacToe_Logic.initial_game),
 };
 
+
+/*graphic symbols for the game*/
+let svgE = <img src=[%raw "require('../../img/sign-e.svg')"]/>;
+let svgX = <img src=[%raw "require('../../img/sign-x.svg')"]/>;
+let svgO = <img src=[%raw "require('../../img/sign-o.svg')"]/>;
+
 /* greeting and children are props. `children` isn't used, therefore ignored.
    We ignore it by prepending it with an underscore */
 let make = (~customInitialLogicState, ~onGameFinished, _children) => {
@@ -71,13 +77,11 @@ let make = (~customInitialLogicState, ~onGameFinished, _children) => {
       };
     },
   render: self => {
-   let s_x = "x";
-   let s_o ="o";
    let label = s =>
       switch (s) {
-      | None => ""
-      | Some(TicTacToe_Logic.X) => s_x
-      | Some(TicTacToe_Logic.O) => s_o
+      | None => <div />
+      | Some(TicTacToe_Logic.X) => svgX
+      | Some(TicTacToe_Logic.O) => svgO
       };
     let disabled =
       switch (self.state.logic.status) {
@@ -89,8 +93,8 @@ let make = (~customInitialLogicState, ~onGameFinished, _children) => {
       let base =
         style([
           display(block),
-          width(px(78)),
-          height(px(78)),
+          width(px(88)),
+          height(px(88)),
           margin(px(3)),
         ]);
       switch (self.state.logic.status) {
@@ -101,9 +105,9 @@ let make = (~customInitialLogicState, ~onGameFinished, _children) => {
     };
     let overlay =
       switch (self.state.logic.status) {
-      | Tied => Some("=")
-      | Won(X) => Some("X")
-      | Won(O) => Some("O")
+      | Tied => Some(svgE)
+      | Won(X) => Some(svgX)
+      | Won(O) => Some(svgO)
       | _ => None
       };
     let rowCss = style([display(flexBox), flexDirection(row)]);
@@ -114,19 +118,19 @@ let make = (~customInitialLogicState, ~onGameFinished, _children) => {
             className={"tictactoe__button " ++ {buttonCss(A)}}
             onClick={_event => self.send(Move(A))}
             disabled>
-            {ReasonReact.string(label(self.state.logic.game.grid.a))}
+            {label(self.state.logic.game.grid.a)}
           </button>
           <button
             className={"tictactoe__button " ++ {buttonCss(B)}}
             onClick={_event => self.send(Move(B))}
             disabled>
-            {ReasonReact.string(label(self.state.logic.game.grid.b))}
+            {label(self.state.logic.game.grid.b)}
           </button>
           <button
             className={"tictactoe__button " ++ {buttonCss(C)}}
             onClick={_event => self.send(Move(C))}
             disabled>
-            {ReasonReact.string(label(self.state.logic.game.grid.c))}
+            {label(self.state.logic.game.grid.c)}
           </button>
         </div>
         <div className=rowCss>
@@ -134,19 +138,19 @@ let make = (~customInitialLogicState, ~onGameFinished, _children) => {
             className={"tictactoe__button " ++ {buttonCss(D)}}
             onClick={_event => self.send(Move(D))}
             disabled>
-            {ReasonReact.string(label(self.state.logic.game.grid.d))}
+            {label(self.state.logic.game.grid.d)}
           </button>
           <button
             className={"tictactoe__button " ++ {buttonCss(E)}}
             onClick={_event => self.send(Move(E))}
             disabled>
-            {ReasonReact.string(label(self.state.logic.game.grid.e))}
+            {label(self.state.logic.game.grid.e)}
           </button>
           <button
             className={"tictactoe__button " ++ {buttonCss(F)}}
             onClick={_event => self.send(Move(F))}
             disabled>
-            {ReasonReact.string(label(self.state.logic.game.grid.f))}
+            {label(self.state.logic.game.grid.f)}
           </button>
         </div>
         <div className=rowCss>
@@ -154,19 +158,19 @@ let make = (~customInitialLogicState, ~onGameFinished, _children) => {
             className={"tictactoe__button " ++ {buttonCss(G)}}
             onClick={_event => self.send(Move(G))}
             disabled>
-            {ReasonReact.string(label(self.state.logic.game.grid.g))}
+            {label(self.state.logic.game.grid.g)}
           </button>
           <button
             className={"tictactoe__button " ++ {buttonCss(H)}}
             onClick={_event => self.send(Move(H))}
             disabled>
-            {ReasonReact.string(label(self.state.logic.game.grid.h))}
+            {label(self.state.logic.game.grid.h)}
           </button>
           <button
             className={"tictactoe__button " ++ {buttonCss(I)}}
             onClick={_event => self.send(Move(I))}
             disabled>
-            {ReasonReact.string(label(self.state.logic.game.grid.i))}
+            {label(self.state.logic.game.grid.i)}
           </button>
         </div>
       </div>;
@@ -192,12 +196,14 @@ let make = (~customInitialLogicState, ~onGameFinished, _children) => {
             ])}
             onClick={_event => self.send(Restart)}>
             <div
-              className={style([
+              className={"tictactoe__result " ++
+              {style([
                 display(flexBox),
                 flexDirection(column),
                 justifyContent(spaceAround),
-              ])}>
-              {ReasonReact.string(overlayText)}
+              ])}
+              }>
+              {overlayText}
             </div>
           </div>,
         |]
@@ -222,17 +228,17 @@ let make = (~customInitialLogicState, ~onGameFinished, _children) => {
           {ReasonReact.string("Next player:")}
         </div>
         <div className={"tictactoe__button"}>
-          {ReasonReact.string(
-             {let next_player =
+             {
+               let next_player =
                 switch (self.state.logic.game.last_player) {
                 | None => TicTacToe_Logic.initial_player
                 | Some(p) => TicTacToe_Logic.other_player(p)
-                }
+                };
               switch (next_player) {
-              | X => "x2"
-              | O => "o2"
-              }},
-           )}
+              | X => svgX
+              | O => svgO
+              };
+            }
         </div>
       </div>
     </div>;
