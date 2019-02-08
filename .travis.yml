@@ -16,6 +16,8 @@ script:
 - echo "travis_fold:end:imandra-setup"
 - echo "travis_fold:start:npm-build"
 - npm run build
+- npm run build-tictactoe
+- npm run build-todomovc
 - echo "travis_fold:end:npm-build"
 - npm run test
 env:

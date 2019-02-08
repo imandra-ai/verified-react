@@ -12,7 +12,9 @@
     "clean": "rm -rf dist && bsb -clean-world",
     "watch": "bsb -make-world -w",
     "watch-tictactoe": "parcel examples/tictactoe/index.html",
-    "watch-todomvc": "parcel examples/todomvc/index.html"
+    "watch-todomvc": "parcel examples/todomvc/index.html",
+    "build-tictactoe": "parcel build examples/tictactoe/index.html",
+    "build-todomvc": "parcel build examples/todomvc/index.html"
   },
   "repository": {
     "type": "git",
