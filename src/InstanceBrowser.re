@@ -135,6 +135,12 @@ let make =
           instanceFetch: Loaded,
           instanceFeedback: Some("Unsat."),
         })
+      | I.Api.Response.I_unsat_upto(_) =>
+        ReasonReact.Update({
+          ...s,
+          instanceFetch: Loaded,
+          instanceFeedback: Some("Unsat."),
+        })
       }
     },
 
