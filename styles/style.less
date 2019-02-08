@@ -10,6 +10,7 @@
 @iblue: #0088FF;
 @igreen: #22e0b6;
 @igreenText: #15d2a8;
+@colorfont: #2C446D;
 @size: 8px;
 @sizeX2: 16px;
 @sizeX3: 24px;
@@ -25,7 +26,7 @@ body {
     font-family: 'Merriweather Sans', sans-serif;
     font-weight: 300;
     line-height: 1;
-    color: #2C446D;
+    color: @colorfont;
 }
 
 h1 {
@@ -59,12 +60,12 @@ p {
     padding: 0;
     background: #FAFAFA;
     align-items: center;
-
+    min-height: 100vh;
 
     &__main {
         display: flex;
         justify-content: center;
-        min-height: 89vh;
+        flex-grow: 1;
     }
 
     &__header {
@@ -212,12 +213,9 @@ p {
                 border: none;
             }
 
-            @media (min-width: @bp-larger-than-tablet) {
-                font-size: @sizeX2 * 0.7;
-            }
-
-            @media (min-width: @bp-larger-than-desktop) {
-                font-size: @sizeX2 * 0.875;
+            & pre {
+                white-space: pre-wrap;
+                text-align: left;
             }
         }
     }
@@ -225,38 +223,53 @@ p {
 
     &__examples li {
         list-style: none;
+        position: relative;
 
         &:before {
             content: "";
             font-size: 1px;
             display: block;
+            position: absolute;
+            top: 10px;
+            left: -10px;
             border-radius: @size;
             width: 6px;
             height: 6px;
             background: @iblue;
             color: @iblue;
-            display: inline-block;
-            margin-right: @size
+
         }
 
     }
 
-    &__copyrights {
-        margin: @size;
+    &__footer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: none;
+        height: @sizeX3;
         width: 100%;
         text-align: center;
+    }
+
+    &__copyrights {
+        color: @colorfont;
     }
 }
 
 .instance {
-    &__header {}
+    &__description {
+        color: @colorfont;
+        font-size: smaller;
+    }
 
     &__title {
         font-size: @sizeX4;
+        line-height: @sizeX2;
         color: #3276B5;
         font-weight: 400;
         text-align: center;
-        margin-top: @sizeX3;
+        margin-bottom: @sizeX3;
     }
 
     &__subtitle {
@@ -273,6 +286,10 @@ p {
 
 
 
+
+
+
+//specific examples styles
 .tictactoe {
 
     &__instances {
@@ -319,4 +336,36 @@ p {
             opacity: 0.5;
         }
     }
+}
+
+.todoapp {
+    margin: 0;
+    margin-top: 66px;
+
+    @media (min-width: @bp-larger-than-tablet) {
+        margin-top: 44px;
+    }
+
+    & header {
+        position: relative;
+    }
+
+    & header h1 {
+        position: absolute;
+        top: -42px;
+        font-size: @sizeX4;
+        line-height: @sizeX2;
+        color: #3276B5;
+        font-weight: 400;
+        text-align: center;
+    }
+}
+
+.todo-list li {
+    font-size: @sizeX2;
+}
+
+.clear-completed {
+    font-size: 10px;
+    color: @iblue;
 }

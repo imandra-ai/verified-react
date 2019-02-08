@@ -11,24 +11,30 @@ ReactDOMRe.renderToElementWithId(
           |> Belt.Result.getExn
           |> (x => Some(x))
         };
-      <div>
+      <div className="instance">
         <section className="todoapp">
           <TodoMvc_App customInitialState=instance />
         </section>
-        <div>
-          {ReasonReact.string("Generate instances of TodoMVC state based on ")}
-          <a
-            href="https://github.com/AestheticIntegration/verified-react/blob/master/examples/todomvc/TodoMvc_Model.ire">
-            {ReasonReact.string("the source code of the app logic")}
-          </a>
-          {ReasonReact.string(
-             " which has been loaded into Imandra. A few helper functions are defined in ",
-           )}
-          <a
-            href="https://github.com/AestheticIntegration/verified-react/blob/master/examples/todomvc/TodoMvc_Setup.ire">
-            {ReasonReact.string("the instance setup file")}
-          </a>
-          {ReasonReact.string(" to help with writing logical constraints.")}
+        <div className="instance__description">
+          <h2 className="instance__subtitle">
+            {ReasonReact.string(
+               "Generate instances of TodoMVC state based on ",
+             )}
+            <a
+              className="instance__subtitle--link"
+              href="https://github.com/AestheticIntegration/verified-react/blob/master/examples/todomvc/TodoMvc_Model.ire">
+              {ReasonReact.string("the source code of the app logic")}
+            </a>
+            {ReasonReact.string(
+               " which has been loaded into Imandra. A few helper functions are defined in ",
+             )}
+            <a
+              className="instance__subtitle--link"
+              href="https://github.com/AestheticIntegration/verified-react/blob/master/examples/todomvc/TodoMvc_Setup.ire">
+              {ReasonReact.string("the instance setup file")}
+            </a>
+            {ReasonReact.string(" to help with writing logical constraints.")}
+          </h2>
         </div>
       </div>;
     }}
