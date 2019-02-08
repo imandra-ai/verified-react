@@ -227,7 +227,7 @@ let make = (~customInitialLogicState, ~onGameFinished, _children) => {
         <div className={style([marginBottom(px(10))])}>
           {ReasonReact.string("Next player:")}
         </div>
-        <div className={"tictactoe__button"}>
+        <div className={"tictactoe__button tictactoe__button--silent "}>
              {
                let next_player =
                 switch (self.state.logic.game.last_player) {
