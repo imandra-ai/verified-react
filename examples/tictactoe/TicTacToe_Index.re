@@ -1,5 +1,3 @@
-open Css;
-
 let player_of_json = json => {
   let s = Json.Decode.optional(Json.Decode.string, json);
   switch (s) {
