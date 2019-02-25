@@ -146,7 +146,8 @@ let make =
 
   render: self => {
     let example = s =>
-      <button className="app__button--example "
+      <button
+        className="app__button--example "
         onClick={_e => self.send(QueryInstance(s))}
         disabled={
           switch (self.state.init) {
@@ -156,33 +157,41 @@ let make =
         }>
         <pre> {ReasonReact.string(s)} </pre>
       </button>;
-    
-    
-    
-      <div className="app__columns">
-        <div className="app__column app__column--dark-bg "> {body(self.state.instance)} </div>
-        <div className="app__column">
-        
-        <h1 className="app__title"> {ReasonReact.string("Instance Browser")} </h1>
-        
-        <h2 className="app__description"> {ReasonReact.string("Make sure ")}
+
+    <div className="app__columns">
+      <div className="app__column app__column--dark-bg ">
+        {body(self.state.instance)}
+      </div>
+      <div className="app__column">
+        <h1 className="app__title">
+          {ReasonReact.string("Instance Browser")}
+        </h1>
+        <h2 className="app__description">
+          {ReasonReact.string("Make sure ")}
           <a
             href="https://docs.imandra.ai/imandra-docs/notebooks/installation-simple/"
-            className={"app__description--link " ++ {style([fontFamily("monospace"), whiteSpace(`pre)])}}>
+            className={
+              "app__description--link "
+              ++ style([fontFamily("monospace"), whiteSpace(`pre)])
+            }>
             {ReasonReact.string("imandra-http-server -reason")}
           </a>
           {ReasonReact.string(
              " is running in the background on localhost:3000",
            )}
         </h2>
-
-        <h2 className="app__call-to-action"> {ReasonReact.string("Enter a ReasonML instance query:")} </h2>
-        
-        <div className={"app__query-header " ++ { style([
-            display(flexBox),
-            justifyContent(spaceBetween),
-            marginBottom(px(8)),
-          ])}}>
+        <h2 className="app__call-to-action">
+          {ReasonReact.string("Enter a ReasonML instance query:")}
+        </h2>
+        <div
+          className={
+            "app__query-header "
+            ++ style([
+                 display(flexBox),
+                 justifyContent(spaceBetween),
+                 marginBottom(px(8)),
+               ])
+          }>
           <pre>
             {ReasonReact.string(Printf.sprintf("x : %s  =>", instanceType))}
           </pre>
@@ -190,7 +199,8 @@ let make =
             <div className={style([fontSize(px(8)), marginRight(px(5))])}>
               {ReasonReact.string("imandra-http-server connection")}
             </div>
-            <div className={style([
+            <div
+              className={style([
                 borderRadius(pct(50.)),
                 height(px(16)),
                 width(px(16)),
@@ -213,7 +223,14 @@ let make =
               | _ => true
               }
             }
-            className={ "app__query " ++ {style([height(px(100)), padding(px(5))])}}
+            className={
+              "app__query "
+              ++ style([
+                   height(px(100)),
+                   padding(px(5)),
+                   fontSize(px(16)),
+                 ])
+            }
             value={self.state.query}
             onChange={event =>
               self.send(QueryInstance(ReactEvent.Form.target(event)##value))
@@ -229,10 +246,11 @@ let make =
           <div
             className={style([
               width(pct(70.)),
+              maxWidth(pct(70.)),
               fontSize(px(10)),
               paddingTop(px(5)),
               fontFamily("monospace"),
-              whiteSpace(`pre),
+              minHeight(px(30)),
             ])}>
             {ReasonReact.string(
                switch (self.state.instanceFeedback) {
@@ -267,10 +285,10 @@ let make =
             />
           </div>
         </div>
-
         <div className="app__examples">
-          <h3 className="app__call-to-action"> {ReasonReact.string("or try these examples:")}</h3>
-
+          <h3 className="app__call-to-action">
+            {ReasonReact.string("or try these examples:")}
+          </h3>
           {if (List.length(examples) > 0) {
              let children =
                List.map(e => <li> {example(e)} </li>, examples)
@@ -279,11 +297,7 @@ let make =
            } else {
              <div />;
            }}
-
         </div>
-
-
-
       </div>
     </div>;
   },
