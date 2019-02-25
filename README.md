@@ -22,9 +22,9 @@ For an overview, read our Medium post [Introducing Verified React](https://mediu
     - `examples/todomvc/__tests__/TodoMvc_Model_Goals.re`
   - [x] Hook verified state machine up to React reducer component. See:
     - `examples/tictactoe/TicTacToe.re`
-  
-- [ ] Stage 2 
-  - [x] [Viewing instances](#viewing-instances)
+
+- [ ] Stage 2
+  - [x] [Viewing instances](#viewing-instances) - also see [our blog post](https://medium.com/imandra/constraint-solving-your-uis-8933f4cf8927)
   - [x] TodoMVC as a larger example
   - [ ] Decomposition visualisation
 
@@ -38,15 +38,15 @@ For an overview, read our Medium post [Introducing Verified React](https://mediu
 Make sure you have the latest version of `imandra-repl` installed via the [Imandra Installer](https://docs.imandra.ai/imandra-docs/notebooks/installation/), then run
 
     imandra-repl
-    
+
 and make sure it starts up successfully (i.e. all updates are installed). Once it's started, quit it again with Ctrl-D. Next:
 
     npm install
-    
+
 to install the bucklescript compiler, `imandra-prelude` and Imandra client bindings for bucklescript. Then:
-    
+
     npm run watch
-    
+
 You may see a few errors the first time you run watch - this I believe is due to an issue with `components` in `bsb.exe` as they are a WIP. However, if you run `npm run watch` multiple times, you should stop seeing errors after a few builds, and from then on incremental compilation will work sucessfully.
 
 ## The compilation chain
@@ -71,28 +71,28 @@ To run the verification goals:
 
 ## Viewing instances
 
-[Click here to see a quick example of viewing instances with Imandra](https://i.imgur.com/FMd8yrf.mp4)
+[Read our post about viewing instances in your UIs with Imandra](https://medium.com/imandra/constraint-solving-your-uis-8933f4cf8927).
 
 The TicTacToe example is hooked up to Imandra to allow querying and viewing instances. To start it, from the `verified-react` repo root run:
 
     imandra-http-server -reason
-    
+
 to start Imandra's http server with `reason` syntax loaded. Then for bucklescript compilation, (in another terminal) run:
 
     npm install
     npm run watch
-    
+
 Then, to start the parcel.js dev server, (in another terminal) run:
 
     npm run watch-tictactoe
-    
+
 You should now be able to visit `http://localhost:1234` to see/play the TicTacToe game (verified via the `npm run test` Jest tests), and also query for instances from Imandra.
 
 ### How it works
 
 The TicTacToe UI is [wrapped in an InstanceBrowser component](./examples/tictactoe/Index.re), which loads the game logic into Imandra (along with some JSON encoders and decoders) via [`examples/tictactoe/Setup.ire`](examples/tictactoe/Setup.ire).
 
-The TicTacToe UI component has been edited slightly to allow a default intial state to be passed from its parent via the `customInitialLogicState` prop. 
+The TicTacToe UI component has been edited slightly to allow a default intial state to be passed from its parent via the `customInitialLogicState` prop.
 
 When the instance query box's contents change, the query is sent to `imandra-http-server`'s `/instance/by-src` endpoint as a lambda expression, `x : game_state => <constraint>`, so an instance of type `game_state` matching the constraint is returned, printed to a JSON string via a serialisation function (`instancePrinterFn`).
 
