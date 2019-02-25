@@ -48,6 +48,7 @@ ReactDOMRe.renderToElementWithId(
       "num_todos(x, 5) && with_todo_text(x)",
       "num_todos(x, 5) && with_todo_text(x) && empty_new_todo(x)",
       "num_todos(x, 5) && with_todo_text(x) && completedCount(x) == 3 && x.viewing == AllTodos",
+      {|switch (update(EditNewTodo("Add a new todo"), initialState)) { | Ok(x0) => update(AddNewTodo, x0) == Ok(x) | _ => false } |},
     ]
     instancePrinterFn="state_to_json"
     instanceType="state"
