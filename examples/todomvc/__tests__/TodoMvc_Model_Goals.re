@@ -10,7 +10,7 @@ let () =
   beforeAllPromise(() => {
     let si = Imandra_client.Server_info.from_file() |> Belt.Result.getExn;
     serverInfo := Some(si);
-    Imandra_client.reset(si);
+    Js.Promise.resolve();
   });
 
 let syntax = I.Api.Reason;
@@ -38,6 +38,31 @@ describe("todomvc model", () => {
            },
        );
   });
+
+  afterAllPromise(() =>
+    Js.Promise.make((~resolve, ~reject) =>
+      Js.Global.setTimeout(
+        () =>
+          Imandra_client.reset(serverInfo^ |> Belt.Option.getExn)
+          |> Js.Promise.then_(
+               fun
+               | Belt.Result.Ok(_) => {
+                   resolve(. pass);
+                   Js.Promise.resolve();
+                 }
+               | Belt.Result.Error(e) => {
+                   Js.Console.error(I.Error.pp_str(e));
+                   reject(. Failure(I.Error.pp_str(e)));
+                   Js.Promise.resolve();
+                 },
+             )
+          |> ignore,
+        500,
+      )
+      |> ignore
+    )
+  );
+
   testPromise("vg_add_todo", () => {
     let ip = serverInfo^ |> Belt.Option.getExn;
     let functionName =

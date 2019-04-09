@@ -12,12 +12,11 @@ let () =
   beforeAllPromise (fun () ->
       let si = (Imandra_client.Server_info.from_file () |> Belt.Result.getExn) in
       serverInfo := Some (si);
-      Imandra_client.reset si
+      Js.Promise.resolve ()
     )
 
 let () =
   describe "simple counter model" (fun () ->
-
       beforeAllPromise (fun () ->
           let ip = !serverInfo |> Belt.Option.getExn in
           let model_path = Node.Path.join([|[%raw "__dirname"]; ".."; (Printf.sprintf "%s.ire" module_name) |]) in
@@ -30,6 +29,23 @@ let () =
                 end
             )
         );
+
+      afterAllPromise
+        (fun ()  -> Js.Promise.make (fun ~resolve ~reject ->
+             (Js.Global.setTimeout (fun ()  ->
+                  ((Imandra_client.reset
+                      ((!serverInfo) |> Belt.Option.getExn))
+                   |> (Js.Promise.then_ (function
+                       | Belt.Result.Ok _ ->
+                         (((resolve pass)[@bs ]); Js.Promise.resolve ())
+                       | ((Belt.Result.Error (e))) ->
+                         (Js.Console.error (I.Error.pp_str e);
+                          ((reject
+                              ((Failure ((I.Error.pp_str e)))))
+                             [@bs ]);
+                          Js.Promise.resolve ()))))
+                  |> ignore) 500)
+             |> ignore));
 
       testPromise "verify increment" (fun () ->
           let ip = !serverInfo |> Belt.Option.getExn in
