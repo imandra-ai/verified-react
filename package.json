@@ -39,10 +39,10 @@
     "imandra-prelude": "git+https://github.com/aestheticintegration/imandra-prelude.git",
     "jest": "^23.6.0",
     "parcel-bundler": "^1.11.0",
-    "reason-react": "^0.5.3"
+    "reason-react": "^0.6.0"
   },
   "devDependencies": {
-    "bs-platform": "^4.0.7",
+    "bs-platform": "^5.0.2",
     "less": "^3.9.0",
     "todomvc-app-css": "^2.1.2"
   }
