@@ -47,7 +47,7 @@
     "bs-decoders"
   ],
   "reason": {
-    "react-jsx": 2
+    "react-jsx": 3
   },
   "warnings": {
     "error" : "+101"
