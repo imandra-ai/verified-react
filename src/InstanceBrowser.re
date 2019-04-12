@@ -97,8 +97,8 @@ let make =
       ~instancePrinterFn,
       ~body,
       ~examples=[],
-      _children,
-    ) => {
+    )
+    : React.element => {
   let (state, dispatch) = React.useReducer(reducer, init());
   let () =
     React.useEffect(()
@@ -173,7 +173,7 @@ let make =
         | _ => true
         }
       }>
-      <pre> {ReasonReact.string(s)} </pre>
+      <pre> {React.string(s)} </pre>
     </button>;
 
   <div className="app__columns">
@@ -181,25 +181,21 @@ let make =
       {body(state.instance)}
     </div>
     <div className="app__column">
-      <h1 className="app__title">
-        {ReasonReact.string("Instance Browser")}
-      </h1>
+      <h1 className="app__title"> {React.string("Instance Browser")} </h1>
       <h2 className="app__description">
-        {ReasonReact.string("Make sure ")}
+        {React.string("Make sure ")}
         <a
           href="https://docs.imandra.ai/imandra-docs/notebooks/installation-simple/"
           className={
             "app__description--link "
             ++ style([fontFamily("monospace"), whiteSpace(`pre)])
           }>
-          {ReasonReact.string("imandra-http-server -reason")}
+          {React.string("imandra-http-server -reason")}
         </a>
-        {
-          ReasonReact.string(" is running in the background on localhost:3000")
-        }
+        {React.string(" is running in the background on localhost:3000")}
       </h2>
       <h2 className="app__call-to-action">
-        {ReasonReact.string("Enter a ReasonML instance query:")}
+        {React.string("Enter a ReasonML instance query:")}
       </h2>
       <div
         className={
@@ -211,11 +207,11 @@ let make =
              ])
         }>
         <pre>
-          {ReasonReact.string(Printf.sprintf("x : %s  =>", instanceType))}
+          {React.string(Printf.sprintf("x : %s  =>", instanceType))}
         </pre>
         <div className={style([display(flexBox), alignItems(center)])}>
           <div className={style([fontSize(px(8)), marginRight(px(5))])}>
-            {ReasonReact.string("imandra-http-server connection")}
+            {React.string("imandra-http-server connection")}
           </div>
           <div
             className={
@@ -278,7 +274,7 @@ let make =
             ])
           }>
           {
-            ReasonReact.string(
+            React.string(
               switch (state.instanceFeedback) {
               | None => ""
               | Some(f) => f
@@ -295,7 +291,7 @@ let make =
             ])
           }>
           <div className={style([fontSize(px(8)), marginRight(px(5))])}>
-            {ReasonReact.string("Query result")}
+            {React.string("Query result")}
           </div>
           <div
             className={
@@ -318,7 +314,7 @@ let make =
       </div>
       <div className="app__examples">
         <h3 className="app__call-to-action">
-          {ReasonReact.string("or try these examples:")}
+          {React.string("or try these examples:")}
         </h3>
         {
           if (List.length(examples) > 0) {

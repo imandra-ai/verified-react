@@ -27,28 +27,27 @@ let game_state_of_json = json => {
 };
 
 module App = {
-  let component = ReasonReact.statelessComponent("App");
-  let make = _children => {
-    ...component,
-    render: _self =>
-      <InstanceBrowser
-        serverInfo=Imandra_client.Server_info.{
-          port: 3000,
-          base_url: "http://localhost:3000",
-        }
-        setupScriptPath="examples/tictactoe/TicTacToe_Setup.ire"
-        instanceType="game_state"
-        instancePrinterFn="game_state_to_json_pp"
-        examples=[
-          "is_valid_game(x)",
-          "x.grid.c == Some(X)",
-          "status(x) == Won(X)",
-          "status(x) == Won(O) && is_valid_game(x)",
-          "is_valid_game(x) && x.last_player == Some(O)",
-          "is_valid_game(x) && status(x) == Tied",
-          "true",
-        ]
-        body={instanceJson => {
+  [@react.component]
+  let make = (): React.element =>
+    <InstanceBrowser
+      serverInfo=Imandra_client.Server_info.{
+        port: 3000,
+        base_url: "http://localhost:3000",
+      }
+      setupScriptPath="examples/tictactoe/TicTacToe_Setup.ire"
+      instanceType="game_state"
+      instancePrinterFn="game_state_to_json_pp"
+      examples=[
+        "is_valid_game(x)",
+        "x.grid.c == Some(X)",
+        "status(x) == Won(X)",
+        "status(x) == Won(O) && is_valid_game(x)",
+        "is_valid_game(x) && x.last_player == Some(O)",
+        "is_valid_game(x) && status(x) == Tied",
+        "true",
+      ]
+      body={
+        instanceJson => {
           let instance =
             switch (instanceJson) {
             | None => None
@@ -62,7 +61,7 @@ module App = {
 
           <div className="instance">
             <h1 className="instance__title">
-              {ReasonReact.string("Tic Tac Toe")}
+              {React.string("Tic Tac Toe")}
             </h1>
             <section className="tictactoe">
               <TicTacToe
@@ -72,21 +71,23 @@ module App = {
             </section>
             <div className="instance__description">
               <h2 className="instance__subtitle">
-                {ReasonReact.string(
-                   "Generate instances of TicTacToe based purely on ",
-                 )}
+                {
+                  React.string(
+                    "Generate instances of TicTacToe based purely on ",
+                  )
+                }
                 <a
                   className="instance__subtitle--link"
                   href="https://github.com/AestheticIntegration/verified-react/blob/master/examples/tictactoe/TicTacToe_Logic.ire">
-                  {ReasonReact.string("the source code of the game logic")}
+                  {React.string("the source code of the game logic")}
                 </a>
-                {ReasonReact.string(" which has been loaded into Imandra.")}
+                {React.string(" which has been loaded into Imandra.")}
               </h2>
             </div>
           </div>;
-        }}
-      />,
-  };
+        }
+      }
+    />;
 };
 
 ReactDOMRe.renderToElementWithId(<App />, "app");
