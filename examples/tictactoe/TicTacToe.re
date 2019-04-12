@@ -179,42 +179,40 @@ let make = (~customInitialLogicState, ~onGameFinished): React.element => {
         </button>
       </div>
     </div>;
-  let sub =
+  let overlay =
     switch (overlay) {
-    | None => [|elems|]
-    | Some(overlayText) => [|
-        elems,
+    | None => React.null
+    | Some(overlayText) =>
+      <div
+        className={
+          style([
+            position(absolute),
+            top(px(0)),
+            left(px(0)),
+            width(pct(100.)),
+            height(pct(100.)),
+            textAlign(center),
+            fontSize(px(150)),
+            display(flexBox),
+            flexDirection(row),
+            justifyContent(spaceAround),
+            userSelect(none),
+            cursor(`pointer),
+          ])
+        }
+        onClick=(_event => dispatch(Restart))>
         <div
           className={
-            style([
-              position(absolute),
-              top(px(0)),
-              left(px(0)),
-              width(pct(100.)),
-              height(pct(100.)),
-              textAlign(center),
-              fontSize(px(150)),
-              display(flexBox),
-              flexDirection(row),
-              justifyContent(spaceAround),
-              userSelect(none),
-              cursor(`pointer),
-            ])
-          }
-          onClick=(_event => dispatch(Restart))>
-          <div
-            className={
-              "tictactoe__result "
-              ++ style([
-                   display(flexBox),
-                   flexDirection(column),
-                   justifyContent(spaceAround),
-                 ])
-            }>
-            overlayText
-          </div>
-        </div>,
-      |]
+            "tictactoe__result "
+            ++ style([
+                 display(flexBox),
+                 flexDirection(column),
+                 justifyContent(spaceAround),
+               ])
+          }>
+          overlayText
+        </div>
+      </div>
     };
   <div>
     <div
@@ -225,7 +223,8 @@ let make = (~customInitialLogicState, ~onGameFinished): React.element => {
           justifyContent(spaceAround),
         ])
       }>
-      {React.array(sub)}
+      elems
+      overlay
     </div>
     <div
       className={

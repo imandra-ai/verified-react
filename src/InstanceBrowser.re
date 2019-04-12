@@ -319,7 +319,10 @@ let make =
         {
           if (List.length(examples) > 0) {
             let children =
-              List.map(e => <li> {example(e)} </li>, examples)
+              List.mapi(
+                (i, e) => <li key={string_of_int(i)}> {example(e)} </li>,
+                examples,
+              )
               |> Array.of_list
               |> React.array;
             <ul> children </ul>;
