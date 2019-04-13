@@ -100,67 +100,61 @@ let make =
     )
     : React.element => {
   let (state, dispatch) = React.useReducer(reducer, init());
+  Js.log("Render");
   let () =
-    React.useEffect(()
-      /* TODO: is this correct? */
-      =>
-        if (state.init === Loading) {
-          Some(
-            () => {
-              let _p =
-                I.Eval.by_src(
-                  ~syntax=Imandra_client.Api.Reason,
-                  ~src=Printf.sprintf("#use \"%s\"", setupScriptPath),
-                  serverInfo,
-                )
-                |> Js.Promise.then_(v => {
-                     switch (v) {
-                     | Belt.Result.Ok(_) => dispatch(Initialised)
-                     | Belt.Result.Error(e) => dispatch(InitialiseError(e))
-                     };
-                     Js.Promise.resolve();
-                   });
-              ();
-            },
-          );
-        } else {
-          None;
-        }
-      );
+    React.useEffect1(
+      () => {
+        let _p =
+          I.Eval.by_src(
+            ~syntax=Imandra_client.Api.Reason,
+            ~src=Printf.sprintf("#use \"%s\"", setupScriptPath),
+            serverInfo,
+          )
+          |> Js.Promise.then_(v => {
+               switch (v) {
+               | Belt.Result.Ok(_) => dispatch(Initialised)
+               | Belt.Result.Error(e) => dispatch(InitialiseError(e))
+               };
+               Js.Promise.resolve();
+             });
+        None;
+      },
+      [||],
+    );
 
   /* Execute effect when state.query changes */
   let () =
     React.useEffect1(
       () =>
-        Some(
-          () => {
-            let _p =
-              I.Instance.by_src(
-                ~syntax=Imandra_client.Api.Reason,
-                ~src=
-                  Printf.sprintf("(x : %s) => %s", instanceType, state.query),
-                ~instance_printer={name: instancePrinterFn, cx_var_name: "x"},
-                serverInfo,
-              )
-              |> Js.Promise.then_(v => {
-                   switch (v) {
-                   | Belt.Result.Ok(r) => dispatch(InstanceReturned(r))
-                   | Belt.Result.Error(
-                       I.Error.Imandra_error({
-                         error:
-                           "Imandra_reason_parser__Reason_syntax_util.Error(_, _)",
-                       }),
-                     ) =>
-                     dispatch(InstanceFetchError("Reason parse error"))
-                   | Belt.Result.Error(e) =>
-                     dispatch(InstanceFetchError(I.Error.pp_str(e)))
-                   };
-                   Js.Promise.resolve();
-                 });
-            ();
-          },
-        ),
-      [|state.query|],
+        if (state.query === "") {
+          None;
+        } else {
+          let _p =
+            I.Instance.by_src(
+              ~syntax=Imandra_client.Api.Reason,
+              ~src=
+                Printf.sprintf("(x : %s) => %s", instanceType, state.query),
+              ~instance_printer={name: instancePrinterFn, cx_var_name: "x"},
+              serverInfo,
+            )
+            |> Js.Promise.then_(v => {
+                 switch (v) {
+                 | Belt.Result.Ok(r) => dispatch(InstanceReturned(r))
+                 | Belt.Result.Error(
+                     I.Error.Imandra_error({
+                       error:
+                         "Imandra_reason_parser__Reason_syntax_util.Error(_, _)",
+                     }),
+                   ) =>
+                   dispatch(InstanceFetchError("Reason parse error"))
+                 | Belt.Result.Error(e) =>
+                   dispatch(InstanceFetchError(I.Error.pp_str(e)))
+                 };
+                 Js.Promise.resolve();
+               });
+          None;
+        },
+      [|state.query, instanceType, instancePrinterFn|],
     );
 
   let example = s =>
