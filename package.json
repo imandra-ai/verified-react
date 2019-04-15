@@ -13,6 +13,7 @@
     "watch": "bsb -make-world -w",
     "watch-tictactoe": "parcel examples/tictactoe/index.html",
     "watch-todomvc": "parcel examples/todomvc/index.html",
+    "watch-simple": "parcel examples/simple/index.html",
     "build-tictactoe": "parcel build examples/tictactoe/index.html",
     "build-todomvc": "parcel build examples/todomvc/index.html"
   },
