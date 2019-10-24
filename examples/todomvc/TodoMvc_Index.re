@@ -38,10 +38,7 @@ ReactDOMRe.renderToElementWithId(
         </div>
       </div>;
     }}
-    serverInfo=Imandra_client.Server_info.{
-      port: 3000,
-      base_url: "http://localhost:3000",
-    }
+    serverInfo=Imandra_client.Server_info.{url: "http://localhost:3000"}
     examples=[
       "num_todos(x, 5)",
       "with_todo_text(x)",

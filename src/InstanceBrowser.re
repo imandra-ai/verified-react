@@ -31,10 +31,7 @@ type state = {
 
 let component = ReasonReact.reducerComponent("InstanceBrowser");
 
-let serverInfo: I.Server_info.t = {
-  port: 3000,
-  base_url: "http://localhost:3000",
-};
+let serverInfo: I.Server_info.t = {url: "http://localhost:3000"};
 
 let make =
     (

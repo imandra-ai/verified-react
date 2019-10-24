@@ -35,14 +35,15 @@
     "@glennsl/bs-json": "^3.0.0",
     "bs-css": "^8.0.0",
     "bs-decoders": "https://github.com/mattjbray/ocaml-decoders.git#27deef2c5d32366950955ea96a2ada3ed12e6f5e",
-    "bs-imandra-client": "git+https://github.com/aestheticintegration/bs-imandra-client.git#6c2133c0efe8b3ce670f93c07b821e79c71ec731",
+    "bs-imandra-client": "git+https://github.com/aestheticintegration/bs-imandra-client.git#9b8b4817df1f4682e95386bbb5d7eaacd353437f",
+    "bs-jest-expect-imandra": "git+https://github.com/aestheticintegration/bs-jest-expect-imandra.git#4eb0eba64906b97f182f2833067f5cf6eb976d74",
     "imandra-prelude": "git+https://github.com/aestheticintegration/imandra-prelude.git#c89318b17eff1791bc8ec5c2d99b11852e8a36b1",
     "jest": "^23.6.0",
     "parcel-bundler": "^1.11.0",
     "reason-react": "^0.5.3"
   },
   "devDependencies": {
-    "bs-platform": "^6.2.1",
+    "bs-platform": "6.2.1",
     "less": "^3.9.0",
     "todomvc-app-css": "^2.1.2"
   }
