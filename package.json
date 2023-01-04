@@ -38,7 +38,7 @@
     "bs-imandra-client": "git+https://github.com/aestheticintegration/bs-imandra-client.git#9b8b4817df1f4682e95386bbb5d7eaacd353437f",
     "bs-jest-expect-imandra": "git+https://github.com/aestheticintegration/bs-jest-expect-imandra.git#4eb0eba64906b97f182f2833067f5cf6eb976d74",
     "imandra-prelude": "git+https://github.com/aestheticintegration/imandra-prelude.git#c89318b17eff1791bc8ec5c2d99b11852e8a36b1",
-    "jest": "^23.6.0",
+    "jest": "^29.3.1",
     "parcel-bundler": "^1.11.0",
     "reason-react": "^0.5.3"
   },
